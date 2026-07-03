@@ -111,6 +111,10 @@ Then set the app's accent in its own root CSS, from its `app-registry.js` row:
 Don't copy token files into apps — that's the drift this package exists to
 prevent. The one exception: throwaway HTML mocks, where copying is fine.
 
+Full per-stack adoption steps — non-React apps, static sites, dark-mode
+bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
+`ADOPTING.md`, along with a universal kickoff prompt for coding agents.
+
 ## Index
 - `styles.css` — root import list (tokens only)
 - `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`

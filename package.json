@@ -1,6 +1,6 @@
 {
   "name": "@misterbeardy/design-system",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shared design system for the MisterBeardy app portfolio — tokens, core components, accent registry.",
   "type": "module",
   "exports": {
@@ -12,6 +12,7 @@
     "./app-registry": "./app-registry.js"
   },
   "files": [
+    "ADOPTING.md",
     "components",
     "guidelines",
     "tokens",

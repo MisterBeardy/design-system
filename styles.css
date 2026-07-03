@@ -1,3 +1,6 @@
-@import "tokens/colors.css";
-@import "tokens/typography.css";
-@import "tokens/spacing.css";
+/* typography.css leads with its own @import (Google Fonts), which per the
+   CSS spec must precede all non-import rules in the final stylesheet —
+   so it has to be imported first here too. */
+@import "./tokens/typography.css";
+@import "./tokens/colors.css";
+@import "./tokens/spacing.css";

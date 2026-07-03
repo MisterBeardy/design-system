@@ -1,0 +1,5 @@
+node_modules/
+.playwright-mcp/
+proxmox_mcp.log
+status-cache.json
+*.tgz

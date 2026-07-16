@@ -1,0 +1,37 @@
+/* Motion. Previously undefined system-wide — apps each picked their own
+   durations, which is why the readme carried a "no system-wide easing/duration
+   tokens yet" caveat for as long as it did.
+
+   The scale is the one iDroveWhere converged on by usage, not an invention:
+   duration-base (200ms) covers disclosure chevrons and hover/colour changes,
+   duration-slow (300ms) covers panels and sheets sliding, duration-slower
+   (700ms) covers the long ambient stuff (route draws, fills). ease-out-expo is
+   the curve its map pulse already used.
+
+   Rule of thumb: anything the user triggered should be fast enough to feel
+   like a response (fast/base). Anything the app decided to do on its own can
+   take its time (slow/slower). */
+:root {
+  --duration-fast:   150ms;
+  --duration-base:   200ms;
+  --duration-slow:   300ms;
+  --duration-slower: 700ms;
+
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
+  /* easeOutExpo — overshoot-free but decisive. The default for anything that
+     travels a distance (sheets, thumbs, chevrons). */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Honour the OS setting. Motion in this system is always decoration on top of
+   a state change that already happened — never the thing that communicates it —
+   so collapsing it to ~0 loses nothing. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   0.01ms;
+    --duration-base:   0.01ms;
+    --duration-slow:   0.01ms;
+    --duration-slower: 0.01ms;
+  }
+}

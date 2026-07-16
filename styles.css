@@ -4,3 +4,9 @@
 @import "./tokens/typography.css";
 @import "./tokens/colors.css";
 @import "./tokens/spacing.css";
+@import "./tokens/motion.css";
+@import "./tokens/materials.css";
+/* Not tokens — the few component rules that need real selectors (Row's
+   hairline ::after, :last-child, hover, focus-visible). Everything else in
+   components/core/ is inline styles reading the tokens above. */
+@import "./components/core/core.css";

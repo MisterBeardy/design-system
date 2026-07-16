@@ -4,7 +4,16 @@ description: Use this skill to generate well-branded interfaces and assets acros
 user-invocable: true
 ---
 
-Read the README.md file within this skill, and explore the other available files.
+Read the readme.md file within this skill, and explore the other available files.
+Its **Visual language** section is the important one: settings-, list-, and
+stats-shaped UI is built from `Group` / `Row` / `GlyphTile` / `Segmented` /
+`Switch` / `StatStrip`, not from bespoke cards. Each has a `.prompt.md` next to
+it in `components/core/` stating when it applies.
+
+Three rules worth knowing before you design anything here: colour lives on the
+glyph tile and never on the card surface; data colour never collapses into the
+accent; translucency is only for panels floating over live content.
+
 If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets
 out and create static HTML files for the user to view. If working on production
 code, copy the token CSS files and component source and read the rules here to

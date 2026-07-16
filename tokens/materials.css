@@ -1,0 +1,44 @@
+/* Materials — translucency, and the one place it's allowed.
+
+   The rule, verbatim from the language: "Vibrancy is a signal, not a texture."
+   A translucent panel means "there is live content behind this that you still
+   care about" — a map, a canvas, a video. That's the only time you get to
+   spend it. A translucent settings panel over a static page is texture, and
+   texture is what makes an interface look busy without being informative.
+
+   Everywhere else: solid --surface on tinted --bg. That contrast is what makes
+   cards read as objects, and it's also why the page is never white.
+
+   Usage — the class, not the raw recipe:
+
+     <div class="material-glass"> … </div>
+
+   Falls back to opaque --bg where backdrop-filter isn't supported, which is
+   correct rather than degraded: an opaque panel over a map is just a panel. */
+:root {
+  --glass-blur:       24px;
+  --glass-saturate:   180%;
+  /* The floating sheet is the ONE elevation in the system. Cards stay flat —
+     see readme.md "Shadows". A shadow here is load-bearing: it's what says the
+     sheet is above the map rather than printed on it. */
+  --shadow-sheet:     0 -4px 20px rgb(0 0 0 / 0.15);
+  --shadow-popover:   0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.material-glass {
+  background: var(--bg);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .material-glass {
+    /* The vertical falloff (88% -> 76%) matters: a flat translucency reads as a
+       dirty window, a graded one reads as a material with an edge. */
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg) 88%, transparent),
+      color-mix(in srgb, var(--bg) 76%, transparent)
+    );
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}

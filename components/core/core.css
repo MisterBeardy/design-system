@@ -1,0 +1,117 @@
+/* The handful of rules the grouped-list primitives can't express as inline
+   styles: pseudo-elements, :last-child, :hover, :focus-visible. Everything else
+   in components/core/ stays inline-style + CSS variables, so the package keeps
+   working in any stack without a build step or a utility framework.
+
+   Imported by styles.css. If you're cherry-picking token files instead of the
+   barrel (some apps must — see ADOPTING.md), import this too or Row separators
+   and Switch focus rings will silently not render. */
+
+/* --- Row ------------------------------------------------------------- */
+
+.ds-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  /* Not inherited from a reset: this package can't assume the host app ships
+     one (Tailwind's preflight sets it globally, a plain Vite app doesn't). With
+     the browser default content-box, `width: 100%` plus the horizontal padding
+     below makes every row overflow its Group by exactly --row-pad-x. */
+  box-sizing: border-box;
+  align-items: center;
+  gap: var(--row-gap);
+  padding: 10px var(--row-pad-x);
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+}
+
+/* The separator is drawn ON the row rather than between rows, so a Group can
+   take any children in any order without a sibling selector deciding which
+   gaps get a rule. */
+.ds-row::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: var(--row-pad-x);
+  height: var(--hairline);
+  background: var(--border);
+}
+
+/* Inset to the label's leading edge when the row leads with a glyph. Assumes a
+   default-size GlyphTile — see --row-inset. */
+.ds-row[data-glyph="true"]::after {
+  left: var(--row-inset);
+}
+
+/* The group's own border closes the list — a rule on the last row would double
+   it, or worse, sit a hairline above it. */
+.ds-row:last-child::after {
+  display: none;
+}
+
+.ds-row[data-interactive="true"] {
+  cursor: pointer;
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.ds-row[data-interactive="true"]:hover {
+  background: var(--surface-alt);
+}
+
+.ds-row[data-interactive="true"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.ds-row[data-disabled="true"] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* --- Segmented ------------------------------------------------------- */
+
+.ds-segment {
+  /* Same reason as .ds-row: flex: 1 sizes the content box, so under the
+     browser default the segments' padding pushes the track wider than its
+     container. */
+  box-sizing: border-box;
+  transition: background-color var(--duration-base) var(--ease-out),
+              color var(--duration-base) var(--ease-out);
+}
+
+.ds-segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* --- Switch ---------------------------------------------------------- */
+
+/* Visually hidden, but still a real focusable checkbox — the switch keeps
+   native keyboard and form semantics and only changes its presentation. */
+.ds-switch-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.ds-switch-track {
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.ds-switch-input:focus-visible + .ds-switch-track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ds-switch-knob {
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}

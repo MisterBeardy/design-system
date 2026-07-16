@@ -11,4 +11,33 @@
   --radius-lg:   14px;
   --radius-xl:   20px;
   --radius-pill: 999px;
+
+  /* The grouped card's radius. A role, not a step on the scale above —
+     12px sits between --radius-md and --radius-lg, and adding it as a step
+     would give us 10/12/14, three values too close together to ever choose
+     between deliberately. Group uses this; Card and StatTile stay on
+     --radius-lg, since they're standalone objects rather than list containers. */
+  --radius-card: 12px;
+
+  /* --- Grouped-list metrics -------------------------------------------
+     The structural constants behind Group/Row/GlyphTile. These were inline
+     literals in the app that proved the language out; they're tokens here
+     because Row's separator inset is arithmetic on the other three, and that
+     arithmetic silently breaks if someone resizes a tile without knowing.
+
+     A hairline is 0.5px, not 1px, and it isn't a border: at 1px a list of rows
+     reads as a table, at 0.5px it reads as a list. On 1x displays it rounds up
+     and you get the table back — acceptable, and the reason the Group's own
+     outline is still a real 1px border. */
+  --hairline:   0.5px;
+  --glyph-size: 23px;
+  --row-pad-x:  var(--space-3);   /* 12px */
+  --row-gap:    10px;
+  /* Where a Row's separator starts when the row leads with a glyph: the label's
+     leading edge, = --row-pad-x + --glyph-size + --row-gap = 12 + 23 + 10.
+     Hand-computed, because CSS can't do this arithmetic across the component
+     boundary — resize the tile and this has to move with it. A full-width rule
+     running under the glyph tile is the one thing that makes a grouped list
+     read as a ladder of rules rather than a set of related things. */
+  --row-inset:  45px;
 }

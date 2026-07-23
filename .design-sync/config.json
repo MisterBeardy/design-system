@@ -1,0 +1,39 @@
+{
+  "projectId": "38437aad-2039-4a1a-ad1d-73b3aeb3cec2",
+  "shape": "package",
+  "pkg": "@misterbeardy/design-system",
+  "globalName": "MisterBeardyDS",
+  "cssEntry": "components/core/core.css",
+  "tokensPkg": "@misterbeardy/design-system",
+  "tokensGlob": "tokens/*.css",
+  "componentSrcMap": {
+    "Button": "components/core/Button.jsx",
+    "Card": "components/core/Card.jsx",
+    "Chip": "components/core/Chip.jsx",
+    "Input": "components/core/Input.jsx",
+    "StatTile": "components/core/StatTile.jsx",
+    "Group": "components/core/Group.jsx",
+    "Row": "components/core/Row.jsx",
+    "GlyphTile": "components/core/GlyphTile.jsx",
+    "Segmented": "components/core/Segmented.jsx",
+    "Switch": "components/core/Switch.jsx",
+    "StatStrip": "components/core/StatStrip.jsx"
+  },
+  "docsMap": {
+    "Button": "components/core/Button.prompt.md",
+    "Card": "components/core/Card.prompt.md",
+    "Chip": "components/core/Chip.prompt.md",
+    "Input": "components/core/Input.prompt.md",
+    "StatTile": "components/core/StatTile.prompt.md",
+    "Group": "components/core/Group.prompt.md",
+    "Row": "components/core/Row.prompt.md",
+    "GlyphTile": "components/core/GlyphTile.prompt.md",
+    "Segmented": "components/core/Segmented.prompt.md",
+    "Switch": "components/core/Switch.prompt.md",
+    "StatStrip": "components/core/StatStrip.prompt.md"
+  },
+  "overrides": {
+    "Input": { "cardMode": "column" }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

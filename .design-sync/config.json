@@ -35,5 +35,6 @@
   "overrides": {
     "Input": { "cardMode": "column" }
   },
-  "readmeHeader": ".design-sync/conventions.md"
+  "readmeHeader": ".design-sync/conventions.md",
+  "guidelinesGlob": "guidelines/*.md"
 }

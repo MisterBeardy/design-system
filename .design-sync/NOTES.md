@@ -41,10 +41,15 @@ Shape: **package** (no Storybook). 11 components, all authored previews, all gra
 - **Fonts load remotely.** `typography.css` `@import`s Google Fonts (Space Grotesk +
   JetBrains Mono) → `[FONT_REMOTE]`, non-blocking, assumed served at runtime. No local
   fonts shipped, no `fonts/` dir.
-- **`guidelines/*.card.html` are NOT synced.** They're HTML reference cards, not the
-  markdown format `guidelinesGlob` copies, so `guidelines/` ships empty. Their design
-  guidance is captured in `conventions.md` + the per-component `.prompt.md`. Future
-  enhancement: convert them to markdown and set `cfg.guidelinesGlob`.
+- **Guidelines are synced as markdown.** The repo's original `guidelines/*.card.html`
+  are visual preview cards (not synced — they're HTML, not the markdown `guidelinesGlob`
+  copies). We hand-wrote markdown equivalents at `guidelines/*.md` (accent, neutrals,
+  status, spacing, radius, type-scale, grouped-list) capturing the real token values +
+  rules, and set `cfg.guidelinesGlob="guidelines/*.md"`. They land at
+  `guidelines/guidelines/*.md` in the bundle (the glob preserves the package-relative
+  subpath) with a generated `guidelines/index.md` — the double-nesting is cosmetic; the
+  index links resolve correctly. Keep the `.md` and `.card.html` in sync if the tokens
+  change; the `category:` frontmatter sets each card's group in the DS pane.
 
 ## Known render warns
 

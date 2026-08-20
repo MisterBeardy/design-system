@@ -1,10 +1,10 @@
 {
   "name": "@misterbeardy/design-system",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Shared design system for the MisterBeardy app portfolio — tokens, core components, accent registry.",
   "type": "module",
   "exports": {
-    ".": "./components/core/index.js",
+    ".": "./dist/index.js",
     "./styles.css": "./styles.css",
     "./tokens/colors.css": "./tokens/colors.css",
     "./tokens/typography.css": "./tokens/typography.css",
@@ -15,6 +15,7 @@
     "./app-registry": "./app-registry.js"
   },
   "files": [
+    "dist",
     "ADOPTING.md",
     "components",
     "guidelines",
@@ -28,5 +29,11 @@
     "react": ">=18"
   },
   "license": "UNLICENSED",
-  "private": false
+  "private": false,
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  }
 }

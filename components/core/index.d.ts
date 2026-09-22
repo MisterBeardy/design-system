@@ -11,6 +11,7 @@ import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
 import type { StatStripProps, Stat } from "./StatStrip";
 import type { IconProps, IconName } from "./Icon";
+import type { SheetProps } from "./Sheet";
 import type { FieldProps } from "./Field";
 import type { SelectProps, SelectOption } from "./Select";
 import type { TextareaProps } from "./Textarea";
@@ -37,6 +38,7 @@ export type {
   StatStripProps,
   Stat,
   IconProps,
+  SheetProps,
   FieldProps,
   SelectProps,
   SelectOption,
@@ -68,6 +70,9 @@ export declare const StatStrip: FC<StatStripProps>;
 // Icons.
 export declare const Icon: FC<IconProps>;
 export { ICON_NAMES } from "./Icon";
+
+// Elevation.
+export declare const Sheet: FC<SheetProps>;
 
 // Forms.
 export declare const Field: FC<FieldProps>;

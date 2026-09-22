@@ -135,6 +135,44 @@
   transition: transform var(--duration-base) var(--ease-out-expo);
 }
 
+/* --- Sheet ----------------------------------------------------------- */
+
+/* The sheet is the one translucent surface: the content behind it is live and
+   still matters. It reuses .material-glass's recipe rather than redefining it.
+   `solid` (and a reader who has asked for less transparency) gets the opaque
+   fallback, which is correct rather than degraded: an opaque panel over a map
+   is still a panel above the map. */
+.ds-sheet {
+  background: var(--bg);
+}
+
+/* The sheet takes focus when it opens, so a screen reader lands inside it —
+   but it isn't a control, so it draws no ring. The controls within keep
+   theirs. */
+.ds-sheet:focus {
+  outline: none;
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .ds-sheet:not(.ds-sheet-solid) {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg) 88%, transparent),
+      color-mix(in srgb, var(--bg) 76%, transparent)
+    );
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ds-sheet:not(.ds-sheet-solid) {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 /* --- Forms: Field and Checkbox -------------------------------------- */
 
 /* A bare control sits in a Field row with no box of its own, so the ring goes

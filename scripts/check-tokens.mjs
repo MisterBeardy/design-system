@@ -175,6 +175,27 @@ for (const app of APPS) {
   );
 }
 
+// 6. Banner: its title, body and glyph are all drawn in the tone's -text
+//    colour on the tone's -soft fill (4.5:1), and the neutral Banner in ink on
+//    --surface-alt. The Skeleton's bars are --surface-alt too, but carry no
+//    text, so they have no floor.
+for (const theme of ["light", "dark"]) {
+  const v = themes[theme];
+  for (const [ink, fill] of [["--success-text", "--success-soft"], ["--warning-text", "--warning-soft"], ["--danger-text", "--danger-soft"], ["--text-ink", "--surface-alt"]]) {
+    const r = contrast(v[ink], v[fill]);
+    expect(r >= 4.5, `${theme} Banner ${ink} on ${fill}: ${r.toFixed(2)}:1${r >= 4.5 ? "" : " (needs 4.5)"}`);
+  }
+}
+
+// 7. Toast: its action is drawn in each app's --accent-text on --surface.
+for (const app of APPS) {
+  const t = accentTokensFor(app.key);
+  for (const theme of ["light", "dark"]) {
+    const r = contrast(t[theme]["--accent-text"], themes[theme]["--surface"]);
+    expect(r >= 4.5, `${app.name}, ${theme}: Toast action ${r.toFixed(2)}:1 on --surface${r >= 4.5 ? "" : " (needs 4.5)"}`);
+  }
+}
+
 if (failures.length) {
   console.error(`${failures.length} colour check(s) failed:\n  ${failures.join("\n  ")}`);
   process.exit(1);

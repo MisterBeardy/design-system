@@ -29,6 +29,17 @@ under its version (see `CONTRIBUTING.md`).
   same size; tappable Rows by growing to 44px. Before, only Input reached it:
   the Switch took taps across 23px, a small Button 34px, a Segmented option
   31px. (#17)
+- `Banner` and `Toast`, for feedback. A Banner is an outcome that stays until
+  it's dealt with, in its tone's `-soft` fill and `-text` ink: the one surface
+  allowed a status tint. A Toast is a brief "that worked" over the page, one
+  at a time, 5 seconds or 8 with an action, held while hovered or focused,
+  announced through a live region. It's a surface card with a border and
+  `--shadow-popover`. New type roles `--text-message-title` and
+  `--text-message`. (#12)
+- `Skeleton`, `EmptyState` and `ErrorState`, for loading, empty and failed
+  content, and a "States and feedback" section in the readme saying which
+  goes where (offline is a warning Banner). `npm run check` now also holds
+  the Banner's text on its fill, and each app's Toast action, at 4.5:1. (#13)
 
 ## [0.5.0] — 2026-09-22
 

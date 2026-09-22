@@ -51,7 +51,10 @@ preserved as the accent rather than replaced.
   card specifically, and adding 12 as a step would leave 10/12/14 sitting too
   close together to choose between deliberately.
 - **Shadows**: none by default. Cards are flat — depth comes from border +
-  surface/bg contrast, not elevation. Chrome windows / device frames (used
+  surface/bg contrast, not elevation. The exception is something floating
+  over the page: a sheet takes `--shadow-sheet`, a `Toast` `--shadow-popover`
+  (`tokens/materials.css`). In dark mode the shadow barely shows against the
+  dark page, so the Toast's 1px border carries the separation. Chrome windows / device frames (used
   only for presenting mockups, not part of the UI itself) carry their own
   drop shadow.
 - **Buttons**: primary (solid accent), secondary (bordered neutral), soft
@@ -90,15 +93,42 @@ changes colour, and per-app accents are untouched.
 | `Switch` | Replaces the checkbox wherever the change takes effect immediately. |
 | Material | Translucency only over live content. Everywhere else, solid. |
 | Accent | Interactive things only. Per-app, from the registry. |
+| `Banner` | An outcome that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
 | Data colour | **Sacred.** Categories and series use the data palette (`--data-1` … `--data-6`, `GlyphTile data={n}`); counts and density use the ramp (`--ramp-1` … `--ramp-7`). Data colour never collapses into the accent or a status hue. See `guidelines/data.md`. |
 
 Two standing rules, both learned the hard way: **data colour is sacred**, and
 **decoration isn't colour's job**. The pattern this replaces was a
 `bg-gradient-to-br from-blue-50` wash on the card surface — every surface
 shouting, none of it meaning anything. Colour moved onto the glyph tile, where
-it has a job.
+it has a job. The one exception is the `Banner`, where the tint *is* the
+message ("this failed", "you're offline"); it's never used to decorate.
 
 Emoji remain banned in UI chrome (see Content fundamentals); glyphs are SVG.
+
+## States and feedback
+
+Every screen that loads something meets four states. Each has one component
+and one place.
+
+| State | Component | Where |
+|---|---|---|
+| Loading | `Skeleton` | Where the content will be, in its shape: rows inside the real Group, tiles in the tile row. After ~300ms, never a flash. No spinners in content. |
+| Empty | `EmptyState` | Filling the panel: a neutral tile, a title, one sentence saying why or when it won't be, and one primary action. |
+| Error | `ErrorState` | Where the content failed, inside its Group, with Try again. The rest of the screen keeps working. |
+| Offline | `Banner tone="warning"` | Top of the screen. Not an error: the app still works, and the Banner goes when the connection comes back. |
+
+Messages about something the person did:
+
+- **`Toast`** for "that worked" (saved, copied, archived), with at most one
+  way back (Undo). One at a time, 5 seconds or 8 with an action, held while
+  hovered or focused. **Never for an error**: it leaves on its own, so it
+  can't hold a problem.
+- **`Banner`** for anything that has to stay until it's dealt with: a save
+  that failed, a limit reached. Above the content it's about, one per screen.
+
+Write both in plain words: what happened, then what to do. "Couldn't save
+the trip. Try again, or keep editing and it'll save when you're back online",
+not "Error: request failed".
 
 ## Accent registry
 `app-registry.js` (project root) is the single source of truth for which
@@ -186,7 +216,8 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 - `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
-  GlyphTile, Segmented, Switch, StatStrip (`.jsx` + `.d.ts` + `.prompt.md` each)
+  GlyphTile, Segmented, Switch, StatStrip, and for feedback and states Banner,
+  Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no

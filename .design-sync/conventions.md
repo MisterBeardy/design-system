@@ -1,6 +1,6 @@
 # MisterBeardy Design System — how to build with it
 
-A small React kit (11 components) with a flat, calm, Apple-HIG-grouped-list
+A small React kit (16 components) with a flat, calm, Apple-HIG-grouped-list
 visual language. Inline styles reading CSS custom properties — **no utility
 classes, no provider, no build step required.**
 
@@ -12,7 +12,8 @@ classes, no provider, no build step required.**
 2. **Tint the page.** Set the app background to `var(--bg)` (a warm off-white
    `#f6f5f3`, never pure white). The system is deliberately **flat — no
    shadows**; depth comes entirely from the `--surface`/`--bg` contrast plus 1px
-   borders. A `Group` or `Card` on a white page looks like it's floating; the
+   borders. (Only things that float over the page, a `Toast` or a sheet, carry
+   a shadow token.) A `Group` or `Card` on a white page looks like it's floating; the
    fix is the page background, not a shadow.
 3. **Dark mode** is `[data-theme="dark"]` on a root element — every token has a
    dark value. **No provider or ThemeProvider exists or is needed.**
@@ -32,7 +33,7 @@ CSS). Components carry their own look; you compose them and space them.
 | Data (categories, series) | `--data-1`…`--data-6` (in that order), `--on-data` (glyph on a data fill) |
 | Ramp (counts, density) | `--ramp-1` (least) … `--ramp-7` (most) |
 | Fonts | `--font-display` (Space Grotesk), `--font-mono` (JetBrains Mono) |
-| Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` |
+| Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` `--text-message-title` `--text-message` |
 | Spacing | `--space-1`…`--space-6` |
 | Radius | `--radius-sm` `--radius-md` `--radius-lg` `--radius-card` `--radius-pill` `--radius-xl` |
 | Tracking | `--tracking-caps` `--tracking-label` `--tracking-stat` |
@@ -41,7 +42,8 @@ CSS). Components carry their own look; you compose them and space them.
 `--accent-text` with its own hue; everything else is identical across apps.
 Status tokens are **never** overridden, so a "PAID" chip reads the same
 everywhere. Color lives on small elements (a `GlyphTile`, a `Chip`), never as a
-surface wash — that keeps color meaningful.
+surface wash — that keeps color meaningful. (One exception: a `Banner`, whose
+tint is the message.)
 
 ## Idiom rules that keep designs on-brand
 
@@ -56,6 +58,12 @@ surface wash — that keeps color meaningful.
 - **`Switch`** is on/off *now* (track goes `--success`, not accent). **`Segmented`**
   is "one of a few peers" (3–4 max). **`Chip`** is `mono` uppercase for status.
 - One headline metric per screen sets `accent` on `StatTile`/`StatStrip`.
+- **Feedback and states.** `Banner` for an outcome that stays until it's dealt
+  with (errors, offline is a warning Banner); `Toast` only for "that worked",
+  one at a time, never an error. Loading is a `Skeleton` in the shape of the
+  content, inside its `Group`; empty is an `EmptyState` filling the panel;
+  failed is an `ErrorState` where the content would be. The Banner is the one
+  surface allowed a status tint.
 
 ## Where the truth lives
 

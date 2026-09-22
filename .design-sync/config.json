@@ -20,6 +20,7 @@
     "StatStrip": "components/core/StatStrip.prompt.md",
     "Icon": "components/core/Icon.prompt.md",
     "Sheet": "components/core/Sheet.prompt.md",
+    "Popover": "components/core/Popover.prompt.md",
     "Field": "components/core/Field.prompt.md",
     "Select": "components/core/Select.prompt.md",
     "Textarea": "components/core/Textarea.prompt.md",

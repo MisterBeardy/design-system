@@ -12,6 +12,7 @@ import type { SwitchProps } from "./Switch";
 import type { StatStripProps, Stat } from "./StatStrip";
 import type { IconProps, IconName } from "./Icon";
 import type { SheetProps } from "./Sheet";
+import type { PopoverProps } from "./Popover";
 import type { FieldProps } from "./Field";
 import type { SelectProps, SelectOption } from "./Select";
 import type { TextareaProps } from "./Textarea";
@@ -39,6 +40,7 @@ export type {
   Stat,
   IconProps,
   SheetProps,
+  PopoverProps,
   FieldProps,
   SelectProps,
   SelectOption,
@@ -73,6 +75,7 @@ export { ICON_NAMES } from "./Icon";
 
 // Elevation.
 export declare const Sheet: FC<SheetProps>;
+export declare const Popover: FC<PopoverProps>;
 
 // Forms.
 export declare const Field: FC<FieldProps>;

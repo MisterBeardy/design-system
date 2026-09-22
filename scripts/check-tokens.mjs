@@ -1,12 +1,13 @@
 // Checks the colour rules that nothing else would catch until an app looked
-// wrong: the default accent in tokens/colors.css matches the registry, and
-// every label or glyph drawn on a coloured fill meets its contrast floor, in
-// both themes, for every app in app-registry.js.
+// wrong: the default accent in tokens/colors.css matches the registry; every
+// label or glyph drawn on a coloured fill meets its contrast floor, in both
+// themes, for every app in app-registry.js; the data palette stays
+// distinguishable for colour-blind viewers; and the ramp steps evenly.
 //
 // Run with `npm run check`. CI runs it on every push and pull request.
 
 import { readFile } from "node:fs/promises";
-import { APPS, accentTokensFor } from "../app-registry.js";
+import { APPS, DATA_SLOTS, accentFor, accentTokensFor } from "../app-registry.js";
 
 // --- Colour maths: CSS colour string -> WCAG 2 contrast ratio -------------
 
@@ -35,10 +36,35 @@ function parseOklch(str) {
   ].map((v) => Math.min(1, Math.max(0, v)));
 }
 
+const linear = (color) => (color.startsWith("#") ? parseHex(color) : parseOklch(color));
+
 const luminance = (color) => {
-  const [r, g, b] = color.startsWith("#") ? parseHex(color) : parseOklch(color);
+  const [r, g, b] = linear(color);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
+
+// Colour blindness, simulated on linear sRGB (Machado, Oliveira & Fernandes
+// 2009, full severity), and distance in OKLab x 100: how far apart two colours
+// look to someone with that kind of vision.
+const CVD = {
+  normal: null,
+  protan: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+  deutan: [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.01182, 0.04294, 0.968881]],
+  tritan: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.3039]],
+};
+const seenBy = (rgb, vision) =>
+  CVD[vision] ? CVD[vision].map((row) => Math.min(1, Math.max(0, row[0] * rgb[0] + row[1] * rgb[1] + row[2] * rgb[2]))) : rgb;
+function oklab([r, g, b]) {
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ];
+}
+const apart = (x, y, vision = "normal") => 100 * Math.hypot(...oklab(seenBy(linear(x), vision)).map((v, i) => v - oklab(seenBy(linear(y), vision))[i]));
 
 function contrast(fg, bg) {
   const [hi, lo] = [luminance(fg), luminance(bg)].sort((x, y) => y - x);
@@ -99,6 +125,54 @@ for (const theme of ["light", "dark"]) {
     const r = contrast(v[`--${status}-text`], v["--surface"]);
     expect(r >= 4.5, `${theme} --${status}-text on --surface: ${r.toFixed(2)}:1${r >= 4.5 ? "" : " (needs 4.5)"}`);
   }
+}
+
+// 4. The data palette: every slot carries its glyph (3:1) and reads as a mark
+//    on the surface (3:1); every pair stays distinguishable for each kind of
+//    vision; and each app's dataLast really is the slot nearest its accent.
+const FLOOR = { normal: 12, protan: 12, deutan: 12, tritan: 10 };
+for (const theme of ["light", "dark"]) {
+  const v = themes[theme];
+  const slots = Array.from({ length: DATA_SLOTS }, (_, i) => `--data-${i + 1}`);
+  for (const slot of slots) {
+    const glyph = contrast(v["--on-data"], v[slot]);
+    expect(glyph >= 3, `${theme} --on-data on ${slot}: ${glyph.toFixed(2)}:1${glyph >= 3 ? "" : " (needs 3)"}`);
+    const mark = contrast(v[slot], v["--surface"]);
+    expect(mark >= 3, `${theme} ${slot} on --surface: ${mark.toFixed(2)}:1${mark >= 3 ? "" : " (needs 3)"}`);
+  }
+  for (const [vision, floor] of Object.entries(FLOOR)) {
+    let closest = [Infinity];
+    for (let i = 0; i < slots.length; i++)
+      for (let j = i + 1; j < slots.length; j++) {
+        const d = apart(v[slots[i]], v[slots[j]], vision);
+        if (d < closest[0]) closest = [d, slots[i], slots[j]];
+      }
+    expect(
+      closest[0] >= floor,
+      `${theme} data palette, ${vision} vision: closest pair ${closest[1]}/${closest[2]} ${closest[0].toFixed(1)} apart` +
+        (closest[0] >= floor ? "" : ` (needs ${floor})`),
+    );
+  }
+  // 5. The ramp: neighbouring steps at least 10 apart for every kind of vision,
+  //    and each step further from the page than the one before.
+  const ramp = Array.from({ length: 7 }, (_, i) => v[`--ramp-${i + 1}`]);
+  for (let i = 0; i < ramp.length - 1; i++) {
+    const step = Math.min(...Object.keys(CVD).map((vision) => apart(ramp[i], ramp[i + 1], vision)));
+    expect(step >= 10, `${theme} --ramp-${i + 1} to --ramp-${i + 2}: ${step.toFixed(1)} apart${step >= 10 ? "" : " (needs 10)"}`);
+    const rising = contrast(ramp[i + 1], v["--bg"]) > contrast(ramp[i], v["--bg"]);
+    expect(rising, `${theme} --ramp-${i + 2} ${rising ? "has more" : "does NOT have more"} contrast with --bg than --ramp-${i + 1}`);
+  }
+}
+for (const app of APPS) {
+  const accent = accentFor(app.hue, app.chroma);
+  const nearest = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1)
+    .map((n) => [apart(themes.light[`--data-${n}`], accent), n])
+    .sort((a, b) => a[0] - b[0])[0];
+  expect(
+    app.dataLast === nearest[1],
+    `${app.name}: dataLast ${app.dataLast}` +
+      (app.dataLast === nearest[1] ? ` is the slot nearest its accent (${nearest[0].toFixed(1)} apart)` : `, but --data-${nearest[1]} is nearest its accent. Set dataLast: ${nearest[1]}.`),
+  );
 }
 
 if (failures.length) {

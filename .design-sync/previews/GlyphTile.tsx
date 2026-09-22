@@ -31,11 +31,15 @@ export function Tones() {
 }
 
 export function DataColor() {
+  // The six data palette slots, in order: data, not state.
   return (
     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-      <GlyphTile color="#f59e0b"><Trophy /></GlyphTile>
-      <GlyphTile color="#8b5cf6"><Trophy /></GlyphTile>
-      <GlyphTile color="#0ea5e9"><Bolt /></GlyphTile>
+      <GlyphTile data={1}><Trophy /></GlyphTile>
+      <GlyphTile data={2}><Trophy /></GlyphTile>
+      <GlyphTile data={3}><Bolt /></GlyphTile>
+      <GlyphTile data={4}><Pin /></GlyphTile>
+      <GlyphTile data={5}><Check /></GlyphTile>
+      <GlyphTile data={6}><Alert /></GlyphTile>
     </div>
   );
 }

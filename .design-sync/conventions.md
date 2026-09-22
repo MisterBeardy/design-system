@@ -29,6 +29,8 @@ CSS). Components carry their own look; you compose them and space them.
 | Accent slot (per-app) | `--accent` `--accent-soft` `--accent-text` `--on-accent` (text or glyph on a solid accent) |
 | On-colours | `--on-success` `--on-warning` `--on-danger` `--on-neutral` (glyph on that solid fill) |
 | Status (app-agnostic) | `--success[-soft/-text]` `--warning[-soft/-text]` `--danger[-soft/-text]` |
+| Data (categories, series) | `--data-1`…`--data-6` (in that order), `--on-data` (glyph on a data fill) |
+| Ramp (counts, density) | `--ramp-1` (least) … `--ramp-7` (most) |
 | Fonts | `--font-display` (Space Grotesk), `--font-mono` (JetBrains Mono) |
 | Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` |
 | Spacing | `--space-1`…`--space-6` |
@@ -47,7 +49,9 @@ surface wash — that keeps color meaningful.
   the `Group` header is where the grouping earns its keep. Rows own their
   padding so separators inset to the label edge — don't wrap rows in a padded div.
 - **`GlyphTile` carries color, needs an SVG icon** (never an emoji — the system
-  bans emoji in chrome). `tone` = semantic state; `color` = categorical data.
+  bans emoji in chrome). `tone` = semantic state; `data={1…6}` = a category
+  from the data palette. Charts use `var(--data-n)` for series and
+  `var(--ramp-n)` for counts; never the accent or a status colour for data.
 - **`Switch`** is on/off *now* (track goes `--success`, not accent). **`Segmented`**
   is "one of a few peers" (3–4 max). **`Chip`** is `mono` uppercase for status.
 - One headline metric per screen sets `accent` on `StatTile`/`StatStrip`.

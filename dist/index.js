@@ -199,7 +199,9 @@ var TONE_ON = {
   danger: "var(--on-danger)",
   neutral: "var(--on-neutral)"
 };
-function GlyphTile({ tone = "neutral", color, size, children, style, ...props }) {
+function GlyphTile({ tone = "neutral", color, data, size, children, style, ...props }) {
+  const background = color ?? (data ? `var(--data-${data})` : TONE_BG[tone]);
+  const glyph = color ? "#fff" : data ? "var(--on-data)" : TONE_ON[tone];
   return /* @__PURE__ */ jsx7(
     "span",
     {
@@ -213,10 +215,8 @@ function GlyphTile({ tone = "neutral", color, size, children, style, ...props })
         width: size ?? "var(--glyph-size)",
         height: size ?? "var(--glyph-size)",
         borderRadius: "var(--radius-sm)",
-        background: color ?? TONE_BG[tone],
-        // A data colour is the consumer's own and isn't themed, so its glyph
-        // stays white; pick data colours dark enough to carry it.
-        color: color ? "#fff" : TONE_ON[tone],
+        background,
+        color: glyph,
         ...style
       },
       children

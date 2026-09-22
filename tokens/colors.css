@@ -50,6 +50,38 @@
   --on-warning:   #ffffff;
   --on-danger:    #ffffff;
   --on-neutral:   #ffffff;
+
+  /* Data colour: categories in charts, legends and GlyphTile data={n}. Data
+     colour encodes WHAT something is, never how it went, so it never borrows
+     the accent or a status hue. Six slots, ordered so the first ones are the
+     most distinct: a two-series chart uses 1 and 2 (22.6 apart in OKLab x100,
+     for every kind of vision), three series 1-3, and so on. Every pair stays
+     at least 13.3 apart for normal and red-green colour-blind vision and 10.8
+     for blue-yellow, in both themes. There is deliberately no green: it
+     collapses into red for red-green colour blindness. Past six categories,
+     label the series rather than adding colours. Each slot carries a white
+     glyph (--on-data) at 3:1 and reads as a mark on the surface at 3:1. */
+  --data-1:       oklch(0.66 0.10 95);
+  --data-2:       oklch(0.44 0.10 340);
+  --data-3:       oklch(0.64 0.10 210);
+  --data-4:       oklch(0.44 0.18 280);
+  --data-5:       oklch(0.52 0.16 40);
+  --data-6:       oklch(0.60 0.20 290);
+  --on-data:      #ffffff;
+
+  /* Sequential ramp: counts and density (visit frequency, heat). One warm
+     hue stepping only in lightness, so neighbouring steps are equally easy
+     to tell apart for every kind of vision (10.8 apart) and it can't be
+     mistaken for any app's accent. --ramp-1 is the least, --ramp-7 the most:
+     more always means more contrast with the page, which is why the dark
+     theme runs the other way. */
+  --ramp-1:       oklch(0.950 0.025 70);
+  --ramp-2:       oklch(0.842 0.025 70);
+  --ramp-3:       oklch(0.733 0.025 70);
+  --ramp-4:       oklch(0.625 0.025 70);
+  --ramp-5:       oklch(0.517 0.025 70);
+  --ramp-6:       oklch(0.408 0.025 70);
+  --ramp-7:       oklch(0.300 0.025 70);
 }
 
 [data-theme="dark"] {
@@ -84,4 +116,21 @@
   --on-warning:   #211f1c;
   --on-danger:    #211f1c;
   --on-neutral:   #211f1c;
+
+  /* Same hues, lifted for the dark surface; the glyph turns dark with them. */
+  --data-1:       oklch(0.88 0.10 95);
+  --data-2:       oklch(0.60 0.10 340);
+  --data-3:       oklch(0.84 0.10 210);
+  --data-4:       oklch(0.72 0.12 280);
+  --data-5:       oklch(0.70 0.12 40);
+  --data-6:       oklch(0.60 0.18 290);
+  --on-data:      #211f1c;
+
+  --ramp-1:       oklch(0.280 0.025 70);
+  --ramp-2:       oklch(0.388 0.025 70);
+  --ramp-3:       oklch(0.497 0.025 70);
+  --ramp-4:       oklch(0.605 0.025 70);
+  --ramp-5:       oklch(0.713 0.025 70);
+  --ramp-6:       oklch(0.822 0.025 70);
+  --ramp-7:       oklch(0.930 0.025 70);
 }

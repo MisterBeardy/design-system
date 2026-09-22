@@ -11,6 +11,10 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-09-22
+
+Feedback and states, touch targets, and a changelog. (#12, #13, #17, #19)
+
 ### Upgrading
 
 - **On touch screens, tappable Rows are 44px tall** (37.5px without a
@@ -214,7 +218,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/MisterBeardy/design-system/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/MisterBeardy/design-system/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/MisterBeardy/design-system/compare/v0.2.1...v0.3.0

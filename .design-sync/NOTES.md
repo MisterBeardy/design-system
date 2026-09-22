@@ -36,6 +36,8 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
 - **Docs = the repo's hand-authored `.prompt.md`.** Wired via `cfg.docsMap` (they end in
   `.md` so they pass the doc-extension gate). This preserves the rich design intent;
   the converter appends the synthesized `## Props` section. Far better than synthesizing.
+- **`Icon` uses `cardMode: column`** (`cfg.overrides.Icon`) — its 16-glyph `TheSet`
+  story is wider than a grid cell, so the card cropped it (`[GRID_OVERFLOW]`).
 - **`Input` uses `cardMode: column`** (`cfg.overrides.Input`) — its 320px stories overflow
   a grid cell otherwise (`[GRID_OVERFLOW]`).
 - **Fonts load remotely.** `typography.css` `@import`s Google Fonts (Space Grotesk +
@@ -53,7 +55,11 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
 
 ## Known render warns
 
-- None. Render check is fully clean (16/16, bad 0, thin 0). `[FONT_REMOTE]` is the only
+- None. Render check is fully clean (21/21, bad 0, thin 0).
+- `[DTS_STYLE_SYSTEM]` fires on **Icon**, whose props extend `SVGAttributes`: the
+  converter drops the inherited presentational attributes and keeps the real API
+  (`name`, `size`, `label`, plus the `IconName` union inlined). Expected, not a
+  problem; don't set `cfg.dtsPropsFor.Icon`. `[FONT_REMOTE]` is the only
   informational line and is expected (see above).
 
 ## Re-sync risks (what can silently go stale)
@@ -61,6 +67,9 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
 - **Per-clone setup is gitignored:** the `--no-save` react install AND the
   `node_modules/@misterbeardy/design-system` self-symlink. Recreate both before running
   `resync.mjs`, or the build fails at discovery/token-copy.
+- **`icons/*.svg` generate two committed files** (`components/core/iconData.js`
+  and `iconNames.d.ts`) during `npm run build`. Run the repo build before the
+  converter after touching icons, or the bundle ships stale glyphs.
 - **`docsMap` is hand-enumerated** because the docs are named `.prompt.md`. A new
   component still appears (discovery reads the types entry), but without its doc until
   it's added to `docsMap`.

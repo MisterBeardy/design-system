@@ -1,6 +1,6 @@
 # MisterBeardy Design System — how to build with it
 
-A small React kit (16 components) with a flat, calm, Apple-HIG-grouped-list
+A small React kit (17 components) with a flat, calm, Apple-HIG-grouped-list
 visual language. Inline styles reading CSS custom properties — **no utility
 classes, no provider, no build step required.**
 
@@ -50,8 +50,10 @@ tint is the message.)
 - **Grouped lists are the default UX.** Related `Row`s live inside one `Group`;
   the `Group` header is where the grouping earns its keep. Rows own their
   padding so separators inset to the label edge — don't wrap rows in a padded div.
-- **`GlyphTile` carries color, needs an SVG icon** (never an emoji — the system
-  bans emoji in chrome). `tone` = semantic state; `data={1…6}` = a category
+- **`GlyphTile` carries color, holds an `Icon`** at 13px (never an emoji — the
+  system bans emoji in chrome). `Icon name=…` draws the house glyphs: `check`
+  `close` `plus` `chevron-right` `chevron-down` `alert` `info` `inbox` `search`
+  `calendar` `pin` `map` `bolt` `ruler` `thermometer` `trophy`; 16px beside text. `tone` = semantic state; `data={1…6}` = a category
   from the data palette. Charts colour series with `var(--data-1)` …
   `var(--data-6)` in that order and counts with `var(--ramp-1)` (least) …
   `var(--ramp-7)` (most); never the accent or a status colour for data.
@@ -76,11 +78,11 @@ tint is the message.)
 ## One idiomatic snippet
 
 ```jsx
-import { Group, Row, GlyphTile, Switch } from '@misterbeardy/design-system';
+import { Group, Row, GlyphTile, Icon, Switch } from '@misterbeardy/design-system';
 
 <div style={{ background: 'var(--bg)', padding: 'var(--space-5)' }}>
   <Group header="Units" footer="Applies to every trip.">
-    <Row glyph={<GlyphTile tone="accent"><RulerIcon /></GlyphTile>}
+    <Row glyph={<GlyphTile tone="accent"><Icon name="ruler" size={13} /></GlyphTile>}
          label="Distance" value="Miles" chevron />
     <Row label="Show chargers"
          trailing={<Switch checked={on} onChange={setOn} label="Show chargers" />} />

@@ -224,8 +224,57 @@ function GlyphTile({ tone = "neutral", color, data, size, children, style, ...pr
   );
 }
 
+// components/core/Icon.jsx
+import { createElement } from "react";
+
+// components/core/iconData.js
+var ICONS = {
+  "alert": [["path", { "d": "M10 3.5 2.8 16h14.4L10 3.5Z" }], ["path", { "d": "M10 8.5v3.5" }], ["circle", { "cx": "10", "cy": "14", "r": "0.6", "fill": "currentColor" }]],
+  "bolt": [["path", { "d": "M11 2 4 11h5l-1 7 7-9h-5l1-7Z" }]],
+  "calendar": [["rect", { "x": "3.5", "y": "4.5", "width": "13", "height": "12", "rx": "2" }], ["path", { "d": "M3.5 8.5h13M7 2.5v4M13 2.5v4" }]],
+  "check": [["path", { "d": "M4.5 10.5 8.5 14.5 15.5 6" }]],
+  "chevron-down": [["path", { "d": "M4.5 7.5 10 13l5.5-5.5" }]],
+  "chevron-right": [["path", { "d": "M7.5 4.5 13 10l-5.5 5.5" }]],
+  "close": [["path", { "d": "M5.5 5.5l9 9M14.5 5.5l-9 9" }]],
+  "inbox": [["path", { "d": "M3 11l2.5-6h9L17 11v5H3v-5Z" }], ["path", { "d": "M3 11h4l1 2h4l1-2h4" }]],
+  "info": [["circle", { "cx": "10", "cy": "10", "r": "7" }], ["path", { "d": "M10 9v5" }], ["circle", { "cx": "10", "cy": "6.5", "r": "0.6", "fill": "currentColor" }]],
+  "map": [["path", { "d": "M3 5.5l4.5-2 5 2 4.5-2v11l-4.5 2-5-2-4.5 2Z" }], ["path", { "d": "M7.5 3.5v11M12.5 5.5v11" }]],
+  "pin": [["path", { "d": "M10 2.5a5 5 0 0 0-5 5c0 3.6 5 10 5 10s5-6.4 5-10a5 5 0 0 0-5-5Z" }], ["circle", { "cx": "10", "cy": "7.5", "r": "1.8" }]],
+  "plus": [["path", { "d": "M10 4.5v11M4.5 10h11" }]],
+  "ruler": [["path", { "d": "M3 7h14v6H3zM6 7v3M9 7v4M12 7v3M15 7v4" }]],
+  "search": [["circle", { "cx": "9", "cy": "9", "r": "5.5" }], ["path", { "d": "m13 13 3.5 3.5" }]],
+  "thermometer": [["path", { "d": "M10 3.5a2 2 0 0 0-2 2v6.2a3 3 0 1 0 4 0V5.5a2 2 0 0 0-2-2Z" }], ["path", { "d": "M10 8v5.5" }]],
+  "trophy": [["path", { "d": "M6 3h8v4a4 4 0 0 1-8 0V3Z" }], ["path", { "d": "M6 4H3.5v1.5A2.5 2.5 0 0 0 6 8M14 4h2.5v1.5A2.5 2.5 0 0 1 14 8M10 11v3M7 17h6M8 14h4v3H8z" }]]
+};
+
+// components/core/Icon.jsx
+import { jsx as jsx8 } from "react/jsx-runtime";
+var ICON_NAMES = Object.keys(ICONS);
+function Icon({ name, size = 16, label, style, ...props }) {
+  const parts = ICONS[name];
+  if (!parts) return null;
+  return /* @__PURE__ */ jsx8(
+    "svg",
+    {
+      viewBox: "0 0 20 20",
+      width: size,
+      height: size,
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "1.75",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      focusable: "false",
+      ...label ? { role: "img", "aria-label": label } : { "aria-hidden": true },
+      ...props,
+      style: { display: "block", flexShrink: 0, ...style },
+      children: parts.map(([tag, attrs], i) => createElement(tag, { key: i, ...attrs }))
+    }
+  );
+}
+
 // components/core/Row.jsx
-import { Fragment, jsx as jsx8, jsxs as jsxs3 } from "react/jsx-runtime";
+import { Fragment, jsx as jsx9, jsxs as jsxs3 } from "react/jsx-runtime";
 var truncate = {
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -251,12 +300,12 @@ function Row({
   const body = /* @__PURE__ */ jsxs3(Fragment, { children: [
     glyph,
     /* @__PURE__ */ jsxs3("span", { style: { minWidth: 0, flex: 1, textAlign: "left" }, children: [
-      /* @__PURE__ */ jsx8("span", { style: { display: "block", font: "var(--text-row-label)", color: "var(--text-ink)", ...truncate }, children: label }),
-      sub && /* @__PURE__ */ jsx8("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }, children: sub })
+      /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--text-row-label)", color: "var(--text-ink)", ...truncate }, children: label }),
+      sub && /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }, children: sub })
     ] }),
-    value !== void 0 && value !== null && /* @__PURE__ */ jsx8("span", { style: { flexShrink: 0, font: "var(--text-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }, children: value }),
+    value !== void 0 && value !== null && /* @__PURE__ */ jsx9("span", { style: { flexShrink: 0, font: "var(--text-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }, children: value }),
     trailing,
-    chevron && /* @__PURE__ */ jsx8("svg", { "aria-hidden": true, viewBox: "0 0 20 20", fill: "none", style: { width: 14, height: 14, flexShrink: 0, color: "var(--text-muted)", opacity: 0.5 }, children: /* @__PURE__ */ jsx8("path", { d: "M7.5 4.5L13 10l-5.5 5.5", stroke: "currentColor", strokeWidth: "1.75", strokeLinecap: "round", strokeLinejoin: "round" }) })
+    chevron && /* @__PURE__ */ jsx9(Icon, { name: "chevron-right", size: 14, style: { color: "var(--text-muted)", opacity: 0.5 } })
   ] });
   const shared = {
     className: cx("ds-row", className),
@@ -266,20 +315,20 @@ function Row({
     style: rowStyle
   };
   if (interactive) {
-    return /* @__PURE__ */ jsx8("button", { type: "button", onClick, disabled, ...props, ...shared, children: body });
+    return /* @__PURE__ */ jsx9("button", { type: "button", onClick, disabled, ...props, ...shared, children: body });
   }
-  return /* @__PURE__ */ jsx8("div", { ...props, ...shared, children: body });
+  return /* @__PURE__ */ jsx9("div", { ...props, ...shared, children: body });
 }
 
 // components/core/Segmented.jsx
-import { jsx as jsx9, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx10, jsxs as jsxs4 } from "react/jsx-runtime";
 var SIZES2 = {
   sm: { padding: "4px 8px", font: "var(--text-segment-sm)" },
   md: { padding: "6px 12px", font: "var(--text-segment)" }
 };
 var truncate2 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function Segmented({ options, value, onChange, label, size = "md", style, ...props }) {
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx10(
     "div",
     {
       role: "radiogroup",
@@ -316,8 +365,8 @@ function Segmented({ options, value, onChange, label, size = "md", style, ...pro
               ...active ? { background: "var(--surface)", color: "var(--text-ink)", border: "1px solid var(--border)" } : { background: "transparent", color: "var(--text-muted)", border: "1px solid transparent" }
             },
             children: [
-              /* @__PURE__ */ jsx9("span", { style: truncate2, children: opt.label }),
-              opt.sub && /* @__PURE__ */ jsx9("span", { style: { ...truncate2, font: "var(--text-segment-sub)", color: "var(--text-muted)" }, children: opt.sub })
+              /* @__PURE__ */ jsx10("span", { style: truncate2, children: opt.label }),
+              opt.sub && /* @__PURE__ */ jsx10("span", { style: { ...truncate2, font: "var(--text-segment-sub)", color: "var(--text-muted)" }, children: opt.sub })
             ]
           },
           opt.value
@@ -328,7 +377,7 @@ function Segmented({ options, value, onChange, label, size = "md", style, ...pro
 }
 
 // components/core/Switch.jsx
-import { jsx as jsx10, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx11, jsxs as jsxs5 } from "react/jsx-runtime";
 function Switch({ checked, onChange, disabled = false, label, className, style, ...props }) {
   return /* @__PURE__ */ jsxs5(
     "label",
@@ -344,7 +393,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           "input",
           {
             type: "checkbox",
@@ -357,7 +406,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
             className: cx("ds-switch-input", className)
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           "span",
           {
             "aria-hidden": true,
@@ -371,7 +420,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
             }
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           "span",
           {
             "aria-hidden": true,
@@ -397,7 +446,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
 }
 
 // components/core/StatStrip.jsx
-import { jsx as jsx11, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs6 } from "react/jsx-runtime";
 var SUB_COLOR = {
   muted: "var(--text-muted)",
   success: "var(--success-text)",
@@ -406,7 +455,7 @@ var SUB_COLOR = {
 };
 var truncate3 = { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function StatStrip({ stats, style, ...props }) {
-  return /* @__PURE__ */ jsx11("div", { ...props, style: { display: "flex", ...style }, children: stats.map((s, i) => /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsx12("div", { ...props, style: { display: "flex", ...style }, children: stats.map((s, i) => /* @__PURE__ */ jsxs6(
     "div",
     {
       style: {
@@ -422,7 +471,7 @@ function StatStrip({ stats, style, ...props }) {
         borderLeft: i > 0 ? "var(--hairline) solid var(--border)" : void 0
       },
       children: [
-        /* @__PURE__ */ jsx11(
+        /* @__PURE__ */ jsx12(
           "div",
           {
             style: {
@@ -435,7 +484,7 @@ function StatStrip({ stats, style, ...props }) {
             children: s.value
           }
         ),
-        /* @__PURE__ */ jsx11(
+        /* @__PURE__ */ jsx12(
           "div",
           {
             style: {
@@ -449,7 +498,7 @@ function StatStrip({ stats, style, ...props }) {
             children: s.label
           }
         ),
-        s.sub && /* @__PURE__ */ jsx11(
+        s.sub && /* @__PURE__ */ jsx12(
           "div",
           {
             style: {
@@ -467,48 +516,13 @@ function StatStrip({ stats, style, ...props }) {
   )) });
 }
 
-// components/core/glyphs.jsx
-import { jsx as jsx12, jsxs as jsxs7 } from "react/jsx-runtime";
-var Glyph = ({ size = 13, children }) => /* @__PURE__ */ jsx12(
-  "svg",
-  {
-    "aria-hidden": "true",
-    viewBox: "0 0 20 20",
-    width: size,
-    height: size,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.75",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    style: { display: "block", flexShrink: 0 },
-    children
-  }
-);
-var CheckGlyph = (p) => /* @__PURE__ */ jsx12(Glyph, { ...p, children: /* @__PURE__ */ jsx12("path", { d: "M4.5 10.5 8.5 14.5 15.5 6" }) });
-var AlertGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
-  /* @__PURE__ */ jsx12("path", { d: "M10 3.5 2.8 16h14.4L10 3.5Z" }),
-  /* @__PURE__ */ jsx12("path", { d: "M10 8.5v3.5" }),
-  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "14", r: "0.6", fill: "currentColor" })
-] });
-var InfoGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
-  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "10", r: "7" }),
-  /* @__PURE__ */ jsx12("path", { d: "M10 9v5" }),
-  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "6.5", r: "0.6", fill: "currentColor" })
-] });
-var InboxGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
-  /* @__PURE__ */ jsx12("path", { d: "M3 11l2.5-6h9L17 11v5H3v-5Z" }),
-  /* @__PURE__ */ jsx12("path", { d: "M3 11h4l1 2h4l1-2h4" })
-] });
-var CloseGlyph = (p) => /* @__PURE__ */ jsx12(Glyph, { ...p, children: /* @__PURE__ */ jsx12("path", { d: "M5.5 5.5l9 9M14.5 5.5l-9 9" }) });
-
 // components/core/Banner.jsx
-import { jsx as jsx13, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
 var TONES = {
-  success: { fill: "var(--success-soft)", ink: "var(--success-text)", Icon: CheckGlyph },
-  warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", Icon: AlertGlyph },
-  danger: { fill: "var(--danger-soft)", ink: "var(--danger-text)", Icon: AlertGlyph },
-  neutral: { fill: "var(--surface-alt)", ink: "var(--text-ink)", Icon: InfoGlyph }
+  success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
+  warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
+  danger: { fill: "var(--danger-soft)", ink: "var(--danger-text)", icon: "alert" },
+  neutral: { fill: "var(--surface-alt)", ink: "var(--text-ink)", icon: "info" }
 };
 function Banner({
   tone = "neutral",
@@ -523,8 +537,8 @@ function Banner({
   ...props
 }) {
   const t = TONES[tone] ?? TONES.neutral;
-  const glyph = icon === void 0 ? /* @__PURE__ */ jsx13(t.Icon, { size: 16 }) : icon;
-  return /* @__PURE__ */ jsxs8(
+  const glyph = icon === void 0 ? /* @__PURE__ */ jsx13(Icon, { name: t.icon }) : icon;
+  return /* @__PURE__ */ jsxs7(
     "div",
     {
       role: tone === "danger" ? "alert" : "status",
@@ -543,7 +557,7 @@ function Banner({
       },
       children: [
         glyph && /* @__PURE__ */ jsx13("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
-        /* @__PURE__ */ jsxs8("div", { style: { flex: 1, minWidth: 0 }, children: [
+        /* @__PURE__ */ jsxs7("div", { style: { flex: 1, minWidth: 0 }, children: [
           title && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message-title)" }, children: title }),
           children && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
           action && /* @__PURE__ */ jsx13("div", { style: { marginTop: 10 }, children: action })
@@ -570,7 +584,7 @@ function Banner({
               color: "inherit",
               cursor: "pointer"
             },
-            children: /* @__PURE__ */ jsx13(CloseGlyph, { size: 14 })
+            children: /* @__PURE__ */ jsx13(Icon, { name: "close", size: 14 })
           }
         )
       ]
@@ -580,7 +594,7 @@ function Banner({
 
 // components/core/Toast.jsx
 import { useEffect, useRef, useState } from "react";
-import { jsx as jsx14, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
 function Toast({
   open,
   message,
@@ -620,7 +634,7 @@ function Toast({
         justifyContent: "center",
         pointerEvents: "none"
       },
-      children: open && /* @__PURE__ */ jsxs9(
+      children: open && /* @__PURE__ */ jsxs8(
         "div",
         {
           ...props,
@@ -685,13 +699,13 @@ function Toast({
 }
 
 // components/core/Skeleton.jsx
-import { jsx as jsx15, jsxs as jsxs10 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs9 } from "react/jsx-runtime";
 var LABEL_WIDTHS = ["62%", "48%", "70%", "40%", "56%", "66%"];
 var VALUE_WIDTHS = [44, 36, 52, 30, 40, 48];
 var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx15("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
 function Skeleton({ variant = "rows", count = 3, label = "Loading", className, style, ...props }) {
   const items = Array.from({ length: count }, (_, i) => i);
-  return /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs9(
     "div",
     {
       role: "status",
@@ -702,7 +716,7 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
       style: variant === "tiles" ? { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 10, ...style } : style,
       children: [
         /* @__PURE__ */ jsx15("span", { className: "ds-visually-hidden", children: label }),
-        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs10(
+        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs9(
           "div",
           {
             "aria-hidden": "true",
@@ -724,9 +738,9 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
           i
         )) : items.map((i) => (
           // The Row's own class: same padding, gap and inset separators.
-          /* @__PURE__ */ jsxs10("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
+          /* @__PURE__ */ jsxs9("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
             /* @__PURE__ */ jsx15(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
-            /* @__PURE__ */ jsxs10("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
+            /* @__PURE__ */ jsxs9("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
               /* @__PURE__ */ jsx15(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
               /* @__PURE__ */ jsx15(Bar, { width: "30%", height: 8 })
             ] }),
@@ -739,9 +753,9 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
 }
 
 // components/core/EmptyState.jsx
-import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs10 } from "react/jsx-runtime";
 function EmptyState({ icon, title, action, children, className, style, ...props }) {
-  return /* @__PURE__ */ jsxs11(
+  return /* @__PURE__ */ jsxs10(
     "div",
     {
       ...props,
@@ -759,7 +773,7 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx16(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx16(InboxGlyph, { size: 22 }) }),
+        /* @__PURE__ */ jsx16(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx16(Icon, { name: "inbox", size: 22 }) }),
         title && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
         children && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
         action && /* @__PURE__ */ jsx16("div", { style: { marginTop: 4 }, children: action })
@@ -769,7 +783,7 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
 }
 
 // components/core/ErrorState.jsx
-import { jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs11 } from "react/jsx-runtime";
 function ErrorState({
   title,
   onRetry,
@@ -781,7 +795,7 @@ function ErrorState({
   style,
   ...props
 }) {
-  return /* @__PURE__ */ jsxs12(
+  return /* @__PURE__ */ jsxs11(
     "div",
     {
       role: "alert",
@@ -789,8 +803,8 @@ function ErrorState({
       className: cx("ds-error", className),
       style: { display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style },
       children: [
-        /* @__PURE__ */ jsx17(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx17(AlertGlyph, {}) }),
-        /* @__PURE__ */ jsxs12("div", { style: { flex: 1, minWidth: 0 }, children: [
+        /* @__PURE__ */ jsx17(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx17(Icon, { name: "alert", size: 13 }) }),
+        /* @__PURE__ */ jsxs11("div", { style: { flex: 1, minWidth: 0 }, children: [
           title && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
           children && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
           (action || onRetry) && /* @__PURE__ */ jsx17("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx17(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
@@ -808,6 +822,8 @@ export {
   ErrorState,
   GlyphTile,
   Group,
+  ICON_NAMES,
+  Icon,
   Input,
   Row,
   Segmented,

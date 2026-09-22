@@ -16,6 +16,7 @@
     "./tokens/motion.css": "./tokens/motion.css",
     "./tokens/materials.css": "./tokens/materials.css",
     "./core.css": "./components/core/core.css",
+    "./icons/*": "./icons/*",
     "./app-registry": "./app-registry.js"
   },
   "files": [
@@ -23,6 +24,7 @@
     "ADOPTING.md",
     "CHANGELOG.md",
     "components",
+    "icons",
     "guidelines",
     "tokens",
     "styles.css",

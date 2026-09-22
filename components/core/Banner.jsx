@@ -1,15 +1,15 @@
 import { cx } from "./cx.js";
-import { AlertGlyph, CheckGlyph, CloseGlyph, InfoGlyph } from "./glyphs.jsx";
+import { Icon } from "./Icon.jsx";
 
 // The one surface that takes a status tint. Everywhere else colour stays on
 // small elements; a banner is a message, and its tint is what it says.
 // Every pair here is the -text token on its -soft fill (6.5:1 or better in
 // both themes; `npm run check` holds it there).
 const TONES = {
-  success: { fill: "var(--success-soft)", ink: "var(--success-text)", Icon: CheckGlyph },
-  warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", Icon: AlertGlyph },
-  danger:  { fill: "var(--danger-soft)",  ink: "var(--danger-text)",  Icon: AlertGlyph },
-  neutral: { fill: "var(--surface-alt)",  ink: "var(--text-ink)",     Icon: InfoGlyph },
+  success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
+  warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
+  danger:  { fill: "var(--danger-soft)",  ink: "var(--danger-text)",  icon: "alert" },
+  neutral: { fill: "var(--surface-alt)",  ink: "var(--text-ink)",     icon: "info" },
 };
 
 export function Banner({
@@ -26,7 +26,7 @@ export function Banner({
 }) {
   const t = TONES[tone] ?? TONES.neutral;
   // `icon={null}` hides it; leaving it out uses the tone's own.
-  const glyph = icon === undefined ? <t.Icon size={16} /> : icon;
+  const glyph = icon === undefined ? <Icon name={t.icon} /> : icon;
   return (
     <div
       // A danger banner interrupts; the rest are announced politely.
@@ -73,7 +73,7 @@ export function Banner({
             cursor: "pointer",
           }}
         >
-          <CloseGlyph size={14} />
+          <Icon name="close" size={14} />
         </button>
       )}
     </div>

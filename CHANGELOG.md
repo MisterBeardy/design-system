@@ -11,6 +11,18 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- `Icon` and the house icon set: 16 glyphs (`check`, `close`, `plus`,
+  `chevron-right`, `chevron-down`, `alert`, `info`, `inbox`, `search`,
+  `calendar`, `pin`, `map`, `bolt`, `ruler`, `thermometer`, `trophy`) on a
+  20×20 grid with a 1.75 stroke, drawn in `currentColor`. `<Icon name="pin" />`
+  in React; `@misterbeardy/design-system/icons/pin.svg` without it.
+  `ICON_NAMES` lists them and `IconName` types them. `icons/*.svg` is the
+  single source: `npm run build` generates the component's data from it and
+  fails on a glyph drawn off the house style. A new
+  `guidelines/iconography.md` covers sizes, colour and adding one. (#15)
+
 ## [0.6.0] — 2026-09-22
 
 Feedback and states, touch targets, and a changelog. (#12, #13, #17, #19)

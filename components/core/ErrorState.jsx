@@ -1,7 +1,7 @@
 import { cx } from "./cx.js";
 import { Button } from "./Button.jsx";
 import { GlyphTile } from "./GlyphTile.jsx";
-import { AlertGlyph } from "./glyphs.jsx";
+import { Icon } from "./Icon.jsx";
 
 // In place of content that failed to load, usually inside its Group: what
 // happened, what's still safe, and one way forward.
@@ -23,7 +23,7 @@ export function ErrorState({
       className={cx("ds-error", className)}
       style={{ display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style }}
     >
-      <GlyphTile tone="danger">{icon ?? <AlertGlyph />}</GlyphTile>
+      <GlyphTile tone="danger">{icon ?? <Icon name="alert" size={13} />}</GlyphTile>
       <div style={{ flex: 1, minWidth: 0 }}>
         {title && <div style={{ font: "var(--text-message-title)", color: "var(--text-ink)" }}>{title}</div>}
         {children && (

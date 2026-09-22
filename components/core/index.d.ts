@@ -10,6 +10,7 @@ import type { GlyphTileProps, GlyphTone } from "./GlyphTile";
 import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
 import type { StatStripProps, Stat } from "./StatStrip";
+import type { IconProps, IconName } from "./Icon";
 import type { BannerProps, BannerTone } from "./Banner";
 import type { ToastProps, ToastAction } from "./Toast";
 import type { SkeletonProps } from "./Skeleton";
@@ -31,6 +32,8 @@ export type {
   SwitchProps,
   StatStripProps,
   Stat,
+  IconProps,
+  IconName,
   BannerProps,
   BannerTone,
   ToastProps,
@@ -52,6 +55,10 @@ export declare const GlyphTile: FC<GlyphTileProps>;
 export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): ReactElement;
 export declare const Switch: FC<SwitchProps>;
 export declare const StatStrip: FC<StatStripProps>;
+
+// Icons.
+export declare const Icon: FC<IconProps>;
+export { ICON_NAMES } from "./Icon";
 
 // Feedback and states.
 export declare const Banner: FC<BannerProps>;

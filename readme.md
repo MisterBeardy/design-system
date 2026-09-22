@@ -103,7 +103,9 @@ shouting, none of it meaning anything. Colour moved onto the glyph tile, where
 it has a job. The one exception is the `Banner`, where the tint *is* the
 message ("this failed", "you're offline"); it's never used to decorate.
 
-Emoji remain banned in UI chrome (see Content fundamentals); glyphs are SVG.
+Emoji remain banned in UI chrome (see Content fundamentals); glyphs are SVG, from
+the house set first: `<Icon name="pin" />`, or `icons/*.svg` without React.
+See `guidelines/iconography.md` for the grid, the sizes and how to add one.
 
 ## States and feedback
 
@@ -216,8 +218,8 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 - `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
-  GlyphTile, Segmented, Switch, StatStrip, and for feedback and states Banner,
-  Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
+  GlyphTile, Segmented, Switch, StatStrip, Icon, and for feedback and states
+  Banner, Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no
@@ -228,6 +230,8 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   push and pull request and fails if the committed copy is stale.
 - `guidelines/` — foundation specimen cards (neutrals, accent, status, data colour, type
   scale, spacing, radius, grouped list)
+- `icons/` — the house glyphs as SVG files, the single source for `Icon`
+  (`scripts/build-icons.mjs` generates its data and checks the house style)
 - `app-registry.js` — accent hue registry + gap-finding helpers
 - `CHANGELOG.md` — what changed in each release, with **Upgrading** notes for
   apps moving between tags; `CONTRIBUTING.md` — the per-change and release

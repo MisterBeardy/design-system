@@ -18,6 +18,7 @@
     "Segmented": "components/core/Segmented.prompt.md",
     "Switch": "components/core/Switch.prompt.md",
     "StatStrip": "components/core/StatStrip.prompt.md",
+    "Icon": "components/core/Icon.prompt.md",
     "Banner": "components/core/Banner.prompt.md",
     "Toast": "components/core/Toast.prompt.md",
     "Skeleton": "components/core/Skeleton.prompt.md",

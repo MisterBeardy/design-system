@@ -1,6 +1,7 @@
 import { isValidElement } from "react";
 import { cx } from "./cx.js";
 import { GlyphTile } from "./GlyphTile.jsx";
+import { Icon } from "./Icon.jsx";
 
 const truncate = {
   overflow: "hidden",
@@ -53,9 +54,7 @@ export function Row({
       )}
       {trailing}
       {chevron && (
-        <svg aria-hidden viewBox="0 0 20 20" fill="none" style={{ width: 14, height: 14, flexShrink: 0, color: "var(--text-muted)", opacity: 0.5 }}>
-          <path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <Icon name="chevron-right" size={14} style={{ color: "var(--text-muted)", opacity: 0.5 }} />
       )}
     </>
   );

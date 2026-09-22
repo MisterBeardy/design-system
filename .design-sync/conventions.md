@@ -1,6 +1,6 @@
 # MisterBeardy Design System — how to build with it
 
-A small React kit (16 components) with a flat, calm, Apple-HIG-grouped-list
+A small React kit (21 components) with a flat, calm, Apple-HIG-grouped-list
 visual language. Inline styles reading CSS custom properties — **no utility
 classes, no provider, no build step required.**
 
@@ -50,14 +50,22 @@ tint is the message.)
 - **Grouped lists are the default UX.** Related `Row`s live inside one `Group`;
   the `Group` header is where the grouping earns its keep. Rows own their
   padding so separators inset to the label edge — don't wrap rows in a padded div.
-- **`GlyphTile` carries color, needs an SVG icon** (never an emoji — the system
-  bans emoji in chrome). `tone` = semantic state; `data={1…6}` = a category
+- **`GlyphTile` carries color, holds an `Icon`** at 13px (never an emoji — the
+  system bans emoji in chrome). `Icon name=…` draws the house glyphs: `check`
+  `close` `plus` `chevron-right` `chevron-down` `alert` `info` `inbox` `search`
+  `calendar` `pin` `map` `bolt` `ruler` `thermometer` `trophy`; 16px beside text. `tone` = semantic state; `data={1…6}` = a category
   from the data palette. Charts colour series with `var(--data-1)` …
   `var(--data-6)` in that order and counts with `var(--ramp-1)` (least) …
   `var(--ramp-7)` (most); never the accent or a status colour for data.
 - **`Switch`** is on/off *now* (track goes `--success`, not accent). **`Segmented`**
   is "one of a few peers" (3–4 max). **`Chip`** is `mono` uppercase for status.
 - One headline metric per screen sets `accent` on `StatTile`/`StatStrip`.
+- **Forms are grouped lists.** Each input is a `Field` row in a `Group`
+  (`<Field label="Trip name"><Input … /></Field>`; also `Select`, `Textarea`);
+  Field draws the control bare and wires the label, `aria-invalid` and
+  `aria-describedby`. Errors go in Field's `error`. Yes/no on submit is
+  `<Checkbox row … />`; takes-effect-now is `Switch`. Boxed `Input`/`Select`/
+  `Textarea` only for a lone control (a search box).
 - **Feedback and states.** `Banner` for an outcome that stays until it's dealt
   with (errors, offline is a warning Banner); `Toast` only for "that worked",
   one at a time, never an error. Loading is a `Skeleton` in the shape of the
@@ -76,11 +84,11 @@ tint is the message.)
 ## One idiomatic snippet
 
 ```jsx
-import { Group, Row, GlyphTile, Switch } from '@misterbeardy/design-system';
+import { Group, Row, GlyphTile, Icon, Switch } from '@misterbeardy/design-system';
 
 <div style={{ background: 'var(--bg)', padding: 'var(--space-5)' }}>
   <Group header="Units" footer="Applies to every trip.">
-    <Row glyph={<GlyphTile tone="accent"><RulerIcon /></GlyphTile>}
+    <Row glyph={<GlyphTile tone="accent"><Icon name="ruler" size={13} /></GlyphTile>}
          label="Distance" value="Miles" chevron />
     <Row label="Show chargers"
          trailing={<Switch checked={on} onChange={setOn} label="Show chargers" />} />

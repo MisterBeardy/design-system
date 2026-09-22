@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Group, Row, GlyphTile, Switch } from '@misterbeardy/design-system';
+import { Group, Row, GlyphTile, Switch, Icon } from '@misterbeardy/design-system';
 
-const S = { width: 13, height: 13, fill: 'none', stroke: 'currentColor', strokeWidth: 1.75, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
-const Ruler = () => <svg viewBox="0 0 20 20" {...S}><path d="M3 7h14v6H3zM6 7v3M9 7v4M12 7v3M15 7v4" /></svg>;
-const Bolt = () => <svg viewBox="0 0 20 20" {...S}><path d="M11 2 4 11h5l-1 7 7-9h-5l1-7Z" /></svg>;
+const Ruler = () => <Icon name="ruler" size={13} />;
+const Bolt = () => <Icon name="bolt" size={13} />;
 
 const Frame = ({ children }: { children: any }) => (
   <div style={{ background: 'var(--bg)', padding: 20, borderRadius: 16, maxWidth: 420 }}>{children}</div>

@@ -1,6 +1,6 @@
 import { cx } from "./cx.js";
 import { GlyphTile } from "./GlyphTile.jsx";
-import { InboxGlyph } from "./glyphs.jsx";
+import { Icon } from "./Icon.jsx";
 
 // Fills the panel it's in: the first-run moment for a screen with nothing
 // to show yet. A neutral tile, one line, one sentence, one way forward.
@@ -22,7 +22,7 @@ export function EmptyState({ icon, title, action, children, className, style, ..
         ...style,
       }}
     >
-      <GlyphTile tone="neutral" size={44}>{icon ?? <InboxGlyph size={22} />}</GlyphTile>
+      <GlyphTile tone="neutral" size={44}>{icon ?? <Icon name="inbox" size={22} />}</GlyphTile>
       {title && <div style={{ font: "var(--text-subhead)", color: "var(--text-ink)" }}>{title}</div>}
       {children && (
         <div style={{ font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }}>{children}</div>

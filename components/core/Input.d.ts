@@ -5,4 +5,8 @@ import type { InputHTMLAttributes } from "react";
  *
  * @startingPoint section="Components" subtitle="Text input" viewport="700x100"
  */
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  /** No border or fill, value right-aligned: for inside a `Field` row, which
+   *  sets it for you. */
+  bare?: boolean;
+}

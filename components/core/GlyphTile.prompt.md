@@ -1,8 +1,8 @@
 GlyphTile — the small filled square that leads a `Row`.
 
 ```jsx
-<GlyphTile tone="accent"><MapPinIcon /></GlyphTile>
-<GlyphTile data={2}><TrophyIcon /></GlyphTile>   {/* data, not state */}
+<GlyphTile tone="accent"><Icon name="pin" size={13} /></GlyphTile>
+<GlyphTile data={2}><Icon name="trophy" size={13} /></GlyphTile>   {/* data, not state */}
 ```
 
 **This is where colour lives.** The alternative — letting the card carry it, as
@@ -27,8 +27,9 @@ Three ways to colour one, and the difference is the whole point:
   so use `data` whenever the colour is just a way to tell categories apart.
   Do **not** use either to hand-pick a prettier accent.
 
-Children must be an SVG icon, not an emoji. Keep the icon around 12–14px inside
-the default 23px tile — the tile is the shape you notice, the glyph just tells
+Children must be an SVG icon, not an emoji: an `Icon` from the house set at
+13px, or your own glyph drawn the same way. Keep it around 12–14px inside the
+default 23px tile — the tile is the shape you notice, the glyph just tells
 you which one it is. Draw it in `currentColor`: a `tone` tile colours it with
 that fill's on-colour (`--on-accent`, `--on-success`, … — white in light, dark
 in dark), so it holds 3:1 in both themes; a `data` tile uses `--on-data` the

@@ -18,8 +18,13 @@
 
 import { build } from 'esbuild';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { buildIcons } from './scripts/build-icons.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
+
+// icons/*.svg -> components/core/iconData.js, before the bundle reads it.
+const icons = await buildIcons();
+console.log(`components/core/iconData.js written (${icons.length} icons)`);
 
 await mkdir('dist', { recursive: true });
 

@@ -11,6 +11,27 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- `Icon` and the house icon set: 16 glyphs (`check`, `close`, `plus`,
+  `chevron-right`, `chevron-down`, `alert`, `info`, `inbox`, `search`,
+  `calendar`, `pin`, `map`, `bolt`, `ruler`, `thermometer`, `trophy`) on a
+  20×20 grid with a 1.75 stroke, drawn in `currentColor`. `<Icon name="pin" />`
+  in React; `@misterbeardy/design-system/icons/pin.svg` without it.
+  `ICON_NAMES` lists them and `IconName` types them. `icons/*.svg` is the
+  single source: `npm run build` generates the component's data from it and
+  fails on a glyph drawn off the house style. A new
+  `guidelines/iconography.md` covers sizes, colour and adding one. (#15)
+- The form vocabulary: `Field`, `Select`, `Textarea` and `Checkbox`. A form
+  is a grouped list: each `Field` is a row in a `Group` with the label on the
+  left and the control drawn bare on the right, and it wires the label,
+  `aria-invalid` and `aria-describedby`. Errors turn the row `danger-text`
+  with an alert glyph and a line saying how to fix it. `Select` is a native
+  select. `Checkbox` is a real checkbox with an accent tick box, on its own
+  or as a `row`. `Input` gains `bare`, and a 2px `--danger` border when
+  `aria-invalid`. A new `guidelines/forms.md`; `npm run check` holds the
+  checkbox outline and the invalid border at 3:1. (#14)
+
 ## [0.6.0] — 2026-09-22
 
 Feedback and states, touch targets, and a changelog. (#12, #13, #17, #19)

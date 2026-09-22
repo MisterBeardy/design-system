@@ -10,6 +10,11 @@ import type { GlyphTileProps, GlyphTone } from "./GlyphTile";
 import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
 import type { StatStripProps, Stat } from "./StatStrip";
+import type { IconProps, IconName } from "./Icon";
+import type { FieldProps } from "./Field";
+import type { SelectProps, SelectOption } from "./Select";
+import type { TextareaProps } from "./Textarea";
+import type { CheckboxProps } from "./Checkbox";
 import type { BannerProps, BannerTone } from "./Banner";
 import type { ToastProps, ToastAction } from "./Toast";
 import type { SkeletonProps } from "./Skeleton";
@@ -31,6 +36,13 @@ export type {
   SwitchProps,
   StatStripProps,
   Stat,
+  IconProps,
+  FieldProps,
+  SelectProps,
+  SelectOption,
+  TextareaProps,
+  CheckboxProps,
+  IconName,
   BannerProps,
   BannerTone,
   ToastProps,
@@ -52,6 +64,16 @@ export declare const GlyphTile: FC<GlyphTileProps>;
 export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): ReactElement;
 export declare const Switch: FC<SwitchProps>;
 export declare const StatStrip: FC<StatStripProps>;
+
+// Icons.
+export declare const Icon: FC<IconProps>;
+export { ICON_NAMES } from "./Icon";
+
+// Forms.
+export declare const Field: FC<FieldProps>;
+export declare const Select: FC<SelectProps>;
+export declare const Textarea: FC<TextareaProps>;
+export declare const Checkbox: FC<CheckboxProps>;
 
 // Feedback and states.
 export declare const Banner: FC<BannerProps>;

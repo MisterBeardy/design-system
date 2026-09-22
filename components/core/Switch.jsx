@@ -1,4 +1,6 @@
-export function Switch({ checked, onChange, disabled = false, label, style, ...props }) {
+import { cx } from "./cx.js";
+
+export function Switch({ checked, onChange, disabled = false, label, className, style, ...props }) {
   return (
     <label
       style={{
@@ -20,8 +22,8 @@ export function Switch({ checked, onChange, disabled = false, label, style, ...p
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
-        className="ds-switch-input"
         {...props}
+        className={cx("ds-switch-input", className)}
       />
       <span
         aria-hidden

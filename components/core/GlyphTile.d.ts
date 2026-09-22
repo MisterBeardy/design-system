@@ -13,8 +13,8 @@ export interface GlyphTileProps extends HTMLAttributes<HTMLSpanElement> {
   tone?: GlyphTone;
   /** Data-encoding colour. Overrides `tone`. Use when colour means DATA. */
   color?: string;
-  /** Defaults to `--glyph-size` (23px). Overriding this breaks `Row`'s
-   *  separator inset — set `--row-inset` to match if you do. */
+  /** Defaults to `--glyph-size` (23px). A `Row` leading with this tile moves
+   *  its separator inset to match. */
   size?: number;
   /** An SVG icon. Not an emoji — the system bans emoji in UI chrome. */
   children?: ReactNode;

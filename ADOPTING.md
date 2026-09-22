@@ -30,8 +30,10 @@ Every app owns exactly one hue. Check `app-registry.js` in this package:
 
 **React + bundler (Next.js, Vite, …)**
 - Install per step 0.
-- Next.js only: add `transpilePackages: ["@misterbeardy/design-system"]`
-  (components ship as untranspiled `.jsx`).
+- No bundler configuration: components ship compiled (`dist/index.js`, React
+  as a peer), and TypeScript finds the prop types on its own. Remove any
+  `transpilePackages` entry left from before 0.3.0; it's harmless but no longer
+  needed.
 - Import `"@misterbeardy/design-system/styles.css"` once at the app root,
   before app-local styles.
 - Use the primitives:

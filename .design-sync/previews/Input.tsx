@@ -26,3 +26,19 @@ export function Labeled() {
     </label>
   );
 }
+
+export function Focused() {
+  return (
+    <div style={{ maxWidth: 320 }}>
+      <Input autoFocus placeholder="Search trips…" />
+    </div>
+  );
+}
+
+export function Disabled() {
+  return (
+    <div style={{ maxWidth: 320 }}>
+      <Input disabled defaultValue="idrovewhere@example.com" />
+    </div>
+  );
+}

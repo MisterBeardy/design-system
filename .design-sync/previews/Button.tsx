@@ -20,6 +20,15 @@ export function Sizes() {
   );
 }
 
+export function Focused() {
+  return (
+    <div style={{ display: 'flex', gap: 10, alignItems: 'center', padding: 4 }}>
+      <Button variant="primary" autoFocus>Save changes</Button>
+      <Button variant="secondary">Cancel</Button>
+    </div>
+  );
+}
+
 export function Disabled() {
   return (
     <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>

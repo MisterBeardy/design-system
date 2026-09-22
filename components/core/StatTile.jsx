@@ -10,14 +10,14 @@ export function StatTile({ label, value, sub, accent = false, style, ...props })
         ...style,
       }}
     >
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-muted)" }}>
+      <div style={{ font: "var(--text-tile-label)", letterSpacing: "var(--tracking-label)", textTransform: "uppercase", color: "var(--text-muted)" }}>
         {label}
       </div>
-      <div style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 700, color: accent ? "var(--accent)" : "var(--text-ink)", marginTop: 4 }}>
+      <div style={{ font: "var(--text-tile-value)", color: accent ? "var(--accent)" : "var(--text-ink)", marginTop: 4 }}>
         {value}
       </div>
       {sub && (
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
+        <div style={{ font: "var(--text-tile-sub)", color: "var(--text-muted)", marginTop: 2 }}>
           {sub}
         </div>
       )}

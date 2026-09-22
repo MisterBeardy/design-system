@@ -6,19 +6,6 @@
   "cssEntry": "components/core/core.css",
   "tokensPkg": "@misterbeardy/design-system",
   "tokensGlob": "tokens/*.css",
-  "componentSrcMap": {
-    "Button": "components/core/Button.jsx",
-    "Card": "components/core/Card.jsx",
-    "Chip": "components/core/Chip.jsx",
-    "Input": "components/core/Input.jsx",
-    "StatTile": "components/core/StatTile.jsx",
-    "Group": "components/core/Group.jsx",
-    "Row": "components/core/Row.jsx",
-    "GlyphTile": "components/core/GlyphTile.jsx",
-    "Segmented": "components/core/Segmented.jsx",
-    "Switch": "components/core/Switch.jsx",
-    "StatStrip": "components/core/StatStrip.jsx"
-  },
   "docsMap": {
     "Button": "components/core/Button.prompt.md",
     "Card": "components/core/Card.prompt.md",

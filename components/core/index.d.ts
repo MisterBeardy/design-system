@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactElement } from "react";
 import type { ButtonProps } from "./Button";
 import type { CardProps } from "./Card";
 import type { ChipProps } from "./Chip";
@@ -37,6 +37,6 @@ export declare const StatTile: FC<StatTileProps>;
 export declare const Group: FC<GroupProps>;
 export declare const Row: FC<RowProps>;
 export declare const GlyphTile: FC<GlyphTileProps>;
-export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): JSX.Element;
+export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): ReactElement;
 export declare const Switch: FC<SwitchProps>;
 export declare const StatStrip: FC<StatStripProps>;

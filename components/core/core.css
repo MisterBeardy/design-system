@@ -1,11 +1,11 @@
-/* The handful of rules the grouped-list primitives can't express as inline
-   styles: pseudo-elements, :last-child, :hover, :focus-visible. Everything else
-   in components/core/ stays inline-style + CSS variables, so the package keeps
-   working in any stack without a build step or a utility framework.
+/* The handful of rules the components can't express as inline styles:
+   pseudo-elements, :last-child, :hover, :focus-visible. Everything else in
+   components/core/ stays inline-style + CSS variables, so the package keeps
+   working in any stack without a CSS build step or a utility framework.
 
    Imported by styles.css. If you're cherry-picking token files instead of the
    barrel (some apps must — see ADOPTING.md), import this too or Row separators
-   and Switch focus rings will silently not render. */
+   and every focus ring will silently not render. */
 
 /* --- Row ------------------------------------------------------------- */
 
@@ -40,8 +40,8 @@
   background: var(--border);
 }
 
-/* Inset to the label's leading edge when the row leads with a glyph. Assumes a
-   default-size GlyphTile — see --row-inset. */
+/* Inset to the label's leading edge when the row leads with a glyph. Row sets
+   its own --row-inset when the GlyphTile has a custom size. */
 .ds-row[data-glyph="true"]::after {
   left: var(--row-inset);
 }
@@ -69,6 +69,24 @@
 .ds-row[data-disabled="true"] {
   opacity: 0.5;
   cursor: default;
+}
+
+/* --- Button and Input ------------------------------------------------ */
+
+/* The same 2px accent ring as Row, Segmented and Switch. Offset outward on a
+   Button: an inset ring on the primary variant would be accent drawn on
+   accent. Outside, it reads against the page or card (3.4:1 or better on bg
+   and surface, both themes). */
+.ds-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Laid over the 1px border, so a focused field keeps its size and the ring
+   can't collide with a neighbour. */
+.ds-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
 }
 
 /* --- Segmented ------------------------------------------------------- */

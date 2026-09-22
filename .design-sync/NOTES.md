@@ -11,12 +11,11 @@ Shape: **package** (no Storybook). 11 components, all authored previews, all gra
   `--node-modules ./node_modules`. `@types/react` MUST sit next to the repo's `.d.ts`
   files or ts-morph resolves React utility types to `any` → empty prop bodies +
   `[ZERO_MATCH]`.
-- **Component discovery can't use the `.d.ts` entry.** The package declares no
-  `types`/`exports.*.types` and its type entry lives at `components/core/index.d.ts`,
-  so `findTypesRoot` never locates it → `[ZERO_MATCH] no component exports`. Fixed by
-  enumerating all 11 components in `cfg.componentSrcMap` (pins each to its
-  `components/core/<Name>.jsx`). **When a component is added, add it to BOTH
-  `componentSrcMap` and `docsMap`** — discovery won't auto-find it.
+- **Components are discovered from the `types` entry** (`components/core/index.d.ts`,
+  declared in `package.json` since 0.4.0). `findTypesRoot` reads it, and each
+  component's source is found by name under `components/` (`<Name>.jsx`), so there is
+  no `componentSrcMap`. **When a component is added, add it to `docsMap`**: its doc is
+  `<Name>.prompt.md`, which the sibling probe (`<Name>.md`/`.mdx`) doesn't match.
 - **In-repo tokens need a self-symlink.** `copyTokens` only copies from a package in
   `node_modules`, and `tokensGlob` alone is a no-op without `tokensPkg`. We symlink the
   DS into its own node_modules so `tokensPkg` resolves:
@@ -61,10 +60,9 @@ Shape: **package** (no Storybook). 11 components, all authored previews, all gra
 - **Per-clone setup is gitignored:** the `--no-save` react install AND the
   `node_modules/@misterbeardy/design-system` self-symlink. Recreate both before running
   `resync.mjs`, or the build fails at discovery/token-copy.
-- **`componentSrcMap`/`docsMap` are hand-enumerated** because discovery can't read the
-  types entry. A new component silently won't appear until added to both. (Best long-term
-  fix: add `"types": "./components/core/index.d.ts"` to the package, then discovery works
-  and these maps can shrink — not done here to avoid mutating tracked `package.json`.)
+- **`docsMap` is hand-enumerated** because the docs are named `.prompt.md`. A new
+  component still appears (discovery reads the types entry), but without its doc until
+  it's added to `docsMap`.
 - **Remote fonts** depend on Google Fonts being reachable at render time.
 - **Authored previews** in `.design-sync/previews/*.tsx` import from
   `@misterbeardy/design-system` and are tied to the current component APIs (props like

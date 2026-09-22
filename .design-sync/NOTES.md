@@ -5,8 +5,9 @@ Shape: **package** (no Storybook). 11 components, all authored previews, all gra
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 
-- **No lockfile, no `node_modules`, `react` is a peerDep.** Install build deps into the
-  repo's own `node_modules` WITHOUT touching `package.json`:
+- **`react` is a peerDep and `@types/react` isn't a dependency.** The committed
+  `package-lock.json` (CI's `npm ci`) installs only esbuild and react, so add the rest
+  to the repo's own `node_modules` WITHOUT touching `package.json` or the lockfile:
   `npm i --no-save react react-dom @types/react`. Point the converter at
   `--node-modules ./node_modules`. `@types/react` MUST sit next to the repo's `.d.ts`
   files or ts-morph resolves React utility types to `any` → empty prop bodies +

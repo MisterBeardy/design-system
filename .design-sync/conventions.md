@@ -50,8 +50,9 @@ surface wash — that keeps color meaningful.
   padding so separators inset to the label edge — don't wrap rows in a padded div.
 - **`GlyphTile` carries color, needs an SVG icon** (never an emoji — the system
   bans emoji in chrome). `tone` = semantic state; `data={1…6}` = a category
-  from the data palette. Charts use `var(--data-n)` for series and
-  `var(--ramp-n)` for counts; never the accent or a status colour for data.
+  from the data palette. Charts colour series with `var(--data-1)` …
+  `var(--data-6)` in that order and counts with `var(--ramp-1)` (least) …
+  `var(--ramp-7)` (most); never the accent or a status colour for data.
 - **`Switch`** is on/off *now* (track goes `--success`, not accent). **`Segmented`**
   is "one of a few peers" (3–4 max). **`Chip`** is `mono` uppercase for status.
 - One headline metric per screen sets `accent` on `StatTile`/`StatStrip`.

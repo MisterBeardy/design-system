@@ -26,3 +26,7 @@ could be found at a glance.
 Only **one** metric on a screen should set `accent`, so the accent keeps meaning
 "this is the important number". Three or four stats per strip — past that the
 values truncate and you've built a table with extra steps.
+
+`subTone` colours the line under the number with the status `-text` tokens
+(`--success-text`, …), not the solid fills: it's 11px text, and the solids
+drop under 4.5:1 there.

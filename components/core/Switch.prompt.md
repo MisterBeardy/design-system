@@ -15,7 +15,9 @@ and form semantics for free.
 
 The track is `--success` when on, not `--accent` — on/off is a state, and state
 is app-agnostic. A switch that turned the app's accent colour would make "on"
-mean something different in each app.
+mean something different in each app. When on, the knob takes `--on-success`:
+white in light, dark in dark, where a white knob on the lighter green track
+fell to 2.4:1.
 
 Give it a `label` unless it sits in a `Row` whose label already names it; a
 switch with no accessible name is a control that screen readers announce as

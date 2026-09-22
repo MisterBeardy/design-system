@@ -84,21 +84,18 @@ declared on a descendant, and every descendant then inherits the broken value.
 
 ## 3. Accent override
 
-In the app's root stylesheet, set exactly these six values from the app's
-registry row (formula lives in `tokens/colors.css` and the readme):
+In the app's root stylesheet, paste the block the registry prints for it.
+Don't apply the formula by hand; copying the output is what keeps every app
+on the same one:
 
-```css
-:root {
-  --accent:       oklch(0.60 C H);
-  --accent-soft:  oklch(0.95 0.03 H);
-  --accent-text:  oklch(0.42 C H);
-}
-[data-theme="dark"] {
-  --accent:       oklch(0.74 max(C×0.85, 0.09) H);
-  --accent-soft:  oklch(0.32 0.07 H);
-  --accent-text:  oklch(0.85 0.10 H);
-}
+```sh
+node -e 'import("@misterbeardy/design-system/app-registry").then(r => console.log(r.accentCssFor("<app-key>")))'
 ```
+
+It prints `--accent`, `--accent-soft`, `--accent-text` and `--on-accent` for
+`:root` and for `[data-theme="dark"]`. A new app goes into `app-registry.js`
+first (step 1); `npm run check` in this package then confirms its button
+label and glyphs meet their contrast floor in both themes.
 
 Never override neutrals or the status tokens — those are identical across
 the portfolio by design.

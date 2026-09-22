@@ -6,7 +6,7 @@ var cx = (...names) => names.filter(Boolean).join(" ");
 // components/core/Button.jsx
 import { jsx } from "react/jsx-runtime";
 var VARIANTS = {
-  primary: { background: "var(--accent)", color: "#fff", borderColor: "transparent" },
+  primary: { background: "var(--accent)", color: "var(--on-accent)", borderColor: "transparent" },
   secondary: { background: "var(--surface)", color: "var(--text-ink)", borderColor: "var(--border)" },
   soft: { background: "var(--accent-soft)", color: "var(--accent-text)", borderColor: "transparent" },
   ghost: { background: "transparent", color: "var(--text-muted)", borderColor: "transparent" }
@@ -192,6 +192,13 @@ var TONE_BG = {
   danger: "var(--danger)",
   neutral: "var(--text-muted)"
 };
+var TONE_ON = {
+  accent: "var(--on-accent)",
+  success: "var(--on-success)",
+  warning: "var(--on-warning)",
+  danger: "var(--on-danger)",
+  neutral: "var(--on-neutral)"
+};
 function GlyphTile({ tone = "neutral", color, size, children, style, ...props }) {
   return /* @__PURE__ */ jsx7(
     "span",
@@ -207,7 +214,9 @@ function GlyphTile({ tone = "neutral", color, size, children, style, ...props })
         height: size ?? "var(--glyph-size)",
         borderRadius: "var(--radius-sm)",
         background: color ?? TONE_BG[tone],
-        color: "#fff",
+        // A data colour is the consumer's own and isn't themed, so its glyph
+        // stays white; pick data colours dark enough to carry it.
+        color: color ? "#fff" : TONE_ON[tone],
         ...style
       },
       children
@@ -372,7 +381,9 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
               width: 18,
               height: 18,
               borderRadius: "var(--radius-pill)",
-              background: "#fff",
+              // On, the knob sits on --success and takes its on-colour, dark in the
+              // dark theme. Off, it stays white against the neutral track.
+              background: checked ? "var(--on-success)" : "#fff",
               pointerEvents: "none",
               transform: checked ? "translateX(15px)" : "translateX(0)",
               boxShadow: "0 1px 3px rgb(0 0 0 / 0.3)"
@@ -388,9 +399,9 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
 import { jsx as jsx11, jsxs as jsxs6 } from "react/jsx-runtime";
 var SUB_COLOR = {
   muted: "var(--text-muted)",
-  success: "var(--success)",
-  warning: "var(--warning)",
-  danger: "var(--danger)"
+  success: "var(--success-text)",
+  warning: "var(--warning-text)",
+  danger: "var(--danger-text)"
 };
 var truncate3 = { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function StatStrip({ stats, style, ...props }) {

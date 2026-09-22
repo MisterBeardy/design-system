@@ -3,8 +3,19 @@
 // that suggests the next open slot so a new project doesn't have to be
 // eyeballed against the existing set.
 //
-// Accent formula (same everywhere): light = oklch(0.58-0.64 C H),
-// dark = oklch(0.7-0.76 C H) — see App Theme Kit / Palette Check.
+// The accent formula is the same for every app, and accentCssFor() emits it:
+//
+//   light  --accent oklch(0.54 C H)   --accent-soft oklch(0.95 0.03 H)
+//          --accent-text oklch(0.42 C H)   --on-accent #ffffff
+//   dark   --accent oklch(0.74 max(0.85C, 0.09) H)   --accent-soft oklch(0.32 0.07 H)
+//          --accent-text oklch(0.85 0.1 H)   --on-accent #211f1c
+//
+// Light lightness is 0.54, not the 0.60 it used to be: at 0.60 neither a white
+// nor a dark label reached 4.5:1 on a primary button for most apps. At 0.54
+// white clears it for every app below. Not for every possible hue, though:
+// greens and cyans (roughly H156-226) with chroma above 0.13 land too light once
+// they're fitted into sRGB. `npm run check` fails for any row whose label
+// misses 4.5:1 in either theme; lower that app's chroma to fix it.
 
 export const APPS = [
   { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, note: 'Real brand color #d97706' },
@@ -57,7 +68,56 @@ export function crowdedPairs() {
   return gaps.filter((g) => g.size < MIN_HUE_GAP);
 }
 
-/** Accent color strings for a given hue/chroma, light + dark. */
+const LIGHT_L = 0.54;
+const DARK_L = 0.74;
+
+// The label and glyph colour on a solid accent. The dark theme lightens every
+// accent, so white can't reach 4.5:1 on any of them there; a dark label can.
+const ON_ACCENT = { light: "#ffffff", dark: "#211f1c" };
+
+// Four decimals: 0.14 * 0.85 is 0.11900000000000001 in floating point, and
+// that string would otherwise end up in someone's stylesheet.
+const round4 = (n) => Math.round(n * 1e4) / 1e4;
+
+function resolveApp(app, chroma) {
+  if (typeof app !== "string") return { hue: app, chroma };
+  const row = APPS.find((a) => a.key === app);
+  if (!row) throw new Error(`No app "${app}" in the registry. Keys: ${APPS.map((a) => a.key).join(", ")}`);
+  return row;
+}
+
+/** The solid accent colour for a hue and chroma, light or dark. */
 export function accentFor(hue, chroma, dark = false) {
-  return dark ? `oklch(0.74 ${Math.max(chroma * 0.85, 0.09)} ${hue})` : `oklch(0.6 ${chroma} ${hue})`;
+  return dark
+    ? `oklch(${DARK_L} ${round4(Math.max(chroma * 0.85, 0.09))} ${hue})`
+    : `oklch(${LIGHT_L} ${round4(chroma)} ${hue})`;
+}
+
+/** Every accent token for one app, light and dark: the three an app overrides
+ *  per theme, plus the label colour that sits on the accent. Pass an app key
+ *  from APPS (`accentTokensFor("washmycar")`), or a hue and a chroma. */
+export function accentTokensFor(app, chroma) {
+  const { hue, chroma: c } = resolveApp(app, chroma);
+  return {
+    light: {
+      "--accent": accentFor(hue, c),
+      "--accent-soft": `oklch(0.95 0.03 ${hue})`,
+      "--accent-text": `oklch(0.42 ${round4(c)} ${hue})`,
+      "--on-accent": ON_ACCENT.light,
+    },
+    dark: {
+      "--accent": accentFor(hue, c, true),
+      "--accent-soft": `oklch(0.32 0.07 ${hue})`,
+      "--accent-text": `oklch(0.85 0.1 ${hue})`,
+      "--on-accent": ON_ACCENT.dark,
+    },
+  };
+}
+
+/** The same tokens as the stylesheet block an app pastes into its root CSS. */
+export function accentCssFor(app, chroma) {
+  const { light, dark } = accentTokensFor(app, chroma);
+  const block = (selector, vars) =>
+    `${selector} {\n${Object.entries(vars).map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}`;
+  return `${block(":root", light)}\n${block('[data-theme="dark"]', dark)}\n`;
 }

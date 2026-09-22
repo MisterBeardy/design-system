@@ -1,8 +1,10 @@
+// The -text tokens, not the solid fills: this is 11px text on the surface,
+// where the solids measured 4.0 (success) and 3.4 (warning) in the light theme.
 const SUB_COLOR = {
   muted:   "var(--text-muted)",
-  success: "var(--success)",
-  warning: "var(--warning)",
-  danger:  "var(--danger)",
+  success: "var(--success-text)",
+  warning: "var(--warning-text)",
+  danger:  "var(--danger-text)",
 };
 
 const truncate = { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };

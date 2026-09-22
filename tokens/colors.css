@@ -1,6 +1,7 @@
 /* Soft Studio neutrals + accent slot. Each consuming app overrides
-   --accent / --accent-soft / --accent-text with its own hue from
-   app-registry.js — everything else stays identical across apps. */
+   --accent / --accent-soft / --accent-text / --on-accent with the block
+   accentCssFor(<its key>) prints from app-registry.js; everything else stays
+   identical across apps. */
 :root {
   --bg:           #f6f5f3;
   --surface:      #ffffff;
@@ -11,17 +12,19 @@
   --text-ink:     #1c1b19;
 
   /* Default accent — iDroveWhere blue (H256). Override per app.
-     These are exactly accentFor(256, 0.15) from app-registry.js, light and
-     dark. The registry is the single source of truth for accents, so the
-     default here has to agree with it: it used to ship L=0.58 while the
-     registry computed L=0.6, which meant an app setting its accent from the
-     registry got a slightly different blue than one inheriting this default.
-     Both were inside the documented band, so nothing looked broken — it just
-     quietly wasn't the same colour. If you change the formula, change it in
-     accentFor() and mirror it here. */
-  --accent:       oklch(0.6 0.15 256);
+     These are exactly accentTokensFor("idrovewhere") from app-registry.js,
+     light and dark, and `npm run check` fails if they drift. It used to ship
+     L=0.58 while the registry computed L=0.6: an app setting its accent from
+     the registry got a slightly different blue than one inheriting this
+     default, and nothing looked broken. Change the formula in the registry;
+     the check tells you what to mirror here.
+
+     --on-accent is the primary Button's label and the accent GlyphTile's
+     glyph. White reaches 4.5:1 on every light accent at L 0.54. */
+  --accent:       oklch(0.54 0.15 256);
   --accent-soft:  oklch(0.95 0.03 256);
   --accent-text:  oklch(0.42 0.15 256);
+  --on-accent:    #ffffff;
 
   /* Semantic status — same solid/soft/text structure as the accent slot,
      same oklch formula. App-agnostic: never overridden per app, so status
@@ -38,6 +41,15 @@
   --danger:       oklch(0.55 0.18 25);
   --danger-soft:  oklch(0.95 0.03 25);
   --danger-text:  oklch(0.42 0.15 25);
+
+  /* The glyph on a solid status fill (GlyphTile tone=…) and the Switch knob
+     when on. Glyphs are marks, so 3:1 is their floor: white clears it on
+     every light fill (warning is the tightest at 3.4). --on-neutral sits on
+     the neutral tile, which is filled with --text-muted. */
+  --on-success:   #ffffff;
+  --on-warning:   #ffffff;
+  --on-danger:    #ffffff;
+  --on-neutral:   #ffffff;
 }
 
 [data-theme="dark"] {
@@ -49,10 +61,14 @@
   --text-muted:   #a39c91;
   --text-ink:     #f3f1ed;
 
-  /* = accentFor(256, 0.15, true): L 0.74, C max(0.15 * 0.85, 0.09) = 0.1275. */
+  /* = accentTokensFor("idrovewhere").dark: L 0.74, C max(0.15 * 0.85, 0.09).
+     The dark theme lightens every fill, so white labels and glyphs on them
+     measured 2.2-2.9:1. This dark ink clears 5.8:1 on all of them, and 6.6:1
+     on an accent of any hue. */
   --accent:       oklch(0.74 0.1275 256);
   --accent-soft:  oklch(0.32 0.07 256);
   --accent-text:  oklch(0.85 0.1 256);
+  --on-accent:    #211f1c;
 
   --success:      oklch(0.72 0.11 150);
   --success-soft: oklch(0.32 0.06 150);
@@ -63,4 +79,9 @@
   --danger:       oklch(0.70 0.15 25);
   --danger-soft:  oklch(0.32 0.07 25);
   --danger-text:  oklch(0.86 0.08 25);
+
+  --on-success:   #211f1c;
+  --on-warning:   #211f1c;
+  --on-danger:    #211f1c;
+  --on-neutral:   #211f1c;
 }

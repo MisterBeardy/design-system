@@ -38,6 +38,7 @@
     "esbuild": "^0.28.2"
   },
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "check": "node scripts/check-tokens.mjs"
   }
 }

@@ -5,7 +5,8 @@ Button — the call-to-action control used for every clickable action across app
 <Button variant="secondary">Cancel</Button>
 ```
 
-Variants: `primary` (solid accent, use for the one main action per view), `secondary`
+Variants: `primary` (solid accent with an `--on-accent` label: white in light,
+dark in dark, 4.5:1 or better for every app; use it for the one main action per view), `secondary`
 (bordered, neutral — the default for anything not the headline action), `soft`
 (accent-tinted background, for a secondary action that still wants some accent
 presence), `ghost` (no fill/border, for the lowest-emphasis action, e.g. "remove").

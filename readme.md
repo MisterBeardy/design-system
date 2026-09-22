@@ -121,6 +121,27 @@ Errors say what's wrong and how to fix it, turn the row `danger-text` and add
 an alert glyph, never colour alone. On their own, the controls are boxed like
 `Input`. See `guidelines/forms.md`.
 
+## App chrome
+
+The frame around the content: `PageHeader`, `Toolbar`, `TabBar`.
+
+| | Where it sits | Scrolls away? |
+|---|---|---|
+| `PageHeader` | `--surface`, pinned at the top | No (`sticky={false}` if it should) |
+| `Toolbar` | page background, under the header | Yes, with the content |
+| `TabBar` | fixed to the bottom, translucent | No |
+
+The header is one compact height and stays one: a large title that collapses
+on scroll spends the top third of a phone on the word you just tapped, and
+becomes a second thing to learn on every screen. The toolbar isn't attached to
+it — the filters belong to the list, so they scroll away with it.
+
+The `TabBar` is the system's second translucent surface, on the same argument
+as the `Sheet`: the list runs under it and keeps moving. That means the
+scrolling area above it needs
+`calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px))` at the bottom.
+The accent marks the current tab and nothing else. See `guidelines/chrome.md`.
+
 ## States and feedback
 
 Every screen that loads something meets four states. Each has one component
@@ -233,8 +254,9 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
   GlyphTile, Segmented, Switch, StatStrip, Icon; for elevation Sheet and
-  Popover; for forms Field, Select, Textarea, Checkbox; and for feedback and
-  states Banner, Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
+  Popover; for forms Field, Select, Textarea, Checkbox; for feedback and
+  states Banner, Toast, Skeleton, EmptyState, ErrorState; and for app chrome
+  PageHeader, Toolbar, TabBar (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no

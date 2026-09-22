@@ -31,3 +31,8 @@ export { Toast } from "./Toast.jsx";
 export { Skeleton } from "./Skeleton.jsx";
 export { EmptyState } from "./EmptyState.jsx";
 export { ErrorState } from "./ErrorState.jsx";
+
+// App chrome.
+export { PageHeader } from "./PageHeader.jsx";
+export { Toolbar } from "./Toolbar.jsx";
+export { TabBar } from "./TabBar.jsx";

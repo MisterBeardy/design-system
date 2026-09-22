@@ -207,6 +207,20 @@ for (const theme of ["light", "dark"]) {
   }
 }
 
+// 9. TabBar: the bar is translucent over the page, and its opaque fallback is
+//    --bg, so both the current tab's --accent-text and the rest's
+//    --text-muted are read against --bg. A 10px label is small text: 4.5:1.
+for (const app of APPS) {
+  const t = accentTokensFor(app.key);
+  for (const theme of ["light", "dark"]) {
+    const bg = themes[theme]["--bg"];
+    for (const [ink, what] of [[t[theme]["--accent-text"], "current tab (--accent-text)"], [themes[theme]["--text-muted"], "other tabs (--text-muted)"]]) {
+      const r = contrast(ink, bg);
+      expect(r >= 4.5, `${app.name}, ${theme}: TabBar ${what} on --bg: ${r.toFixed(2)}:1${r >= 4.5 ? "" : " (needs 4.5)"}`);
+    }
+  }
+}
+
 if (failures.length) {
   console.error(`${failures.length} colour check(s) failed:\n  ${failures.join("\n  ")}`);
   process.exit(1);

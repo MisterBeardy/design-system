@@ -21,6 +21,17 @@
      --radius-lg, since they're standalone objects rather than list containers. */
   --radius-card: 12px;
 
+  /* --- Chrome metrics --------------------------------------------------
+     PageHeader's and TabBar's resting heights. They're tokens rather than
+     literals inside the two components because app code needs the numbers
+     too: a sticky Group header offsets by --header-height, and a screen with
+     a TabBar has to leave
+     `calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px))` at the
+     bottom of its scrolling area, because the bar is translucent and the list
+     runs under it. Both are floors — safe-area insets are added on top. */
+  --header-height: 52px;
+  --tabbar-height: 56px;
+
   /* --- Grouped-list metrics -------------------------------------------
      The structural constants behind Group/Row/GlyphTile. These were inline
      literals in the app that proved the language out; they're tokens here

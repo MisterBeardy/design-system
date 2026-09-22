@@ -135,14 +135,20 @@
   transition: transform var(--duration-base) var(--ease-out-expo);
 }
 
-/* --- Sheet ----------------------------------------------------------- */
+/* --- Sheet and TabBar: the translucent surfaces ---------------------- */
 
-/* The sheet is the one translucent surface: the content behind it is live and
-   still matters. It reuses .material-glass's recipe rather than redefining it.
-   `solid` (and a reader who has asked for less transparency) gets the opaque
-   fallback, which is correct rather than degraded: an opaque panel over a map
-   is still a panel above the map. */
-.ds-sheet {
+/* The two places translucency is spent, on the same argument: the content
+   behind is live and still matters — the map under a Sheet, the list running
+   under a TabBar. They share .material-glass's recipe rather than each
+   redefining it, so there's one material to tune. `solid` (and a reader who
+   has asked for less transparency) gets the opaque fallback, which is correct
+   rather than degraded: an opaque panel over a map is still a panel above the
+   map.
+
+   The falloff runs denser at the top in both, which is the edge that meets
+   moving content and has to assert itself. */
+.ds-sheet,
+.ds-tabbar {
   background: var(--bg);
 }
 
@@ -154,7 +160,8 @@
 }
 
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .ds-sheet:not(.ds-sheet-solid) {
+  .ds-sheet:not(.ds-sheet-solid),
+  .ds-tabbar:not(.ds-tabbar-solid) {
     background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--bg) 88%, transparent),
@@ -166,11 +173,37 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .ds-sheet:not(.ds-sheet-solid) {
+  .ds-sheet:not(.ds-sheet-solid),
+  .ds-tabbar:not(.ds-tabbar-solid) {
     background: var(--bg);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+}
+
+/* --- Chrome: PageHeader, Toolbar, TabBar ----------------------------- */
+
+/* More filters than fit scroll sideways. The scrollbar is hidden because the
+   row is one line of controls in a phone-width column: a bar under them would
+   be taller than the gap it sits in. The controls themselves are the
+   affordance — one is always half-visible at the edge. */
+.ds-toolbar {
+  scrollbar-width: none;
+}
+
+.ds-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Inset, like a Row's: the tabs sit edge to edge along the bottom, so an
+   outward ring would be clipped by the window on the outer two. */
+.ds-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.ds-tab {
+  transition: color var(--duration-base) var(--ease-out);
 }
 
 /* --- Forms: Field and Checkbox -------------------------------------- */

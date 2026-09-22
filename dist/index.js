@@ -1331,6 +1331,153 @@ function ErrorState({
     }
   );
 }
+
+// components/core/PageHeader.jsx
+import { createElement as createElement2 } from "react";
+import { jsx as jsx24, jsxs as jsxs17 } from "react/jsx-runtime";
+var truncate4 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
+function PageHeader({
+  title,
+  subtitle,
+  leading,
+  actions,
+  headingLevel = 1,
+  sticky = true,
+  className,
+  style,
+  ...props
+}) {
+  const side = { display: "flex", alignItems: "center", gap: "var(--space-1)", minWidth: 0 };
+  return /* @__PURE__ */ jsxs17(
+    "header",
+    {
+      ...props,
+      className: cx("ds-page-header", className),
+      style: {
+        ...sticky ? { position: "sticky", top: 0, zIndex: 700 } : null,
+        boxSizing: "border-box",
+        display: "grid",
+        gridTemplateColumns: "minmax(32px, auto) fit-content(100%) minmax(32px, auto)",
+        alignItems: "center",
+        gap: "var(--space-2)",
+        minHeight: "var(--header-height)",
+        padding: "6px var(--space-2)",
+        paddingTop: "calc(6px + env(safe-area-inset-top, 0px))",
+        background: "var(--surface)",
+        borderBottom: "var(--hairline) solid var(--border)",
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-start" }, children: leading }),
+        /* @__PURE__ */ jsxs17("div", { style: { minWidth: 0, textAlign: "center" }, children: [
+          createElement2(
+            `h${headingLevel}`,
+            { style: { margin: 0, font: "var(--text-subhead)", color: "var(--text-ink)", ...truncate4 } },
+            title
+          ),
+          subtitle && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--text-page-sub)", color: "var(--text-muted)" }, children: subtitle })
+        ] }),
+        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-end" }, children: actions })
+      ]
+    }
+  );
+}
+
+// components/core/Toolbar.jsx
+import { jsx as jsx25 } from "react/jsx-runtime";
+function Toolbar({ label, wrap = false, children, className, style, ...props }) {
+  return /* @__PURE__ */ jsx25(
+    "div",
+    {
+      ...label ? { role: "group", "aria-label": label } : null,
+      ...props,
+      className: cx("ds-toolbar", className),
+      style: {
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        gap: "var(--space-2)",
+        padding: "var(--space-3) 0 var(--space-2)",
+        ...wrap ? { flexWrap: "wrap" } : (
+          // More filters than fit: they scroll sideways rather than wrapping
+          // into a second row that changes the height of the screen.
+          { flexWrap: "nowrap", overflowX: "auto" }
+        ),
+        ...style
+      },
+      children
+    }
+  );
+}
+
+// components/core/TabBar.jsx
+import { jsx as jsx26, jsxs as jsxs18 } from "react/jsx-runtime";
+var truncate5 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" };
+function TabBar({
+  items,
+  value,
+  onChange,
+  label = "Main",
+  solid = false,
+  fixed = true,
+  className,
+  style,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx26(
+    "nav",
+    {
+      "aria-label": label,
+      ...props,
+      className: cx("ds-tabbar", solid && "ds-tabbar-solid", className),
+      style: {
+        ...fixed ? { position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 700 } : null,
+        boxSizing: "border-box",
+        display: "flex",
+        minHeight: "var(--tabbar-height)",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        // No shadow. The Sheet is the system's one elevation; this bar is part
+        // of the frame, and a hairline is all an edge needs.
+        borderTop: "var(--hairline) solid var(--border)",
+        ...style
+      },
+      children: items.map((item) => {
+        const current = item.value === value;
+        return /* @__PURE__ */ jsxs18(
+          "button",
+          {
+            type: "button",
+            "aria-current": current ? "page" : void 0,
+            onClick: () => onChange?.(item.value),
+            className: "ds-tab",
+            style: {
+              flex: 1,
+              minWidth: 0,
+              boxSizing: "border-box",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 3,
+              padding: "8px 4px",
+              border: "none",
+              background: "transparent",
+              cursor: "pointer",
+              // --accent-text, not --accent: this is text and a line-art glyph
+              // on the page background, and it has to clear 4.5:1 there.
+              color: current ? "var(--accent-text)" : "var(--text-muted)"
+            },
+            children: [
+              item.icon && /* @__PURE__ */ jsx26(Icon, { name: item.icon, size: 20 }),
+              /* @__PURE__ */ jsx26("span", { style: { ...truncate5, font: "var(--text-tab)" }, children: item.label })
+            ]
+          },
+          item.value
+        );
+      })
+    }
+  );
+}
 export {
   Banner,
   Button,
@@ -1345,6 +1492,7 @@ export {
   ICON_NAMES,
   Icon,
   Input,
+  PageHeader,
   Popover,
   Row,
   Segmented,
@@ -1354,6 +1502,8 @@ export {
   StatStrip,
   StatTile,
   Switch,
+  TabBar,
   Textarea,
-  Toast
+  Toast,
+  Toolbar
 };

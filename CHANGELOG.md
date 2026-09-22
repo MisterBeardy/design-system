@@ -24,6 +24,17 @@ under its version (see `CONTRIBUTING.md`).
   to the trigger; it flips above or across when the viewport has no room.
   A new `guidelines/elevation.md` says what may float and when translucency
   is allowed. (#11)
+- `PageHeader`, `Toolbar` and `TabBar` — the frame around the content, the
+  level the kit had nothing for. `PageHeader` is one compact height and stays
+  one: title centred, optional subtitle, one or two icon actions, sticky by
+  default. `Toolbar` sits loose on the page background under it, with no
+  surface of its own, and scrolls away with the list it filters; it's built
+  from the controls the system already has. `TabBar` is bottom navigation with
+  `--accent-text` on the current tab and nothing else, translucent on the same
+  argument as the `Sheet` — the list runs under it and keeps moving. New
+  tokens: `--header-height`, `--tabbar-height`, `--text-page-sub`,
+  `--text-tab`. A new `guidelines/chrome.md` says which screens take which and
+  how they compose with `Group`. (#16)
 
 ## [0.7.0] — 2026-09-22
 

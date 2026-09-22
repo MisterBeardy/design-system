@@ -1,6 +1,6 @@
 # MisterBeardy Design System — how to build with it
 
-A small React kit (23 components) with a flat, calm, Apple-HIG-grouped-list
+A small React kit (26 components) with a flat, calm, Apple-HIG-grouped-list
 visual language. Inline styles reading CSS custom properties — **no utility
 classes, no provider, no build step required.**
 
@@ -76,6 +76,14 @@ tint is the message.)
   content, inside its `Group`; empty is an `EmptyState` filling the panel;
   failed is an `ErrorState` where the content would be. The Banner is the one
   surface allowed a status tint.
+- **App chrome is three components.** `PageHeader` is one compact height and
+  never collapses on scroll (title centred, one or two icon actions, sticky by
+  default). `Toolbar` sits loose on the page background under it and scrolls
+  away with the list it filters — no surface, no border, built from `Segmented`,
+  `Button` and `Chip`. `TabBar` is the bottom navigation, translucent like the
+  `Sheet` because the list runs under it, with `--accent-text` on the current
+  tab and nothing else; the scrolling area above needs
+  `calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px))` at its foot.
 
 ## Where the truth lives
 

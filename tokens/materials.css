@@ -16,6 +16,9 @@
    Falls back to opaque --bg where backdrop-filter isn't supported, which is
    correct rather than degraded: an opaque panel over a map is just a panel. */
 :root {
+  /* For app code: --glass-blur, --glass-saturate, --shadow-sheet and the
+     .material-glass class have no component consumer yet (the floating sheet
+     is hand-built in the apps that need one). --shadow-popover is the Toast's. */
   --glass-blur:       24px;
   --glass-saturate:   180%;
   /* The floating sheet is the ONE elevation in the system. Cards stay flat —

@@ -7,6 +7,11 @@
   --surface:      #ffffff;
   --surface-alt:  #f1ede6;
   --border:       #e2ded7;
+  /* For app code: a divider inside a card between loose content (a totals
+     block under a line-item list, a footnote under a chart), where --border
+     would box it in. At 1.17:1 on --surface (1.12:1 dark) it's decoration,
+     never the only thing separating something interactive. No component
+     uses it; Group rows keep --border. */
   --border-soft:  #f1ede6;
   --text-muted:   #6c675f;
   --text-ink:     #1c1b19;

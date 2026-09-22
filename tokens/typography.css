@@ -26,6 +26,27 @@
   --text-stat:       700 19px/1.15 var(--font-display);
   --text-stat-label: 400 9px/1.4   var(--font-mono);  /* StatStrip label, uppercase */
 
+  /* --- Control and tile roles -----------------------------------------
+     The type Button, Input, Chip, Segmented and StatTile set on themselves.
+     These used to be literals inside the components, so the scale didn't
+     describe what actually rendered.
+
+     Line height is explicit on purpose. The literals left it to inheritance,
+     so a chip or a stat tile was a different height in an app with Tailwind's
+     preflight (line-height 1.5) than in one without. 1.3 is what `normal`
+     resolved to for these two faces, now fixed. */
+  --text-button:       600 14px/1.3 var(--font-display);
+  --text-button-sm:    600 13px/1.3 var(--font-display);
+  --text-input:        400 14px/1.3 var(--font-display);
+  --text-segment:      500 12px/1.3 var(--font-display);
+  --text-segment-sm:   500 11px/1.3 var(--font-display);
+  --text-segment-sub:  400 10px/1.3 var(--font-display);
+  --text-chip:         600 11px/1.3 var(--font-mono);     /* uppercase, --tracking-caps */
+  --text-chip-display: 600 11px/1.3 var(--font-display);  /* Chip mono={false} */
+  --text-tile-label:   400 10px/1.3 var(--font-mono);     /* StatTile label, uppercase, --tracking-label */
+  --text-tile-value:   700 24px/1.3 var(--font-display);
+  --text-tile-sub:     400 11px/1.3 var(--font-mono);
+
   /* Tracking can't ride in the font shorthand, so it's separate. Numerals
      tighten, small uppercase opens up — the usual pairing. */
   --tracking-stat:  -0.02em;

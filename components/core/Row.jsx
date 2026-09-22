@@ -1,8 +1,14 @@
+import { isValidElement } from "react";
+import { cx } from "./cx.js";
+import { GlyphTile } from "./GlyphTile.jsx";
+
 const truncate = {
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
 };
+
+const px = (v) => (typeof v === "number" ? `${v}px` : v);
 
 export function Row({
   glyph,
@@ -13,10 +19,19 @@ export function Row({
   chevron = false,
   onClick,
   disabled = false,
+  className,
   style,
   ...props
 }) {
   const interactive = typeof onClick === "function";
+
+  // --row-inset follows --glyph-size, but a GlyphTile given its own `size` is a
+  // prop, which CSS can't see. Recompute the inset for this row's separator so
+  // it still starts at the label's leading edge.
+  const glyphSize = isValidElement(glyph) && glyph.type === GlyphTile ? glyph.props.size : undefined;
+  const rowStyle = glyphSize != null
+    ? { "--row-inset": `calc(var(--row-pad-x) + ${px(glyphSize)} + var(--row-gap))`, ...style }
+    : style;
 
   const body = (
     <>
@@ -45,22 +60,24 @@ export function Row({
     </>
   );
 
+  // Spread after the consumer's props: the class hook and data attributes are
+  // what core.css draws the separator, hover and focus ring from.
   const shared = {
-    className: "ds-row",
+    className: cx("ds-row", className),
     "data-glyph": glyph ? "true" : undefined,
     "data-interactive": interactive && !disabled ? "true" : undefined,
     "data-disabled": disabled ? "true" : undefined,
-    style,
+    style: rowStyle,
   };
 
   // A row that does something must be reachable by keyboard; a row that doesn't
   // must not pretend it is.
   if (interactive) {
     return (
-      <button type="button" onClick={onClick} disabled={disabled} {...shared} {...props}>
+      <button type="button" onClick={onClick} disabled={disabled} {...props} {...shared}>
         {body}
       </button>
     );
   }
-  return <div {...shared} {...props}>{body}</div>;
+  return <div {...props} {...shared}>{body}</div>;
 }

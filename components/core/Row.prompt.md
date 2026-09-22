@@ -26,6 +26,8 @@ button is a keyboard trap that goes nowhere.
 The separator is drawn on the row and inset to the label's leading edge, so it
 starts where the text starts rather than cutting under the glyph. That inset is
 the whole reason grouped lists read as tidy; without it you get a ladder of
-full-width rules. It comes free — but only if the glyph is the default-size
-`GlyphTile`, since the inset (`--row-inset`) is arithmetic on the tile size. A
-custom-size tile means a custom inset.
+full-width rules. It comes free: `--row-inset` is derived from the row padding,
+the tile size and the gap, and a `GlyphTile` passed with its own `size` moves
+the inset with it. A glyph that isn't a `GlyphTile` (or one wrapped in another
+component) gets the default inset; set `--row-inset` on the row's `style` if it
+needs another.

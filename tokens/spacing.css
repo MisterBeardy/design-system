@@ -22,8 +22,8 @@
   /* --- Grouped-list metrics -------------------------------------------
      The structural constants behind Group/Row/GlyphTile. These were inline
      literals in the app that proved the language out; they're tokens here
-     because Row's separator inset is arithmetic on the other three, and that
-     arithmetic silently breaks if someone resizes a tile without knowing.
+     because Row's separator inset is derived from the other three, so a
+     change to any of them has to reach it.
 
      A hairline is 0.5px, not 1px, and it isn't a border: at 1px a list of rows
      reads as a table, at 0.5px it reads as a list. On 1x displays it rounds up
@@ -34,10 +34,10 @@
   --row-pad-x:  var(--space-3);   /* 12px */
   --row-gap:    10px;
   /* Where a Row's separator starts when the row leads with a glyph: the label's
-     leading edge, = --row-pad-x + --glyph-size + --row-gap = 12 + 23 + 10.
-     Hand-computed, because CSS can't do this arithmetic across the component
-     boundary — resize the tile and this has to move with it. A full-width rule
-     running under the glyph tile is the one thing that makes a grouped list
-     read as a ladder of rules rather than a set of related things. */
-  --row-inset:  45px;
+     leading edge (12 + 23 + 10 = 45px at the defaults). Derived, so changing
+     any of the three moves it. A GlyphTile given its own `size` prop is the one
+     case CSS can't see; Row recomputes this for its own separator then. A
+     full-width rule running under the glyph tile is the one thing that makes a
+     grouped list read as a ladder of rules rather than a set of related things. */
+  --row-inset:  calc(var(--row-pad-x) + var(--glyph-size) + var(--row-gap));
 }

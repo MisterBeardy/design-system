@@ -6,7 +6,8 @@ import type { ReactNode, HTMLAttributes } from "react";
  * @startingPoint section="Components" subtitle="Grouped list row" viewport="700x200"
  */
 export interface RowProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> {
-  /** A `GlyphTile`. Shifts the separator inset to the label's leading edge. */
+  /** A `GlyphTile`. Shifts the separator inset to the label's leading edge,
+   *  following the tile's `size` if it has one. */
   glyph?: ReactNode;
   label: ReactNode;
   sub?: ReactNode;

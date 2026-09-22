@@ -11,6 +11,17 @@ on:
   pull_request:
 
 jobs:
+  # The default accent matches app-registry.js, and every label and glyph on a
+  # coloured fill meets its contrast floor for every registered app.
+  colour-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+
   dist-is-current:
     runs-on: ubuntu-latest
     steps:

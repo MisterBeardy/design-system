@@ -78,7 +78,7 @@ changes colour, and per-app accents are untouched.
 | Page | Tinted, never white (`--bg`). Cards sit on it. The tint is what makes a white card read as an object. |
 | `Group` | Related rows in one card. Flat: border + surface/bg contrast, not elevation. Cards group; they don't decorate. |
 | `Row` | One idea. Glyph → label (+ sub) → value → chevron. Hairline separator, inset to the label's leading edge. |
-| `GlyphTile` | 23px rounded square in a category colour, white glyph. **This** carries colour — not the card surface. |
+| `GlyphTile` | 23px rounded square in a category colour; the glyph takes the fill's on-colour (`--on-accent`, `--on-success`, …). **This** carries colour — not the card surface. |
 | `StatStrip` | The number is the hero; its label is furniture. One accent metric per screen. |
 | `Segmented` | Replaces tab rows and year/range pickers. Three or four options, max. |
 | `Switch` | Replaces the checkbox wherever the change takes effect immediately. |
@@ -100,14 +100,21 @@ hue/chroma belongs to which app, and computes open slots for new apps from
 the widest remaining gaps around the hue wheel. The **Accent Registry** and
 **Palette Check** tools that visualise it live in the Claude Design project.
 
-Formula: `light = oklch(0.58–0.64 C H)`, `dark = oklch(0.70–0.76 C H)`.
+One formula for every app, and `accentCssFor(key)` prints it: light
+`--accent: oklch(0.54 C H)` with a white label, dark
+`--accent: oklch(0.74 max(0.85C, 0.09) H)` with a dark label (`--on-accent`).
+The light lightness was 0.60 until 0.5.0, where neither white nor dark text
+reached 4.5:1 on a primary button for most apps.
 
 **Adding app #9:**
 1. Run `suggestOpenSlots()` from `app-registry.js` (or open the Accent Registry
    tool in the Claude Design project) — it computes the current open hue slots.
 2. Pick an open slot (or keep a real existing brand color, accepting the
-   tradeoff if it lands near another app).
-3. Add a row to `app-registry.js` — every tool reads it, nothing else needs updating.
+   tradeoff if it lands near another app). Greens and cyans (roughly H156–226)
+   need chroma of 0.13 or less, or the button label misses 4.5:1.
+3. Add a row to `app-registry.js` and run `npm run check`, which fails if the
+   new app's labels miss their contrast floor. Every tool reads the registry;
+   nothing else needs updating.
 4. Build real screens from the app's actual repo/data where possible.
 
 ## Consuming this system from an app
@@ -133,16 +140,24 @@ import {
 } from "@misterbeardy/design-system";
 
 // accent registry (build scripts, theme tooling)
-import { APPS, accentFor } from "@misterbeardy/design-system/app-registry";
+import { APPS, accentCssFor } from "@misterbeardy/design-system/app-registry";
 ```
 
-Then set the app's accent in its own root CSS, from its `app-registry.js` row:
+Then set the app's accent in its own root CSS: paste what
+`accentCssFor("<its key>")` prints. For WashMyCar:
 
 ```css
 :root {
-  --accent:      oklch(0.60 0.13 230); /* washmycar */
+  --accent: oklch(0.54 0.13 230);
   --accent-soft: oklch(0.95 0.03 230);
   --accent-text: oklch(0.42 0.13 230);
+  --on-accent: #ffffff;
+}
+[data-theme="dark"] {
+  --accent: oklch(0.74 0.1105 230);
+  --accent-soft: oklch(0.32 0.07 230);
+  --accent-text: oklch(0.85 0.1 230);
+  --on-accent: #211f1c;
 }
 ```
 

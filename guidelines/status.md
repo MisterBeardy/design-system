@@ -15,5 +15,6 @@ Semantic outcome colours, each in the same solid / soft / text structure as the 
 Light values: `success oklch(0.58 0.13 150)`, `warning oklch(0.64 0.13 80)`, `danger oklch(0.55 0.18 25)` (each with matching soft/text; all themed for dark).
 
 - Reach for status **only for real outcome states** — `accent`/`neutral` cover everything that isn't a genuine success/warning/danger. Don't use status tones decoratively.
-- The soft/text pair is the `Chip` recipe: `<Chip tone="success">PAID</Chip>`. The solid is for `GlyphTile tone=…` and `Switch` (on = `--success`).
+- The soft/text pair is the `Chip` recipe: `<Chip tone="success">PAID</Chip>`. The solid is for `GlyphTile tone=…` and `Switch` (on = `--success`); what sits on a solid takes its on-colour (`--on-success`, `--on-warning`, `--on-danger`: white in light, dark ink in dark, where every solid is too light for white).
+- Status as text on the surface (a `StatStrip` delta) uses the `-text` token, not the solid: the solids are fills, and as 11px text they fall under 4.5:1.
 - Note: warning (H80) sits near some brand hues (H70–75) — a warning chip and an accent chip can look like siblings in those apps. Acceptable; both mean "attention".

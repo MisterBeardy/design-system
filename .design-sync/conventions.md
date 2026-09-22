@@ -26,7 +26,8 @@ CSS). Components carry their own look; you compose them and space them.
 |---|---|
 | Surfaces | `--bg` `--surface` `--surface-alt` `--border` `--border-soft` `--hairline` |
 | Text | `--text-ink` `--text-muted` |
-| Accent slot (per-app) | `--accent` `--accent-soft` `--accent-text` |
+| Accent slot (per-app) | `--accent` `--accent-soft` `--accent-text` `--on-accent` (text or glyph on a solid accent) |
+| On-colours | `--on-success` `--on-warning` `--on-danger` `--on-neutral` (glyph on that solid fill) |
 | Status (app-agnostic) | `--success[-soft/-text]` `--warning[-soft/-text]` `--danger[-soft/-text]` |
 | Fonts | `--font-display` (Space Grotesk), `--font-mono` (JetBrains Mono) |
 | Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` |

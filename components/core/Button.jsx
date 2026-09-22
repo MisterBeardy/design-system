@@ -5,7 +5,7 @@ import { cx } from "./cx.js";
 // padding is 1px less than the old borderless primary's, which keeps that
 // variant's box exactly as it was.
 const VARIANTS = {
-  primary:   { background: "var(--accent)", color: "#fff", borderColor: "transparent" },
+  primary:   { background: "var(--accent)", color: "var(--on-accent)", borderColor: "transparent" },
   secondary: { background: "var(--surface)", color: "var(--text-ink)", borderColor: "var(--border)" },
   soft:      { background: "var(--accent-soft)", color: "var(--accent-text)", borderColor: "transparent" },
   ghost:     { background: "transparent", color: "var(--text-muted)", borderColor: "transparent" },

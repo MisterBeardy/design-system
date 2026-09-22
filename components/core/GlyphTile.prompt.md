@@ -23,4 +23,7 @@ Two ways to colour one, and the difference is the whole point:
 
 Children must be an SVG icon, not an emoji. Keep the icon around 12–14px inside
 the default 23px tile — the tile is the shape you notice, the glyph just tells
-you which one it is.
+you which one it is. Draw it in `currentColor`: a `tone` tile colours it with
+that fill's on-colour (`--on-accent`, `--on-success`, … — white in light, dark
+in dark), so it holds 3:1 in both themes. A `color` tile's glyph is always
+white, so pick data colours dark enough to carry it.

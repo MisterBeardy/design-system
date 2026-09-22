@@ -10,6 +10,11 @@ import type { GlyphTileProps, GlyphTone } from "./GlyphTile";
 import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
 import type { StatStripProps, Stat } from "./StatStrip";
+import type { BannerProps, BannerTone } from "./Banner";
+import type { ToastProps, ToastAction } from "./Toast";
+import type { SkeletonProps } from "./Skeleton";
+import type { EmptyStateProps } from "./EmptyState";
+import type { ErrorStateProps } from "./ErrorState";
 
 export type {
   ButtonProps,
@@ -26,6 +31,13 @@ export type {
   SwitchProps,
   StatStripProps,
   Stat,
+  BannerProps,
+  BannerTone,
+  ToastProps,
+  ToastAction,
+  SkeletonProps,
+  EmptyStateProps,
+  ErrorStateProps,
 };
 
 export declare const Button: FC<ButtonProps>;
@@ -40,3 +52,10 @@ export declare const GlyphTile: FC<GlyphTileProps>;
 export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): ReactElement;
 export declare const Switch: FC<SwitchProps>;
 export declare const StatStrip: FC<StatStripProps>;
+
+// Feedback and states.
+export declare const Banner: FC<BannerProps>;
+export declare const Toast: FC<ToastProps>;
+export declare const Skeleton: FC<SkeletonProps>;
+export declare const EmptyState: FC<EmptyStateProps>;
+export declare const ErrorState: FC<ErrorStateProps>;

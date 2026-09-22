@@ -17,7 +17,12 @@
     "GlyphTile": "components/core/GlyphTile.prompt.md",
     "Segmented": "components/core/Segmented.prompt.md",
     "Switch": "components/core/Switch.prompt.md",
-    "StatStrip": "components/core/StatStrip.prompt.md"
+    "StatStrip": "components/core/StatStrip.prompt.md",
+    "Banner": "components/core/Banner.prompt.md",
+    "Toast": "components/core/Toast.prompt.md",
+    "Skeleton": "components/core/Skeleton.prompt.md",
+    "EmptyState": "components/core/EmptyState.prompt.md",
+    "ErrorState": "components/core/ErrorState.prompt.md"
   },
   "overrides": {
     "Input": { "cardMode": "column" }

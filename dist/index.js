@@ -466,16 +466,354 @@ function StatStrip({ stats, style, ...props }) {
     s.label
   )) });
 }
+
+// components/core/glyphs.jsx
+import { jsx as jsx12, jsxs as jsxs7 } from "react/jsx-runtime";
+var Glyph = ({ size = 13, children }) => /* @__PURE__ */ jsx12(
+  "svg",
+  {
+    "aria-hidden": "true",
+    viewBox: "0 0 20 20",
+    width: size,
+    height: size,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.75",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    style: { display: "block", flexShrink: 0 },
+    children
+  }
+);
+var CheckGlyph = (p) => /* @__PURE__ */ jsx12(Glyph, { ...p, children: /* @__PURE__ */ jsx12("path", { d: "M4.5 10.5 8.5 14.5 15.5 6" }) });
+var AlertGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
+  /* @__PURE__ */ jsx12("path", { d: "M10 3.5 2.8 16h14.4L10 3.5Z" }),
+  /* @__PURE__ */ jsx12("path", { d: "M10 8.5v3.5" }),
+  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "14", r: "0.6", fill: "currentColor" })
+] });
+var InfoGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
+  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "10", r: "7" }),
+  /* @__PURE__ */ jsx12("path", { d: "M10 9v5" }),
+  /* @__PURE__ */ jsx12("circle", { cx: "10", cy: "6.5", r: "0.6", fill: "currentColor" })
+] });
+var InboxGlyph = (p) => /* @__PURE__ */ jsxs7(Glyph, { ...p, children: [
+  /* @__PURE__ */ jsx12("path", { d: "M3 11l2.5-6h9L17 11v5H3v-5Z" }),
+  /* @__PURE__ */ jsx12("path", { d: "M3 11h4l1 2h4l1-2h4" })
+] });
+var CloseGlyph = (p) => /* @__PURE__ */ jsx12(Glyph, { ...p, children: /* @__PURE__ */ jsx12("path", { d: "M5.5 5.5l9 9M14.5 5.5l-9 9" }) });
+
+// components/core/Banner.jsx
+import { jsx as jsx13, jsxs as jsxs8 } from "react/jsx-runtime";
+var TONES = {
+  success: { fill: "var(--success-soft)", ink: "var(--success-text)", Icon: CheckGlyph },
+  warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", Icon: AlertGlyph },
+  danger: { fill: "var(--danger-soft)", ink: "var(--danger-text)", Icon: AlertGlyph },
+  neutral: { fill: "var(--surface-alt)", ink: "var(--text-ink)", Icon: InfoGlyph }
+};
+function Banner({
+  tone = "neutral",
+  title,
+  icon,
+  action,
+  onDismiss,
+  dismissLabel = "Dismiss",
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const t = TONES[tone] ?? TONES.neutral;
+  const glyph = icon === void 0 ? /* @__PURE__ */ jsx13(t.Icon, { size: 16 }) : icon;
+  return /* @__PURE__ */ jsxs8(
+    "div",
+    {
+      role: tone === "danger" ? "alert" : "status",
+      ...props,
+      className: cx("ds-banner", className),
+      style: {
+        display: "flex",
+        gap: 10,
+        alignItems: "flex-start",
+        boxSizing: "border-box",
+        padding: "12px 14px",
+        borderRadius: "var(--radius-card)",
+        background: t.fill,
+        color: t.ink,
+        ...style
+      },
+      children: [
+        glyph && /* @__PURE__ */ jsx13("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
+        /* @__PURE__ */ jsxs8("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message-title)" }, children: title }),
+          children && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
+          action && /* @__PURE__ */ jsx13("div", { style: { marginTop: 10 }, children: action })
+        ] }),
+        onDismiss && /* @__PURE__ */ jsx13(
+          "button",
+          {
+            type: "button",
+            "aria-label": dismissLabel,
+            onClick: onDismiss,
+            className: "ds-button",
+            style: {
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 28,
+              height: 28,
+              margin: "-4px -6px 0 0",
+              padding: 0,
+              border: "none",
+              borderRadius: "var(--radius-sm)",
+              background: "transparent",
+              color: "inherit",
+              cursor: "pointer"
+            },
+            children: /* @__PURE__ */ jsx13(CloseGlyph, { size: 14 })
+          }
+        )
+      ]
+    }
+  );
+}
+
+// components/core/Toast.jsx
+import { useEffect, useRef, useState } from "react";
+import { jsx as jsx14, jsxs as jsxs9 } from "react/jsx-runtime";
+function Toast({
+  open,
+  message,
+  action,
+  onClose,
+  duration,
+  inline = false,
+  className,
+  style,
+  ...props
+}) {
+  const ms = duration ?? (action ? 8e3 : 5e3);
+  const [paused, setPaused] = useState(false);
+  const close = useRef(onClose);
+  close.current = onClose;
+  useEffect(() => {
+    if (!open) setPaused(false);
+  }, [open]);
+  useEffect(() => {
+    if (!open || paused || !Number.isFinite(ms)) return void 0;
+    const id = setTimeout(() => close.current?.(), ms);
+    return () => clearTimeout(id);
+  }, [open, message, paused, ms]);
+  return /* @__PURE__ */ jsx14(
+    "div",
+    {
+      role: "status",
+      "aria-live": "polite",
+      className: "ds-toast-region",
+      style: inline ? { display: "flex" } : {
+        position: "fixed",
+        left: 0,
+        right: 0,
+        bottom: "calc(24px + env(safe-area-inset-bottom, 0px))",
+        zIndex: 1e3,
+        display: "flex",
+        justifyContent: "center",
+        pointerEvents: "none"
+      },
+      children: open && /* @__PURE__ */ jsxs9(
+        "div",
+        {
+          ...props,
+          className: cx("ds-toast", className),
+          onMouseEnter: () => setPaused(true),
+          onMouseLeave: () => setPaused(false),
+          onFocus: () => setPaused(true),
+          onBlur: (e) => {
+            if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+          },
+          onKeyDown: (e) => {
+            if (e.key === "Escape") close.current?.();
+          },
+          style: {
+            pointerEvents: "auto",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            boxSizing: "border-box",
+            width: inline ? "100%" : "min(420px, calc(100% - 32px))",
+            minHeight: 48,
+            padding: action ? "2px 6px 2px 16px" : "12px 16px",
+            borderRadius: "var(--radius-md)",
+            background: "var(--surface)",
+            color: "var(--text-ink)",
+            border: "1px solid var(--border)",
+            // The popover shadow: a toast floats over the page, so it takes
+            // the elevation the system keeps for floating things.
+            boxShadow: "var(--shadow-popover)",
+            ...style
+          },
+          children: [
+            /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
+            action && /* @__PURE__ */ jsx14(
+              "button",
+              {
+                type: "button",
+                className: "ds-button",
+                onClick: () => {
+                  action.onClick?.();
+                  close.current?.();
+                },
+                style: {
+                  flexShrink: 0,
+                  minHeight: 44,
+                  padding: "0 10px",
+                  border: "none",
+                  borderRadius: "var(--radius-sm)",
+                  background: "transparent",
+                  color: "var(--accent-text)",
+                  font: "var(--text-button)",
+                  cursor: "pointer"
+                },
+                children: action.label
+              }
+            )
+          ]
+        }
+      )
+    }
+  );
+}
+
+// components/core/Skeleton.jsx
+import { jsx as jsx15, jsxs as jsxs10 } from "react/jsx-runtime";
+var LABEL_WIDTHS = ["62%", "48%", "70%", "40%", "56%", "66%"];
+var VALUE_WIDTHS = [44, 36, 52, 30, 40, 48];
+var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx15("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
+function Skeleton({ variant = "rows", count = 3, label = "Loading", className, style, ...props }) {
+  const items = Array.from({ length: count }, (_, i) => i);
+  return /* @__PURE__ */ jsxs10(
+    "div",
+    {
+      role: "status",
+      "aria-live": "polite",
+      "aria-busy": "true",
+      ...props,
+      className: cx("ds-skeleton", className),
+      style: variant === "tiles" ? { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 10, ...style } : style,
+      children: [
+        /* @__PURE__ */ jsx15("span", { className: "ds-visually-hidden", children: label }),
+        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs10(
+          "div",
+          {
+            "aria-hidden": "true",
+            style: {
+              boxSizing: "border-box",
+              padding: "12px 14px",
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-lg)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10
+            },
+            children: [
+              /* @__PURE__ */ jsx15(Bar, { width: "55%", height: 9 }),
+              /* @__PURE__ */ jsx15(Bar, { width: "70%", height: 22, radius: 6 })
+            ]
+          },
+          i
+        )) : items.map((i) => (
+          // The Row's own class: same padding, gap and inset separators.
+          /* @__PURE__ */ jsxs10("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
+            /* @__PURE__ */ jsx15(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
+            /* @__PURE__ */ jsxs10("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
+              /* @__PURE__ */ jsx15(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
+              /* @__PURE__ */ jsx15(Bar, { width: "30%", height: 8 })
+            ] }),
+            /* @__PURE__ */ jsx15(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
+          ] }, i)
+        ))
+      ]
+    }
+  );
+}
+
+// components/core/EmptyState.jsx
+import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
+function EmptyState({ icon, title, action, children, className, style, ...props }) {
+  return /* @__PURE__ */ jsxs11(
+    "div",
+    {
+      ...props,
+      className: cx("ds-empty", className),
+      style: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 12,
+        boxSizing: "border-box",
+        padding: "var(--space-5)",
+        textAlign: "center",
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsx16(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx16(InboxGlyph, { size: 22 }) }),
+        title && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
+        children && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
+        action && /* @__PURE__ */ jsx16("div", { style: { marginTop: 4 }, children: action })
+      ]
+    }
+  );
+}
+
+// components/core/ErrorState.jsx
+import { jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
+function ErrorState({
+  title,
+  onRetry,
+  retryLabel = "Try again",
+  action,
+  icon,
+  children,
+  className,
+  style,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxs12(
+    "div",
+    {
+      role: "alert",
+      ...props,
+      className: cx("ds-error", className),
+      style: { display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style },
+      children: [
+        /* @__PURE__ */ jsx17(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx17(AlertGlyph, {}) }),
+        /* @__PURE__ */ jsxs12("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
+          children && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
+          (action || onRetry) && /* @__PURE__ */ jsx17("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx17(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
+        ] })
+      ]
+    }
+  );
+}
 export {
+  Banner,
   Button,
   Card,
   Chip,
+  EmptyState,
+  ErrorState,
   GlyphTile,
   Group,
   Input,
   Row,
   Segmented,
+  Skeleton,
   StatStrip,
   StatTile,
-  Switch
+  Switch,
+  Toast
 };

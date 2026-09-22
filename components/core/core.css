@@ -135,6 +135,45 @@
   transition: transform var(--duration-base) var(--ease-out-expo);
 }
 
+/* --- Skeleton -------------------------------------------------------- */
+
+/* A slow pulse on the placeholder bars. It's decoration on a state the
+   Skeleton already announces, so it stops entirely under reduced motion. */
+@keyframes ds-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.ds-skeleton-bar {
+  background: var(--surface-alt);
+  animation: ds-skeleton-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+/* In dark, --surface-alt sits too close to --surface to see at the bottom of
+   the pulse; the border colour is one step further. */
+[data-theme="dark"] .ds-skeleton-bar {
+  background: var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-skeleton-bar {
+    animation: none;
+  }
+}
+
+/* Read by screen readers, never drawn: Skeleton's "Loading" label. */
+.ds-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* --- Touch targets --------------------------------------------------- */
 
 /* On a touch screen every control takes taps across at least 44×44px, the

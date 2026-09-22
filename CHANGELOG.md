@@ -11,6 +11,19 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-09-22
+
+The house icon set, the form vocabulary, and a token audit. (#14, #15, #21)
+
+### Upgrading
+
+- **An `Input` marked `aria-invalid` now draws a 2px `--danger` border.**
+  Before, the attribute changed nothing visually. An app that already sets it
+  gets the error look for free; one that sets it on a field it doesn't mean to
+  mark should stop setting it.
+- Nothing else changes for existing code: the rest of this release is new
+  components, new files and documentation.
+
 ### Added
 
 - `Icon` and the house icon set: 16 glyphs (`check`, `close`, `plus`,
@@ -252,7 +265,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/MisterBeardy/design-system/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/MisterBeardy/design-system/compare/v0.3.0...v0.4.0

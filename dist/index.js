@@ -86,30 +86,55 @@ function Chip({ tone = "neutral", mono = true, children, style, ...props }) {
   );
 }
 
+// components/core/controls.js
+function controlStyle({ bare, invalid, disabled }) {
+  const base = {
+    boxSizing: "border-box",
+    minWidth: 0,
+    margin: 0,
+    color: invalid && bare ? "var(--danger-text)" : "var(--text-ink)",
+    cursor: disabled ? "default" : void 0,
+    opacity: disabled ? 0.5 : void 0
+  };
+  if (bare) {
+    return {
+      ...base,
+      flex: "1 1 0",
+      width: "auto",
+      font: "var(--text-row-label)",
+      textAlign: "right",
+      background: "transparent",
+      border: "none",
+      borderRadius: 0,
+      padding: 0
+    };
+  }
+  return {
+    ...base,
+    width: "100%",
+    font: "var(--text-input)",
+    background: "var(--surface)",
+    border: `1px solid ${invalid ? "var(--danger)" : "var(--border)"}`,
+    // A second pixel of danger inside the border, so an invalid field reads
+    // by weight as well as colour.
+    boxShadow: invalid ? "inset 0 0 0 1px var(--danger)" : void 0,
+    borderRadius: "var(--radius-md)",
+    padding: "12px 14px"
+  };
+}
+var isInvalid = (v) => v === true || v === "true";
+
 // components/core/Input.jsx
 import { jsx as jsx4 } from "react/jsx-runtime";
-function Input({ disabled = false, className, style, ...props }) {
+function Input({ disabled = false, bare = false, className, style, ...props }) {
   return /* @__PURE__ */ jsx4(
     "input",
     {
       ...props,
       disabled,
       className: cx("ds-input", className),
-      style: {
-        width: "100%",
-        // Same reason as .ds-row: without a host reset, `width: 100%` plus the
-        // padding and border below overflows the container by 30px.
-        boxSizing: "border-box",
-        font: "var(--text-input)",
-        color: "var(--text-ink)",
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-md)",
-        padding: "12px 14px",
-        cursor: disabled ? "default" : void 0,
-        opacity: disabled ? 0.5 : void 0,
-        ...style
-      }
+      "data-bare": bare ? "true" : void 0,
+      style: { ...controlStyle({ bare, invalid: isInvalid(props["aria-invalid"]), disabled }), ...style }
     }
   );
 }
@@ -516,8 +541,241 @@ function StatStrip({ stats, style, ...props }) {
   )) });
 }
 
+// components/core/Field.jsx
+import { Children, cloneElement, useId } from "react";
+
+// components/core/Textarea.jsx
+import { jsx as jsx13 } from "react/jsx-runtime";
+function Textarea({ disabled = false, bare = false, rows = 3, className, style, ...props }) {
+  return /* @__PURE__ */ jsx13(
+    "textarea",
+    {
+      rows,
+      ...props,
+      disabled,
+      className: cx("ds-input", "ds-textarea", className),
+      "data-bare": bare ? "true" : void 0,
+      style: {
+        ...controlStyle({ bare, invalid: isInvalid(props["aria-invalid"]), disabled }),
+        // Prose runs longer than a field value: a looser line, left-aligned
+        // even in a row, and it grows downward only.
+        lineHeight: 1.45,
+        textAlign: "left",
+        resize: "vertical",
+        ...bare ? { width: "100%", flex: "none" } : null,
+        ...style
+      }
+    }
+  );
+}
+
+// components/core/Field.jsx
+import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
+function Field({ label, help, error, glyph, children, className, style, ...props }) {
+  const autoId = useId();
+  const child = Children.only(children);
+  const id = child.props.id ?? `field${autoId.replace(/:/g, "")}`;
+  const msgId = `${id}-msg`;
+  const message = error || help;
+  const stacked = child.type === Textarea;
+  const control = cloneElement(child, {
+    id,
+    bare: true,
+    "aria-invalid": error ? true : child.props["aria-invalid"],
+    "aria-describedby": [child.props["aria-describedby"], message && msgId].filter(Boolean).join(" ") || void 0
+  });
+  return /* @__PURE__ */ jsxs7(
+    "div",
+    {
+      ...props,
+      className: cx("ds-row", "ds-field", className),
+      "data-glyph": glyph && !stacked ? "true" : void 0,
+      "data-invalid": error ? "true" : void 0,
+      style: { flexDirection: "column", alignItems: "stretch", gap: 4, ...style },
+      children: [
+        /* @__PURE__ */ jsxs7(
+          "label",
+          {
+            htmlFor: id,
+            style: {
+              display: "flex",
+              flexDirection: stacked ? "column" : "row",
+              alignItems: stacked ? "stretch" : "center",
+              gap: stacked ? 6 : "var(--row-gap)",
+              cursor: "text"
+            },
+            children: [
+              !stacked && glyph,
+              /* @__PURE__ */ jsx14(
+                "span",
+                {
+                  style: {
+                    flexShrink: 0,
+                    font: stacked ? "var(--text-row-sub)" : "var(--text-row-label)",
+                    color: error ? "var(--danger-text)" : stacked ? "var(--text-muted)" : "var(--text-ink)"
+                  },
+                  children: label
+                }
+              ),
+              control,
+              error && !stacked && /* @__PURE__ */ jsx14(Icon, { name: "alert", size: 14, style: { color: "var(--danger-text)" } })
+            ]
+          }
+        ),
+        message && /* @__PURE__ */ jsx14(
+          "div",
+          {
+            id: msgId,
+            style: {
+              font: "var(--text-row-sub)",
+              color: error ? "var(--danger-text)" : "var(--text-muted)",
+              // Under the label's leading edge, past the glyph if there is one.
+              marginLeft: glyph && !stacked ? "calc(var(--row-inset) - var(--row-pad-x))" : 0
+            },
+            children: message
+          }
+        )
+      ]
+    }
+  );
+}
+
+// components/core/Select.jsx
+import { jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
+function Select({ options, value, onChange, disabled = false, bare = false, placeholder, className, style, ...props }) {
+  const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
+  const invalid = isInvalid(props["aria-invalid"]);
+  const box = controlStyle({ bare, invalid, disabled });
+  const empty = value == null || value === "";
+  return /* @__PURE__ */ jsxs8(
+    "span",
+    {
+      style: {
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        minWidth: 0,
+        flex: bare ? "1 1 0" : void 0,
+        width: bare ? void 0 : "100%"
+      },
+      children: [
+        /* @__PURE__ */ jsxs8(
+          "select",
+          {
+            ...props,
+            value: value ?? "",
+            disabled,
+            onChange: (e) => onChange?.(e.target.value),
+            className: cx("ds-input", "ds-select", className),
+            "data-bare": bare ? "true" : void 0,
+            style: {
+              ...box,
+              appearance: "none",
+              WebkitAppearance: "none",
+              cursor: disabled ? "default" : "pointer",
+              ...bare ? {
+                // In a row it reads like a Row's value: mono, muted, then the chevron.
+                width: "100%",
+                font: "var(--text-row-value)",
+                fontVariantNumeric: "tabular-nums",
+                color: invalid ? "var(--danger-text)" : "var(--text-muted)",
+                textAlignLast: "right",
+                paddingRight: 20
+              } : {
+                paddingRight: 38,
+                // Showing the placeholder, not a choice: read it as one.
+                ...empty && placeholder != null ? { color: "var(--text-muted)" } : null
+              },
+              ...style
+            },
+            children: [
+              placeholder != null && /* @__PURE__ */ jsx15("option", { value: "", disabled: true, children: placeholder }),
+              opts.map((o) => /* @__PURE__ */ jsx15("option", { value: o.value, disabled: o.disabled, children: o.label }, o.value))
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx15(
+          Icon,
+          {
+            name: bare ? "chevron-right" : "chevron-down",
+            size: bare ? 14 : 16,
+            style: {
+              position: "absolute",
+              right: bare ? 0 : 14,
+              color: "var(--text-muted)",
+              opacity: bare ? 0.5 : 1,
+              pointerEvents: "none"
+            }
+          }
+        )
+      ]
+    }
+  );
+}
+
+// components/core/Checkbox.jsx
+import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
+function Checkbox({ checked, onChange, label, sub, disabled = false, row = false, className, style, ...props }) {
+  return /* @__PURE__ */ jsxs9(
+    "label",
+    {
+      className: cx(row && "ds-row", "ds-checkbox", className),
+      "data-glyph": row ? "true" : void 0,
+      "data-disabled": disabled ? "true" : void 0,
+      style: {
+        display: "flex",
+        gap: row ? "var(--row-gap)" : 10,
+        alignItems: sub ? "flex-start" : "center",
+        cursor: disabled ? "default" : "pointer",
+        opacity: disabled && !row ? 0.5 : void 0,
+        // In a row the box stands where a GlyphTile would, so the separator
+        // insets to the label's edge past a 20px box instead of a 23px tile.
+        ...row ? { "--row-inset": "calc(var(--row-pad-x) + 20px + var(--row-gap))" } : null,
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsx16(
+          "input",
+          {
+            type: "checkbox",
+            checked,
+            disabled,
+            onChange: (e) => onChange?.(e.target.checked),
+            ...props,
+            className: "ds-checkbox-input"
+          }
+        ),
+        /* @__PURE__ */ jsx16(
+          "span",
+          {
+            "aria-hidden": "true",
+            className: "ds-checkbox-box",
+            style: {
+              flexShrink: 0,
+              boxSizing: "border-box",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 20,
+              height: 20,
+              borderRadius: "var(--radius-sm)",
+              // Ticking is an interactive choice, so it spends the accent.
+              ...checked ? { background: "var(--accent)", border: "1px solid transparent", color: "var(--on-accent)" } : { background: "var(--surface)", border: "1.5px solid var(--text-muted)", color: "transparent" }
+            },
+            children: checked && /* @__PURE__ */ jsx16(Icon, { name: "check", size: 14 })
+          }
+        ),
+        (label || sub) && /* @__PURE__ */ jsxs9("span", { style: { minWidth: 0, paddingTop: sub ? 1 : 0 }, children: [
+          /* @__PURE__ */ jsx16("span", { style: { display: "block", font: row ? "var(--text-row-label)" : "var(--text-input)", color: "var(--text-ink)" }, children: label }),
+          sub && /* @__PURE__ */ jsx16("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
+        ] })
+      ]
+    }
+  );
+}
+
 // components/core/Banner.jsx
-import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs10 } from "react/jsx-runtime";
 var TONES = {
   success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
   warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
@@ -537,8 +795,8 @@ function Banner({
   ...props
 }) {
   const t = TONES[tone] ?? TONES.neutral;
-  const glyph = icon === void 0 ? /* @__PURE__ */ jsx13(Icon, { name: t.icon }) : icon;
-  return /* @__PURE__ */ jsxs7(
+  const glyph = icon === void 0 ? /* @__PURE__ */ jsx17(Icon, { name: t.icon }) : icon;
+  return /* @__PURE__ */ jsxs10(
     "div",
     {
       role: tone === "danger" ? "alert" : "status",
@@ -556,13 +814,13 @@ function Banner({
         ...style
       },
       children: [
-        glyph && /* @__PURE__ */ jsx13("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
-        /* @__PURE__ */ jsxs7("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message-title)" }, children: title }),
-          children && /* @__PURE__ */ jsx13("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
-          action && /* @__PURE__ */ jsx13("div", { style: { marginTop: 10 }, children: action })
+        glyph && /* @__PURE__ */ jsx17("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
+        /* @__PURE__ */ jsxs10("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message-title)" }, children: title }),
+          children && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
+          action && /* @__PURE__ */ jsx17("div", { style: { marginTop: 10 }, children: action })
         ] }),
-        onDismiss && /* @__PURE__ */ jsx13(
+        onDismiss && /* @__PURE__ */ jsx17(
           "button",
           {
             type: "button",
@@ -584,7 +842,7 @@ function Banner({
               color: "inherit",
               cursor: "pointer"
             },
-            children: /* @__PURE__ */ jsx13(Icon, { name: "close", size: 14 })
+            children: /* @__PURE__ */ jsx17(Icon, { name: "close", size: 14 })
           }
         )
       ]
@@ -594,7 +852,7 @@ function Banner({
 
 // components/core/Toast.jsx
 import { useEffect, useRef, useState } from "react";
-import { jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs11 } from "react/jsx-runtime";
 function Toast({
   open,
   message,
@@ -618,7 +876,7 @@ function Toast({
     const id = setTimeout(() => close.current?.(), ms);
     return () => clearTimeout(id);
   }, [open, message, paused, ms]);
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx18(
     "div",
     {
       role: "status",
@@ -634,7 +892,7 @@ function Toast({
         justifyContent: "center",
         pointerEvents: "none"
       },
-      children: open && /* @__PURE__ */ jsxs8(
+      children: open && /* @__PURE__ */ jsxs11(
         "div",
         {
           ...props,
@@ -667,8 +925,8 @@ function Toast({
             ...style
           },
           children: [
-            /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
-            action && /* @__PURE__ */ jsx14(
+            /* @__PURE__ */ jsx18("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
+            action && /* @__PURE__ */ jsx18(
               "button",
               {
                 type: "button",
@@ -699,13 +957,13 @@ function Toast({
 }
 
 // components/core/Skeleton.jsx
-import { jsx as jsx15, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs12 } from "react/jsx-runtime";
 var LABEL_WIDTHS = ["62%", "48%", "70%", "40%", "56%", "66%"];
 var VALUE_WIDTHS = [44, 36, 52, 30, 40, 48];
-var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx15("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
+var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx19("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
 function Skeleton({ variant = "rows", count = 3, label = "Loading", className, style, ...props }) {
   const items = Array.from({ length: count }, (_, i) => i);
-  return /* @__PURE__ */ jsxs9(
+  return /* @__PURE__ */ jsxs12(
     "div",
     {
       role: "status",
@@ -715,8 +973,8 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
       className: cx("ds-skeleton", className),
       style: variant === "tiles" ? { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 10, ...style } : style,
       children: [
-        /* @__PURE__ */ jsx15("span", { className: "ds-visually-hidden", children: label }),
-        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs9(
+        /* @__PURE__ */ jsx19("span", { className: "ds-visually-hidden", children: label }),
+        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs12(
           "div",
           {
             "aria-hidden": "true",
@@ -731,20 +989,20 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
               gap: 10
             },
             children: [
-              /* @__PURE__ */ jsx15(Bar, { width: "55%", height: 9 }),
-              /* @__PURE__ */ jsx15(Bar, { width: "70%", height: 22, radius: 6 })
+              /* @__PURE__ */ jsx19(Bar, { width: "55%", height: 9 }),
+              /* @__PURE__ */ jsx19(Bar, { width: "70%", height: 22, radius: 6 })
             ]
           },
           i
         )) : items.map((i) => (
           // The Row's own class: same padding, gap and inset separators.
-          /* @__PURE__ */ jsxs9("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
-            /* @__PURE__ */ jsx15(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
-            /* @__PURE__ */ jsxs9("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
-              /* @__PURE__ */ jsx15(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
-              /* @__PURE__ */ jsx15(Bar, { width: "30%", height: 8 })
+          /* @__PURE__ */ jsxs12("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
+            /* @__PURE__ */ jsx19(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
+            /* @__PURE__ */ jsxs12("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
+              /* @__PURE__ */ jsx19(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
+              /* @__PURE__ */ jsx19(Bar, { width: "30%", height: 8 })
             ] }),
-            /* @__PURE__ */ jsx15(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
+            /* @__PURE__ */ jsx19(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
           ] }, i)
         ))
       ]
@@ -753,9 +1011,9 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
 }
 
 // components/core/EmptyState.jsx
-import { jsx as jsx16, jsxs as jsxs10 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs13 } from "react/jsx-runtime";
 function EmptyState({ icon, title, action, children, className, style, ...props }) {
-  return /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs13(
     "div",
     {
       ...props,
@@ -773,17 +1031,17 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx16(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx16(Icon, { name: "inbox", size: 22 }) }),
-        title && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
-        children && /* @__PURE__ */ jsx16("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
-        action && /* @__PURE__ */ jsx16("div", { style: { marginTop: 4 }, children: action })
+        /* @__PURE__ */ jsx20(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx20(Icon, { name: "inbox", size: 22 }) }),
+        title && /* @__PURE__ */ jsx20("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
+        children && /* @__PURE__ */ jsx20("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
+        action && /* @__PURE__ */ jsx20("div", { style: { marginTop: 4 }, children: action })
       ]
     }
   );
 }
 
 // components/core/ErrorState.jsx
-import { jsx as jsx17, jsxs as jsxs11 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs14 } from "react/jsx-runtime";
 function ErrorState({
   title,
   onRetry,
@@ -795,7 +1053,7 @@ function ErrorState({
   style,
   ...props
 }) {
-  return /* @__PURE__ */ jsxs11(
+  return /* @__PURE__ */ jsxs14(
     "div",
     {
       role: "alert",
@@ -803,11 +1061,11 @@ function ErrorState({
       className: cx("ds-error", className),
       style: { display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style },
       children: [
-        /* @__PURE__ */ jsx17(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx17(Icon, { name: "alert", size: 13 }) }),
-        /* @__PURE__ */ jsxs11("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
-          children && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
-          (action || onRetry) && /* @__PURE__ */ jsx17("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx17(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
+        /* @__PURE__ */ jsx21(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx21(Icon, { name: "alert", size: 13 }) }),
+        /* @__PURE__ */ jsxs14("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx21("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
+          children && /* @__PURE__ */ jsx21("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
+          (action || onRetry) && /* @__PURE__ */ jsx21("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx21(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
         ] })
       ]
     }
@@ -817,9 +1075,11 @@ export {
   Banner,
   Button,
   Card,
+  Checkbox,
   Chip,
   EmptyState,
   ErrorState,
+  Field,
   GlyphTile,
   Group,
   ICON_NAMES,
@@ -827,9 +1087,11 @@ export {
   Input,
   Row,
   Segmented,
+  Select,
   Skeleton,
   StatStrip,
   StatTile,
   Switch,
+  Textarea,
   Toast
 };

@@ -68,8 +68,8 @@ preserved as the accent rather than replaced.
   time (slow/slower). Collapses to ~0 under `prefers-reduced-motion`.
 - **Touch targets**: on a touch screen every control takes taps across at
   least 44×44px. Buttons, Segmented options and the Switch get an invisible
-  tap area around them, so they're drawn at the same size; tappable Rows grow
-  to 44px. Mouse and trackpad keep the drawn size. Stack separate controls so
+  tap area around them, so they're drawn at the same size; tappable Rows, Field
+  rows and checkboxes grow to 44px. Mouse and trackpad keep the drawn size. Stack separate controls so
   their 44px areas don't overlap: two small Buttons (33px) stacked need 11px
   between them, since each area reaches about 5.5px past its edge.
 
@@ -91,6 +91,7 @@ changes colour, and per-app accents are untouched.
 | `StatStrip` | The number is the hero; its label is furniture. One accent metric per screen. |
 | `Segmented` | Replaces tab rows and year/range pickers. Three or four options, max. |
 | `Switch` | Replaces the checkbox wherever the change takes effect immediately. |
+| `Field` | A form is a grouped list whose rows take input: label left, bare control right, help or error under it. |
 | Material | Translucency only over live content. Everywhere else, solid. |
 | Accent | Interactive things only. Per-app, from the registry. |
 | `Banner` | An outcome that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
@@ -106,6 +107,16 @@ message ("this failed", "you're offline"); it's never used to decorate.
 Emoji remain banned in UI chrome (see Content fundamentals); glyphs are SVG, from
 the house set first: `<Icon name="pin" />`, or `icons/*.svg` without React.
 See `guidelines/iconography.md` for the grid, the sizes and how to add one.
+
+## Forms
+
+A form is a grouped list whose rows take input: related fields share a
+`Group`, each one a `Field` (label left, bare control right, help or error
+under it) wrapping an `Input`, `Select` or `Textarea`. Yes-or-no choices are
+`Checkbox row` rows; they apply on submit, where a `Switch` takes effect now.
+Errors say what's wrong and how to fix it, turn the row `danger-text` and add
+an alert glyph, never colour alone. On their own, the controls are boxed like
+`Input`. See `guidelines/forms.md`.
 
 ## States and feedback
 
@@ -218,8 +229,9 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 - `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
-  GlyphTile, Segmented, Switch, StatStrip, Icon, and for feedback and states
-  Banner, Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
+  GlyphTile, Segmented, Switch, StatStrip, Icon; for forms Field, Select,
+  Textarea, Checkbox; and for feedback and states Banner, Toast, Skeleton,
+  EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no

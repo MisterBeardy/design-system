@@ -1,6 +1,6 @@
 # MisterBeardy Design System — how to build with it
 
-A small React kit (17 components) with a flat, calm, Apple-HIG-grouped-list
+A small React kit (21 components) with a flat, calm, Apple-HIG-grouped-list
 visual language. Inline styles reading CSS custom properties — **no utility
 classes, no provider, no build step required.**
 
@@ -60,6 +60,12 @@ tint is the message.)
 - **`Switch`** is on/off *now* (track goes `--success`, not accent). **`Segmented`**
   is "one of a few peers" (3–4 max). **`Chip`** is `mono` uppercase for status.
 - One headline metric per screen sets `accent` on `StatTile`/`StatStrip`.
+- **Forms are grouped lists.** Each input is a `Field` row in a `Group`
+  (`<Field label="Trip name"><Input … /></Field>`; also `Select`, `Textarea`);
+  Field draws the control bare and wires the label, `aria-invalid` and
+  `aria-describedby`. Errors go in Field's `error`. Yes/no on submit is
+  `<Checkbox row … />`; takes-effect-now is `Switch`. Boxed `Input`/`Select`/
+  `Textarea` only for a lone control (a search box).
 - **Feedback and states.** `Banner` for an outcome that stays until it's dealt
   with (errors, offline is a warning Banner); `Toast` only for "that worked",
   one at a time, never an error. Loading is a `Skeleton` in the shape of the

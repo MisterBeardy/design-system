@@ -32,6 +32,19 @@ under its version (see `CONTRIBUTING.md`).
   `aria-invalid`. A new `guidelines/forms.md`; `npm run check` holds the
   checkbox outline and the invalid border at 3:1. (#14)
 
+### Changed
+
+- Every token with no component consumer now says what app code it's for,
+  beside its definition: `--border-soft` (a quiet divider inside a card),
+  `--radius-xl` (large panels), `--duration-fast`, `--duration-slow` and
+  `--duration-slower`, and the glass and sheet-shadow tokens. None were
+  removed: the apps use them. The readme says how to decide this for a new
+  token. (#21)
+
+### Fixed
+
+- `guidelines/radius.md` gave `--radius-pill` as 9999px; it's 999px.
+
 ## [0.6.0] — 2026-09-22
 
 Feedback and states, touch targets, and a changelog. (#12, #13, #17, #19)

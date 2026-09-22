@@ -12,7 +12,7 @@ A warm (not blue-grey) neutral scale, tinted so surfaces read as calm paper rath
 | `--surface` | Card / row / input surface | `#ffffff` | `#2a2723` |
 | `--surface-alt` | Recessed surface — segmented track, chips | `#f1ede6` | `#322f2a` |
 | `--border` | 1px hairline borders and dividers | `#e2ded7` | `#3a352f` |
-| `--border-soft` | Even quieter divider | `#f1ede6` | `#332f29` |
+| `--border-soft` | For app code: a divider inside a card between loose content (1.17:1, decoration only) | `#f1ede6` | `#332f29` |
 | `--text-muted` | Secondary text, labels, values | `#6c675f` | `#a39c91` |
 | `--text-ink` | Primary text | `#1c1b19` | `#f3f1ed` |
 

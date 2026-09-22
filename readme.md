@@ -253,6 +253,15 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   real-app applied examples (**That'll Be 5 Bucks**, **OneOfUs Beer**, **Idle
   Airport Manager**) live in the Claude Design project **lookwhatibuilt.today**.
 
+## Adding, keeping or removing a token
+
+Every token either has a consumer in `components/core/` or says, in a comment
+beside its definition, what app code it's for. A token that can't say either is
+a leftover. Before adding one, name the component or the app use; before
+removing one, search the apps (they use tokens the components don't, like
+`--border-soft` and `--duration-slow`). A removal is a breaking change: it goes
+under **Upgrading** in `CHANGELOG.md`.
+
 ## Known caveats
 - `Group` is on `--radius-card` (12px) while `Card` and `StatTile` are on
   `--radius-lg` (14px). Deliberate — a list container and a standalone object

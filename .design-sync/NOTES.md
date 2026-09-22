@@ -1,7 +1,7 @@
 # design-sync notes — @misterbeardy/design-system
 
 Target Claude Design project: **lookwhatibuilt.today** (`38437aad-2039-4a1a-ad1d-73b3aeb3cec2`).
-Shape: **package** (no Storybook). 11 components, all authored previews, all graded good.
+Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored previews, all graded good.
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 
@@ -53,7 +53,7 @@ Shape: **package** (no Storybook). 11 components, all authored previews, all gra
 
 ## Known render warns
 
-- None. Render check is fully clean (11/11, bad 0, thin 0). `[FONT_REMOTE]` is the only
+- None. Render check is fully clean (16/16, bad 0, thin 0). `[FONT_REMOTE]` is the only
   informational line and is expected (see above).
 
 ## Re-sync risks (what can silently go stale)

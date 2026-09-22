@@ -10,7 +10,13 @@
 
    Rule of thumb: anything the user triggered should be fast enough to feel
    like a response (fast/base). Anything the app decided to do on its own can
-   take its time (slow/slower). */
+   take its time (slow/slower).
+
+   Who uses what: the components use duration-base with ease-out (Row hover,
+   Segmented, Switch track), ease-out-expo (Switch knob) and ease-in-out (the
+   Skeleton pulse). duration-fast, duration-slow and duration-slower are for
+   app code: fast for a press or a tooltip, slow for a progress bar or a panel
+   sliding in, slower for route draws and fills. */
 :root {
   --duration-fast:   150ms;
   --duration-base:   200ms;

@@ -15,6 +15,10 @@ export { StatStrip } from "./StatStrip.jsx";
 // Icons.
 export { Icon, ICON_NAMES } from "./Icon.jsx";
 
+// Elevation.
+export { Sheet } from "./Sheet.jsx";
+export { Popover } from "./Popover.jsx";
+
 // Forms.
 export { Field } from "./Field.jsx";
 export { Select } from "./Select.jsx";

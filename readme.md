@@ -52,16 +52,17 @@ preserved as the accent rather than replaced.
   close together to choose between deliberately.
 - **Shadows**: none by default. Cards are flat — depth comes from border +
   surface/bg contrast, not elevation. The exception is something floating
-  over the page: a sheet takes `--shadow-sheet`, a `Toast` `--shadow-popover`
-  (`tokens/materials.css`). In dark mode the shadow barely shows against the
+  over the page: `Sheet` takes `--shadow-sheet`, `Popover` and `Toast`
+  `--shadow-popover` (`tokens/materials.css`). In dark mode the shadow barely shows against the
   dark page, so the Toast's 1px border carries the separation. Chrome windows / device frames (used
   only for presenting mockups, not part of the UI itself) carry their own
   drop shadow.
 - **Buttons**: primary (solid accent), secondary (bordered neutral), soft
   (accent-tinted), ghost (text-only). One primary action per view, max.
-- **Materials**: solid by default. Translucency (`.material-glass`) is allowed
-  in exactly one situation — a panel floating over live content, e.g. a map.
-  *Vibrancy is a signal, not a texture.* See `tokens/materials.css`.
+- **Materials**: solid by default. Translucency is allowed in exactly one
+  situation — a panel floating over live content, e.g. a map — which is what
+  `Sheet` is. *Vibrancy is a signal, not a texture.* A reader who asks for
+  reduced transparency gets the opaque version. See `guidelines/elevation.md`.
 - **Motion**: `--duration-fast|base|slow|slower` + `--ease-out`, `--ease-in-out`,
   `--ease-out-expo` (`tokens/motion.css`). User-triggered changes should feel
   like a response (fast/base); things the app decided on its own can take their
@@ -92,6 +93,8 @@ changes colour, and per-app accents are untouched.
 | `Segmented` | Replaces tab rows and year/range pickers. Three or four options, max. |
 | `Switch` | Replaces the checkbox wherever the change takes effect immediately. |
 | `Field` | A form is a grouped list whose rows take input: label left, bare control right, help or error under it. |
+| `Sheet` | The one elevation and the one translucent surface: a panel over live content, which it never dims. |
+| `Popover` | A small panel anchored to the control that opened it. Floats, so it takes the popover shadow. |
 | Material | Translucency only over live content. Everywhere else, solid. |
 | Accent | Interactive things only. Per-app, from the registry. |
 | `Banner` | An outcome that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
@@ -229,9 +232,9 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 - `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
-  GlyphTile, Segmented, Switch, StatStrip, Icon; for forms Field, Select,
-  Textarea, Checkbox; and for feedback and states Banner, Toast, Skeleton,
-  EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
+  GlyphTile, Segmented, Switch, StatStrip, Icon; for elevation Sheet and
+  Popover; for forms Field, Select, Textarea, Checkbox; and for feedback and
+  states Banner, Toast, Skeleton, EmptyState, ErrorState (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no

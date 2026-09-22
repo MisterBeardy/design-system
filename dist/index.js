@@ -541,13 +541,273 @@ function StatStrip({ stats, style, ...props }) {
   )) });
 }
 
+// components/core/Sheet.jsx
+import { useEffect, useRef, useState } from "react";
+import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
+function Sheet({
+  open,
+  onClose,
+  title,
+  trailing,
+  label,
+  height = 340,
+  solid = false,
+  grabber = true,
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const panel = useRef(null);
+  const close = useRef(onClose);
+  close.current = onClose;
+  const [drag, setDrag] = useState(null);
+  const start = useRef(0);
+  const restore = useRef(null);
+  useEffect(() => {
+    if (!open) return void 0;
+    restore.current = document.activeElement;
+    panel.current?.focus({ preventScroll: true });
+    const onKey = (e) => {
+      if (e.key === "Escape") close.current?.();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      const back = restore.current;
+      if (back && document.contains(back)) back.focus({ preventScroll: true });
+    };
+  }, [open]);
+  if (!open) return null;
+  const onPointerDown = (e) => {
+    if (e.button != null && e.button !== 0) return;
+    start.current = e.clientY;
+    setDrag(0);
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e) => {
+    if (drag === null) return;
+    setDrag(Math.max(0, e.clientY - start.current));
+  };
+  const onPointerUp = () => {
+    if (drag === null) return;
+    const dismissed = drag > Math.min(120, height / 3);
+    setDrag(null);
+    if (dismissed) close.current?.();
+  };
+  return /* @__PURE__ */ jsxs7(
+    "div",
+    {
+      role: "dialog",
+      "aria-modal": "false",
+      "aria-label": label ?? (typeof title === "string" ? title : void 0),
+      tabIndex: -1,
+      ref: panel,
+      ...props,
+      className: cx("ds-sheet", solid && "ds-sheet-solid", className),
+      style: {
+        position: "fixed",
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 900,
+        boxSizing: "border-box",
+        height,
+        maxHeight: "85vh",
+        display: "flex",
+        flexDirection: "column",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        borderTop: "1px solid var(--border)",
+        borderTopLeftRadius: "var(--radius-xl)",
+        borderTopRightRadius: "var(--radius-xl)",
+        boxShadow: "var(--shadow-sheet)",
+        transform: drag ? `translateY(${drag}px)` : void 0,
+        transition: drag === null ? "transform var(--duration-base) var(--ease-out-expo)" : void 0,
+        touchAction: "none",
+        ...style
+      },
+      children: [
+        grabber && /* @__PURE__ */ jsx13(
+          "div",
+          {
+            onPointerDown,
+            onPointerMove,
+            onPointerUp,
+            onPointerCancel: onPointerUp,
+            style: { display: "flex", justifyContent: "center", padding: "10px 0 4px", cursor: "grab" },
+            children: /* @__PURE__ */ jsx13("span", { "aria-hidden": "true", style: { width: 36, height: 5, borderRadius: "var(--radius-pill)", background: "var(--border)" } })
+          }
+        ),
+        (title || trailing) && /* @__PURE__ */ jsxs7(
+          "div",
+          {
+            style: {
+              display: "flex",
+              alignItems: "baseline",
+              gap: "var(--row-gap)",
+              padding: grabber ? "2px var(--space-4) 0" : "14px var(--space-4) 0"
+            },
+            children: [
+              /* @__PURE__ */ jsx13("span", { style: { flex: 1, minWidth: 0, font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
+              trailing
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx13("div", { style: { flex: 1, minHeight: 0, overflowY: "auto", padding: "var(--space-3) var(--space-4) var(--space-4)" }, children })
+      ]
+    }
+  );
+}
+
+// components/core/Popover.jsx
+import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef2, useState as useState2 } from "react";
+import { jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
+var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+function Popover({
+  open,
+  onClose,
+  trigger,
+  title,
+  label,
+  width = 300,
+  placement = "bottom",
+  align = "start",
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const wrap = useRef2(null);
+  const panel = useRef2(null);
+  const close = useRef2(onClose);
+  close.current = onClose;
+  const [side, setSide] = useState2(placement);
+  const [edge, setEdge] = useState2(align);
+  useLayoutEffect(() => {
+    if (!open || !panel.current) return;
+    const r = panel.current.getBoundingClientRect();
+    const t = wrap.current?.getBoundingClientRect();
+    if (!t) return;
+    setSide(placement === "bottom" && t.bottom + r.height + 8 > window.innerHeight && t.top - r.height - 8 > 0 ? "top" : placement);
+    setEdge(align === "start" && t.left + r.width > window.innerWidth - 8 ? "end" : align);
+  }, [open, placement, align, width]);
+  useEffect2(() => {
+    if (!open) return void 0;
+    const previously = document.activeElement;
+    const items = [...panel.current?.querySelectorAll(FOCUSABLE) ?? []];
+    const first = items.find((el) => !el.hasAttribute("data-ds-close")) ?? items[0];
+    (first ?? panel.current)?.focus({ preventScroll: true });
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        close.current?.();
+        return;
+      }
+      if (e.key !== "Tab" || !panel.current) return;
+      const items2 = [...panel.current.querySelectorAll(FOCUSABLE)];
+      if (!items2.length) return;
+      const [head, tail] = [items2[0], items2[items2.length - 1]];
+      if (e.shiftKey && document.activeElement === head) {
+        e.preventDefault();
+        tail.focus();
+      } else if (!e.shiftKey && document.activeElement === tail) {
+        e.preventDefault();
+        head.focus();
+      }
+    };
+    const onDown = (e) => {
+      if (!wrap.current?.contains(e.target)) close.current?.();
+    };
+    document.addEventListener("keydown", onKey, true);
+    document.addEventListener("pointerdown", onDown, true);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      document.removeEventListener("pointerdown", onDown, true);
+      if (previously && document.contains(previously)) previously.focus({ preventScroll: true });
+    };
+  }, [open]);
+  const dismiss = useCallback(() => close.current?.(), []);
+  return /* @__PURE__ */ jsxs8("span", { ref: wrap, style: { position: "relative", display: "inline-flex" }, children: [
+    trigger && cloneElement(trigger, { "aria-expanded": open ? true : void 0, "aria-haspopup": "dialog" }),
+    open && /* @__PURE__ */ jsxs8(
+      "div",
+      {
+        role: "dialog",
+        "aria-label": label ?? (typeof title === "string" ? title : void 0),
+        tabIndex: -1,
+        ref: panel,
+        ...props,
+        className: cx("ds-popover", className),
+        style: {
+          position: "absolute",
+          zIndex: 800,
+          [side === "top" ? "bottom" : "top"]: "calc(100% + 6px)",
+          [edge === "end" ? "right" : "left"]: 0,
+          boxSizing: "border-box",
+          width,
+          maxWidth: "calc(100vw - 32px)",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius-md)",
+          boxShadow: "var(--shadow-popover)",
+          overflow: "hidden",
+          ...style
+        },
+        children: [
+          title && /* @__PURE__ */ jsxs8(
+            "div",
+            {
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "10px 12px",
+                borderBottom: "var(--hairline) solid var(--border)"
+              },
+              children: [
+                /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
+                /* @__PURE__ */ jsx14(
+                  "button",
+                  {
+                    type: "button",
+                    "aria-label": "Close",
+                    "data-ds-close": "",
+                    onClick: dismiss,
+                    className: "ds-button",
+                    style: {
+                      flexShrink: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 26,
+                      height: 26,
+                      padding: 0,
+                      border: "none",
+                      borderRadius: "var(--radius-sm)",
+                      background: "transparent",
+                      color: "var(--text-muted)",
+                      cursor: "pointer"
+                    },
+                    children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 14 })
+                  }
+                )
+              ]
+            }
+          ),
+          children
+        ]
+      }
+    )
+  ] });
+}
+
 // components/core/Field.jsx
-import { Children, cloneElement, useId } from "react";
+import { Children, cloneElement as cloneElement2, useId } from "react";
 
 // components/core/Textarea.jsx
-import { jsx as jsx13 } from "react/jsx-runtime";
+import { jsx as jsx15 } from "react/jsx-runtime";
 function Textarea({ disabled = false, bare = false, rows = 3, className, style, ...props }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx15(
     "textarea",
     {
       rows,
@@ -570,7 +830,7 @@ function Textarea({ disabled = false, bare = false, rows = 3, className, style, 
 }
 
 // components/core/Field.jsx
-import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
 function Field({ label, help, error, glyph, children, className, style, ...props }) {
   const autoId = useId();
   const child = Children.only(children);
@@ -578,13 +838,13 @@ function Field({ label, help, error, glyph, children, className, style, ...props
   const msgId = `${id}-msg`;
   const message = error || help;
   const stacked = child.type === Textarea;
-  const control = cloneElement(child, {
+  const control = cloneElement2(child, {
     id,
     bare: true,
     "aria-invalid": error ? true : child.props["aria-invalid"],
     "aria-describedby": [child.props["aria-describedby"], message && msgId].filter(Boolean).join(" ") || void 0
   });
-  return /* @__PURE__ */ jsxs7(
+  return /* @__PURE__ */ jsxs9(
     "div",
     {
       ...props,
@@ -593,7 +853,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
       "data-invalid": error ? "true" : void 0,
       style: { flexDirection: "column", alignItems: "stretch", gap: 4, ...style },
       children: [
-        /* @__PURE__ */ jsxs7(
+        /* @__PURE__ */ jsxs9(
           "label",
           {
             htmlFor: id,
@@ -606,7 +866,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
             },
             children: [
               !stacked && glyph,
-              /* @__PURE__ */ jsx14(
+              /* @__PURE__ */ jsx16(
                 "span",
                 {
                   style: {
@@ -618,11 +878,11 @@ function Field({ label, help, error, glyph, children, className, style, ...props
                 }
               ),
               control,
-              error && !stacked && /* @__PURE__ */ jsx14(Icon, { name: "alert", size: 14, style: { color: "var(--danger-text)" } })
+              error && !stacked && /* @__PURE__ */ jsx16(Icon, { name: "alert", size: 14, style: { color: "var(--danger-text)" } })
             ]
           }
         ),
-        message && /* @__PURE__ */ jsx14(
+        message && /* @__PURE__ */ jsx16(
           "div",
           {
             id: msgId,
@@ -641,13 +901,13 @@ function Field({ label, help, error, glyph, children, className, style, ...props
 }
 
 // components/core/Select.jsx
-import { jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs10 } from "react/jsx-runtime";
 function Select({ options, value, onChange, disabled = false, bare = false, placeholder, className, style, ...props }) {
   const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
   const invalid = isInvalid(props["aria-invalid"]);
   const box = controlStyle({ bare, invalid, disabled });
   const empty = value == null || value === "";
-  return /* @__PURE__ */ jsxs8(
+  return /* @__PURE__ */ jsxs10(
     "span",
     {
       style: {
@@ -659,7 +919,7 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
         width: bare ? void 0 : "100%"
       },
       children: [
-        /* @__PURE__ */ jsxs8(
+        /* @__PURE__ */ jsxs10(
           "select",
           {
             ...props,
@@ -689,12 +949,12 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
               ...style
             },
             children: [
-              placeholder != null && /* @__PURE__ */ jsx15("option", { value: "", disabled: true, children: placeholder }),
-              opts.map((o) => /* @__PURE__ */ jsx15("option", { value: o.value, disabled: o.disabled, children: o.label }, o.value))
+              placeholder != null && /* @__PURE__ */ jsx17("option", { value: "", disabled: true, children: placeholder }),
+              opts.map((o) => /* @__PURE__ */ jsx17("option", { value: o.value, disabled: o.disabled, children: o.label }, o.value))
             ]
           }
         ),
-        /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsx17(
           Icon,
           {
             name: bare ? "chevron-right" : "chevron-down",
@@ -714,9 +974,9 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
 }
 
 // components/core/Checkbox.jsx
-import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs11 } from "react/jsx-runtime";
 function Checkbox({ checked, onChange, label, sub, disabled = false, row = false, className, style, ...props }) {
-  return /* @__PURE__ */ jsxs9(
+  return /* @__PURE__ */ jsxs11(
     "label",
     {
       className: cx(row && "ds-row", "ds-checkbox", className),
@@ -734,7 +994,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx16(
+        /* @__PURE__ */ jsx18(
           "input",
           {
             type: "checkbox",
@@ -745,7 +1005,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
             className: "ds-checkbox-input"
           }
         ),
-        /* @__PURE__ */ jsx16(
+        /* @__PURE__ */ jsx18(
           "span",
           {
             "aria-hidden": "true",
@@ -762,12 +1022,12 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
               // Ticking is an interactive choice, so it spends the accent.
               ...checked ? { background: "var(--accent)", border: "1px solid transparent", color: "var(--on-accent)" } : { background: "var(--surface)", border: "1.5px solid var(--text-muted)", color: "transparent" }
             },
-            children: checked && /* @__PURE__ */ jsx16(Icon, { name: "check", size: 14 })
+            children: checked && /* @__PURE__ */ jsx18(Icon, { name: "check", size: 14 })
           }
         ),
-        (label || sub) && /* @__PURE__ */ jsxs9("span", { style: { minWidth: 0, paddingTop: sub ? 1 : 0 }, children: [
-          /* @__PURE__ */ jsx16("span", { style: { display: "block", font: row ? "var(--text-row-label)" : "var(--text-input)", color: "var(--text-ink)" }, children: label }),
-          sub && /* @__PURE__ */ jsx16("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
+        (label || sub) && /* @__PURE__ */ jsxs11("span", { style: { minWidth: 0, paddingTop: sub ? 1 : 0 }, children: [
+          /* @__PURE__ */ jsx18("span", { style: { display: "block", font: row ? "var(--text-row-label)" : "var(--text-input)", color: "var(--text-ink)" }, children: label }),
+          sub && /* @__PURE__ */ jsx18("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
         ] })
       ]
     }
@@ -775,7 +1035,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
 }
 
 // components/core/Banner.jsx
-import { jsx as jsx17, jsxs as jsxs10 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs12 } from "react/jsx-runtime";
 var TONES = {
   success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
   warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
@@ -795,8 +1055,8 @@ function Banner({
   ...props
 }) {
   const t = TONES[tone] ?? TONES.neutral;
-  const glyph = icon === void 0 ? /* @__PURE__ */ jsx17(Icon, { name: t.icon }) : icon;
-  return /* @__PURE__ */ jsxs10(
+  const glyph = icon === void 0 ? /* @__PURE__ */ jsx19(Icon, { name: t.icon }) : icon;
+  return /* @__PURE__ */ jsxs12(
     "div",
     {
       role: tone === "danger" ? "alert" : "status",
@@ -814,13 +1074,13 @@ function Banner({
         ...style
       },
       children: [
-        glyph && /* @__PURE__ */ jsx17("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
-        /* @__PURE__ */ jsxs10("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message-title)" }, children: title }),
-          children && /* @__PURE__ */ jsx17("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
-          action && /* @__PURE__ */ jsx17("div", { style: { marginTop: 10 }, children: action })
+        glyph && /* @__PURE__ */ jsx19("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
+        /* @__PURE__ */ jsxs12("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx19("div", { style: { font: "var(--text-message-title)" }, children: title }),
+          children && /* @__PURE__ */ jsx19("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
+          action && /* @__PURE__ */ jsx19("div", { style: { marginTop: 10 }, children: action })
         ] }),
-        onDismiss && /* @__PURE__ */ jsx17(
+        onDismiss && /* @__PURE__ */ jsx19(
           "button",
           {
             type: "button",
@@ -842,7 +1102,7 @@ function Banner({
               color: "inherit",
               cursor: "pointer"
             },
-            children: /* @__PURE__ */ jsx17(Icon, { name: "close", size: 14 })
+            children: /* @__PURE__ */ jsx19(Icon, { name: "close", size: 14 })
           }
         )
       ]
@@ -851,8 +1111,8 @@ function Banner({
 }
 
 // components/core/Toast.jsx
-import { useEffect, useRef, useState } from "react";
-import { jsx as jsx18, jsxs as jsxs11 } from "react/jsx-runtime";
+import { useEffect as useEffect3, useRef as useRef3, useState as useState3 } from "react";
+import { jsx as jsx20, jsxs as jsxs13 } from "react/jsx-runtime";
 function Toast({
   open,
   message,
@@ -865,18 +1125,18 @@ function Toast({
   ...props
 }) {
   const ms = duration ?? (action ? 8e3 : 5e3);
-  const [paused, setPaused] = useState(false);
-  const close = useRef(onClose);
+  const [paused, setPaused] = useState3(false);
+  const close = useRef3(onClose);
   close.current = onClose;
-  useEffect(() => {
+  useEffect3(() => {
     if (!open) setPaused(false);
   }, [open]);
-  useEffect(() => {
+  useEffect3(() => {
     if (!open || paused || !Number.isFinite(ms)) return void 0;
     const id = setTimeout(() => close.current?.(), ms);
     return () => clearTimeout(id);
   }, [open, message, paused, ms]);
-  return /* @__PURE__ */ jsx18(
+  return /* @__PURE__ */ jsx20(
     "div",
     {
       role: "status",
@@ -892,7 +1152,7 @@ function Toast({
         justifyContent: "center",
         pointerEvents: "none"
       },
-      children: open && /* @__PURE__ */ jsxs11(
+      children: open && /* @__PURE__ */ jsxs13(
         "div",
         {
           ...props,
@@ -925,8 +1185,8 @@ function Toast({
             ...style
           },
           children: [
-            /* @__PURE__ */ jsx18("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
-            action && /* @__PURE__ */ jsx18(
+            /* @__PURE__ */ jsx20("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
+            action && /* @__PURE__ */ jsx20(
               "button",
               {
                 type: "button",
@@ -957,13 +1217,13 @@ function Toast({
 }
 
 // components/core/Skeleton.jsx
-import { jsx as jsx19, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs14 } from "react/jsx-runtime";
 var LABEL_WIDTHS = ["62%", "48%", "70%", "40%", "56%", "66%"];
 var VALUE_WIDTHS = [44, 36, 52, 30, 40, 48];
-var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx19("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
+var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx21("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
 function Skeleton({ variant = "rows", count = 3, label = "Loading", className, style, ...props }) {
   const items = Array.from({ length: count }, (_, i) => i);
-  return /* @__PURE__ */ jsxs12(
+  return /* @__PURE__ */ jsxs14(
     "div",
     {
       role: "status",
@@ -973,8 +1233,8 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
       className: cx("ds-skeleton", className),
       style: variant === "tiles" ? { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 10, ...style } : style,
       children: [
-        /* @__PURE__ */ jsx19("span", { className: "ds-visually-hidden", children: label }),
-        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs12(
+        /* @__PURE__ */ jsx21("span", { className: "ds-visually-hidden", children: label }),
+        variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs14(
           "div",
           {
             "aria-hidden": "true",
@@ -989,20 +1249,20 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
               gap: 10
             },
             children: [
-              /* @__PURE__ */ jsx19(Bar, { width: "55%", height: 9 }),
-              /* @__PURE__ */ jsx19(Bar, { width: "70%", height: 22, radius: 6 })
+              /* @__PURE__ */ jsx21(Bar, { width: "55%", height: 9 }),
+              /* @__PURE__ */ jsx21(Bar, { width: "70%", height: 22, radius: 6 })
             ]
           },
           i
         )) : items.map((i) => (
           // The Row's own class: same padding, gap and inset separators.
-          /* @__PURE__ */ jsxs12("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
-            /* @__PURE__ */ jsx19(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
-            /* @__PURE__ */ jsxs12("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
-              /* @__PURE__ */ jsx19(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
-              /* @__PURE__ */ jsx19(Bar, { width: "30%", height: 8 })
+          /* @__PURE__ */ jsxs14("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
+            /* @__PURE__ */ jsx21(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
+            /* @__PURE__ */ jsxs14("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
+              /* @__PURE__ */ jsx21(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
+              /* @__PURE__ */ jsx21(Bar, { width: "30%", height: 8 })
             ] }),
-            /* @__PURE__ */ jsx19(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
+            /* @__PURE__ */ jsx21(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
           ] }, i)
         ))
       ]
@@ -1011,9 +1271,9 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
 }
 
 // components/core/EmptyState.jsx
-import { jsx as jsx20, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx22, jsxs as jsxs15 } from "react/jsx-runtime";
 function EmptyState({ icon, title, action, children, className, style, ...props }) {
-  return /* @__PURE__ */ jsxs13(
+  return /* @__PURE__ */ jsxs15(
     "div",
     {
       ...props,
@@ -1031,17 +1291,17 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx20(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx20(Icon, { name: "inbox", size: 22 }) }),
-        title && /* @__PURE__ */ jsx20("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
-        children && /* @__PURE__ */ jsx20("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
-        action && /* @__PURE__ */ jsx20("div", { style: { marginTop: 4 }, children: action })
+        /* @__PURE__ */ jsx22(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx22(Icon, { name: "inbox", size: 22 }) }),
+        title && /* @__PURE__ */ jsx22("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
+        children && /* @__PURE__ */ jsx22("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
+        action && /* @__PURE__ */ jsx22("div", { style: { marginTop: 4 }, children: action })
       ]
     }
   );
 }
 
 // components/core/ErrorState.jsx
-import { jsx as jsx21, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx23, jsxs as jsxs16 } from "react/jsx-runtime";
 function ErrorState({
   title,
   onRetry,
@@ -1053,7 +1313,7 @@ function ErrorState({
   style,
   ...props
 }) {
-  return /* @__PURE__ */ jsxs14(
+  return /* @__PURE__ */ jsxs16(
     "div",
     {
       role: "alert",
@@ -1061,11 +1321,11 @@ function ErrorState({
       className: cx("ds-error", className),
       style: { display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style },
       children: [
-        /* @__PURE__ */ jsx21(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx21(Icon, { name: "alert", size: 13 }) }),
-        /* @__PURE__ */ jsxs14("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx21("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
-          children && /* @__PURE__ */ jsx21("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
-          (action || onRetry) && /* @__PURE__ */ jsx21("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx21(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
+        /* @__PURE__ */ jsx23(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx23(Icon, { name: "alert", size: 13 }) }),
+        /* @__PURE__ */ jsxs16("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx23("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
+          children && /* @__PURE__ */ jsx23("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
+          (action || onRetry) && /* @__PURE__ */ jsx23("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx23(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
         ] })
       ]
     }
@@ -1085,9 +1345,11 @@ export {
   ICON_NAMES,
   Icon,
   Input,
+  Popover,
   Row,
   Segmented,
   Select,
+  Sheet,
   Skeleton,
   StatStrip,
   StatTile,

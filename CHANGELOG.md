@@ -11,6 +11,20 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- `Sheet` and `Popover`, the elevation vocabulary the tokens have described
+  all along. `Sheet` is a panel over live content — a map, a canvas, a video:
+  translucent, `--radius-xl` top corners, `--shadow-sheet`, and it never dims
+  what's behind it. It isn't modal, so the content behind stays usable and
+  reachable; Escape closes it, and so does dragging its handle down. `solid`
+  and the reader's own reduced-transparency setting both give the opaque
+  version. `Popover` is a small panel anchored to its trigger, with
+  `--shadow-popover`, a focus trap, Escape, click-outside and focus returned
+  to the trigger; it flips above or across when the viewport has no room.
+  A new `guidelines/elevation.md` says what may float and when translucency
+  is allowed. (#11)
+
 ## [0.7.0] — 2026-09-22
 
 The house icon set, the form vocabulary, and a token audit. (#14, #15, #21)

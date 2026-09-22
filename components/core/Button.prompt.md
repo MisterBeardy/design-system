@@ -15,4 +15,6 @@ same height, so a primary and a secondary sit level side by side.
 
 Built-in states, nothing to add per app: keyboard focus draws the system's 2px
 `--accent` ring, offset 2px outside the button; `disabled` drops to 50% opacity
-with no pointer, the same as `Row` and `Switch`.
+with no pointer, the same as `Row` and `Switch`. On a touch screen it takes taps
+across at least 44×44px, drawn at the same size, and a small button's (33px) area
+reaches about 5.5px past its edge: stack two of them 11px apart.

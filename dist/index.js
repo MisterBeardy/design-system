@@ -333,6 +333,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
   return /* @__PURE__ */ jsxs5(
     "label",
     {
+      className: "ds-switch",
       style: {
         position: "relative",
         display: "inline-flex",

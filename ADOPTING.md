@@ -195,8 +195,9 @@ touched, never in a mass restyle pass.
 Two things that are easy to get wrong: if you can't import styles.css (CSP
 blocks its Google Fonts @import), you must still import core.css explicitly or
 separators and focus rings silently won't render. And don't bridge the app's
-categorical/data colours to the accent — data colour is sacred; it belongs on
-<GlyphTile color={...}>.
+categorical/data colours to the accent — data colour is sacred; it comes from
+the data palette (--data-1 … --data-6, <GlyphTile data={n}>), in the order
+dataOrderFor("<app-key>") gives.
 ```
 
 Already adopted an older version? Same prompt — it's incremental by

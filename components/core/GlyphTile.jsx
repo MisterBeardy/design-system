@@ -16,7 +16,12 @@ const TONE_ON = {
   neutral: "var(--on-neutral)",
 };
 
-export function GlyphTile({ tone = "neutral", color, size, children, style, ...props }) {
+export function GlyphTile({ tone = "neutral", color, data, size, children, style, ...props }) {
+  // Precedence: a raw `color`, then a palette slot (data={1…6}), then `tone`.
+  // A palette slot brings a glyph colour for each theme (--on-data); a raw
+  // colour is the consumer's own and isn't themed, so its glyph stays white.
+  const background = color ?? (data ? `var(--data-${data})` : TONE_BG[tone]);
+  const glyph = color ? "#fff" : data ? "var(--on-data)" : TONE_ON[tone];
   return (
     <span
       aria-hidden
@@ -29,10 +34,8 @@ export function GlyphTile({ tone = "neutral", color, size, children, style, ...p
         width: size ?? "var(--glyph-size)",
         height: size ?? "var(--glyph-size)",
         borderRadius: "var(--radius-sm)",
-        background: color ?? TONE_BG[tone],
-        // A data colour is the consumer's own and isn't themed, so its glyph
-        // stays white; pick data colours dark enough to carry it.
-        color: color ? "#fff" : TONE_ON[tone],
+        background,
+        color: glyph,
         ...style,
       }}
     >

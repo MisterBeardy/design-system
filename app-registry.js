@@ -17,16 +17,22 @@
 // they're fitted into sRGB. `npm run check` fails for any row whose label
 // misses 4.5:1 in either theme; lower that app's chroma to fix it.
 
+// dataLast: the data palette slot (1-6) closest to the app's accent. The app
+// uses it last, so its first data series never reads as its accent.
+// `npm run check` recomputes it and fails when it's stale.
 export const APPS = [
-  { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, note: 'Real brand color #d97706' },
-  { key: 'idleairport',    name: 'IdleAirport',          hue: 75,  chroma: 0.14, note: 'Real brand color #ffd24a' },
-  { key: 'drinkwin',       name: "Drink&Win",            hue: 95,  chroma: 0.15 },
-  { key: 'parametricchaos',name: 'ParametricChaos',      hue: 155, chroma: 0.13 },
-  { key: 'fivebucks',      name: "That'll Be 5 Bucks",   hue: 185, chroma: 0.13 },
-  { key: 'washmycar',      name: 'WashMyCar',            hue: 230, chroma: 0.13 },
-  { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15 },
-  { key: 'whatwillithink', name: 'WhatWillIThink',       hue: 300, chroma: 0.16 },
+  { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, dataLast: 5, note: 'Real brand color #d97706' },
+  { key: 'idleairport',    name: 'IdleAirport',          hue: 75,  chroma: 0.14, dataLast: 5, note: 'Real brand color #ffd24a' },
+  { key: 'drinkwin',       name: "Drink&Win",            hue: 95,  chroma: 0.15, dataLast: 1 },
+  { key: 'parametricchaos',name: 'ParametricChaos',      hue: 155, chroma: 0.13, dataLast: 3 },
+  { key: 'fivebucks',      name: "That'll Be 5 Bucks",   hue: 185, chroma: 0.13, dataLast: 3 },
+  { key: 'washmycar',      name: 'WashMyCar',            hue: 230, chroma: 0.13, dataLast: 3 },
+  { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15, dataLast: 4 },
+  { key: 'whatwillithink', name: 'WhatWillIThink',       hue: 300, chroma: 0.16, dataLast: 6 },
 ];
+
+// The data palette has six slots (--data-1 … --data-6, tokens/colors.css).
+export const DATA_SLOTS = 6;
 
 // Minimum hue separation (degrees) before two accents are considered "too
 // close" for comfort if the apps might ever appear side by side.
@@ -112,6 +118,16 @@ export function accentTokensFor(app, chroma) {
       "--on-accent": ON_ACCENT.dark,
     },
   };
+}
+
+/** The order an app assigns its data colours in: slots 1-6, with the slot
+ *  closest to its accent moved to the end. `dataOrderFor("oneofus")` gives
+ *  [1, 2, 3, 4, 6, 5]: the first series gets --data-1, and so on. */
+export function dataOrderFor(app) {
+  const row = APPS.find((a) => a.key === app);
+  if (!row) throw new Error(`No app "${app}" in the registry. Keys: ${APPS.map((a) => a.key).join(", ")}`);
+  const slots = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1);
+  return [...slots.filter((n) => n !== row.dataLast), row.dataLast];
 }
 
 /** The same tokens as the stylesheet block an app pastes into its root CSS. */

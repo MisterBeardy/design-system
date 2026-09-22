@@ -30,7 +30,12 @@
     "ErrorState": "components/core/ErrorState.prompt.md"
   },
   "overrides": {
-    "Input": { "cardMode": "column" }
+    "Input": {
+      "cardMode": "column"
+    },
+    "Icon": {
+      "cardMode": "column"
+    }
   },
   "readmeHeader": ".design-sync/conventions.md",
   "guidelinesGlob": "guidelines/*.md"

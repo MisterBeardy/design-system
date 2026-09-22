@@ -196,6 +196,17 @@ for (const app of APPS) {
   }
 }
 
+// 8. Forms: an unticked Checkbox is only its --text-muted outline, and an
+//    invalid boxed control's border is --danger; both are the only mark of
+//    the control's edge, so 3:1 on the surface (WCAG 1.4.11).
+for (const theme of ["light", "dark"]) {
+  const v = themes[theme];
+  for (const [mark, what] of [["--text-muted", "unticked Checkbox outline"], ["--danger", "invalid control border"]]) {
+    const r = contrast(v[mark], v["--surface"]);
+    expect(r >= 3, `${theme} ${what} (${mark}) on --surface: ${r.toFixed(2)}:1${r >= 3 ? "" : " (needs 3)"}`);
+  }
+}
+
 if (failures.length) {
   console.error(`${failures.length} colour check(s) failed:\n  ${failures.join("\n  ")}`);
   process.exit(1);

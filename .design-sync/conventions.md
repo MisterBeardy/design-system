@@ -55,7 +55,8 @@ surface wash — that keeps color meaningful.
 ## Where the truth lives
 
 - `styles.css` → `tokens/*.css` (the token definitions) and `_ds_bundle.css`
-  (the few real selectors: Row separators, Switch, Segmented focus).
+  (the few real selectors: Row separators, Switch, and the focus rings on
+  Button, Input, Row and Segmented).
 - Per component: `components/core/<Name>/<Name>.prompt.md` (usage + intent, hand
   written) and `<Name>.d.ts` (the props contract).
 

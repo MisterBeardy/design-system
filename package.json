@@ -21,6 +21,7 @@
   "files": [
     "dist",
     "ADOPTING.md",
+    "CHANGELOG.md",
     "components",
     "guidelines",
     "tokens",
@@ -39,6 +40,6 @@
   },
   "scripts": {
     "build": "node build.mjs",
-    "check": "node scripts/check-tokens.mjs"
+    "check": "node scripts/check-tokens.mjs && node scripts/check-changelog.mjs"
   }
 }

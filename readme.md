@@ -63,6 +63,12 @@ preserved as the accent rather than replaced.
   `--ease-out-expo` (`tokens/motion.css`). User-triggered changes should feel
   like a response (fast/base); things the app decided on its own can take their
   time (slow/slower). Collapses to ~0 under `prefers-reduced-motion`.
+- **Touch targets**: on a touch screen every control takes taps across at
+  least 44×44px. Buttons, Segmented options and the Switch get an invisible
+  tap area around them, so they're drawn at the same size; tappable Rows grow
+  to 44px. Mouse and trackpad keep the drawn size. Stack separate controls so
+  their 44px areas don't overlap: two small Buttons (33px) stacked need 11px
+  between them, since each area reaches about 5.5px past its edge.
 
 ## Visual language
 

@@ -21,7 +21,9 @@ fine.
 
 Pass `onClick` only when the row actually navigates or acts — it becomes a real
 `<button>`, keyboard-reachable and focusable. A decorative row that renders as a
-button is a keyboard trap that goes nowhere.
+button is a keyboard trap that goes nowhere. On a touch screen a row with
+`onClick` is at least 44px tall (Apple's minimum row height): rows stack edge to
+edge, so it grows rather than borrowing tap area from its neighbours.
 
 The separator is drawn on the row and inset to the label's leading edge, so it
 starts where the text starts rather than cutting under the glyph. That inset is

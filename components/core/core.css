@@ -1,5 +1,6 @@
 /* The handful of rules the components can't express as inline styles:
-   pseudo-elements, :last-child, :hover, :focus-visible. Everything else in
+   pseudo-elements, :last-child, :hover, :focus-visible, touch-only tap areas.
+   Everything else in
    components/core/ stays inline-style + CSS variables, so the package keeps
    working in any stack without a CSS build step or a utility framework.
 
@@ -132,4 +133,38 @@
 
 .ds-switch-knob {
   transition: transform var(--duration-base) var(--ease-out-expo);
+}
+
+/* --- Touch targets --------------------------------------------------- */
+
+/* On a touch screen every control takes taps across at least 44×44px, the
+   floor Apple's guidelines and WCAG 2.5.5 set. Buttons, segments and the
+   Switch get an invisible tap area centred on them, so they're drawn at
+   exactly the same size; a tap on a pseudo-element is a tap on its element.
+   Interactive rows grow to 44px instead: rows stack edge to edge, so an
+   overhang would take taps meant for the next row.
+
+   Mouse and trackpad keep the drawn size. Their pointer is precise, and
+   there the overhangs could overlap closely stacked neighbours. */
+@media (pointer: coarse) {
+  .ds-button,
+  .ds-segment {
+    position: relative;
+  }
+
+  .ds-button::before,
+  .ds-segment::before,
+  .ds-switch::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  .ds-row[data-interactive="true"] {
+    min-height: 44px;
+  }
 }

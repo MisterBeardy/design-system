@@ -3,6 +3,7 @@ import { cx } from "./cx.js";
 export function Switch({ checked, onChange, disabled = false, label, className, style, ...props }) {
   return (
     <label
+      className="ds-switch"
       style={{
         position: "relative",
         display: "inline-flex",

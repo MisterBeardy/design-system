@@ -22,3 +22,7 @@ name and isn't optional.
 
 Not a toggle. Two options that are on/off ("Enabled" / "Disabled") is a
 `Switch`; two options that are peers ("Miles" / "Kilometres") is this.
+
+On a touch screen each option takes taps across 44px of height, reaching
+beyond the track while drawn at the same size. Leave room above and below
+before the next control.

@@ -11,11 +11,24 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Upgrading
+
+- **On touch screens, tappable Rows are 44px tall** (37.5px without a
+  sub-label before). Mouse and trackpad are unchanged.
+- Controls stacked closer than their 44px tap areas now overlap on touch:
+  the later one takes the tap. Two small Buttons (33px) stacked need 11px
+  between them.
+
 ### Added
 
 - `CHANGELOG.md`, reconstructed back to 0.1.0, and a release routine in
   `CONTRIBUTING.md`. `npm run check` now fails when the package version has no
   entry here. (#19)
+- On touch screens, every control takes taps across at least 44×44px: Button,
+  Segmented options and the Switch through an invisible tap area, drawn at the
+  same size; tappable Rows by growing to 44px. Before, only Input reached it:
+  the Switch took taps across 23px, a small Button 34px, a Segmented option
+  31px. (#17)
 
 ## [0.5.0] — 2026-09-22
 

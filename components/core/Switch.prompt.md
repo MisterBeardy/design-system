@@ -22,3 +22,6 @@ fell to 2.4:1.
 Give it a `label` unless it sits in a `Row` whose label already names it; a
 switch with no accessible name is a control that screen readers announce as
 nothing at all.
+
+On a touch screen it takes taps across 44×44px around the 37×22 track, drawn
+at the same size. Inside a `Row` that fits comfortably.

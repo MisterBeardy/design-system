@@ -1,0 +1,201 @@
+# Changelog
+
+What changed in each release of `@misterbeardy/design-system`, newest first.
+Apps pin a tag (`github:MisterBeardy/design-system#vX.Y.Z`): before moving to a
+newer one, read the **Upgrading** notes of every release in between. Those are
+the changes an app can see or has to act on.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Every pull request adds its line under **Unreleased**; a release moves them
+under its version (see `CONTRIBUTING.md`).
+
+## [Unreleased]
+
+### Added
+
+- `CHANGELOG.md`, reconstructed back to 0.1.0, and a release routine in
+  `CONTRIBUTING.md`. `npm run check` now fails when the package version has no
+  entry here. (#19)
+
+## [0.5.0] — 2026-09-22
+
+Accent contrast, on-colours and the data palette. (#8, #9, #10)
+
+### Upgrading
+
+- **Every app's light-theme accent is darker** (lightness 0.60 → 0.54), so its
+  button label reaches 4.5:1. An app that sets its own accent should replace
+  that block with the one `accentCssFor("<app-key>")` prints: the old values
+  fail contrast and have no `--on-accent`.
+- **Dark theme: labels and glyphs on coloured fills are now dark**, not white:
+  the primary Button's label, every GlyphTile glyph, and the Switch knob when
+  on.
+- **StatStrip deltas** use the status `-text` colours instead of the solid
+  fills, so they read darker in light and lighter in dark.
+- **Data colour has a palette.** Replace hand-picked `GlyphTile color=` data
+  colours with `data={1…6}`, in the order `dataOrderFor("<app-key>")` gives;
+  chart series use `var(--data-1)` … `var(--data-6)`, counts
+  `var(--ramp-1)` … `var(--ramp-7)`. `color=` still works, unchanged.
+
+### Added
+
+- On-colours: `--on-accent`, `--on-success`, `--on-warning`, `--on-danger`,
+  `--on-neutral`. White in light, `#211f1c` in dark.
+- The data palette `--data-1` … `--data-6` with `--on-data`: six category
+  colours that stay distinguishable for colour-blind viewers, first slots most
+  distinct.
+- The sequential ramp `--ramp-1` … `--ramp-7`: a warm ink stepping only in
+  lightness.
+- `GlyphTile data={1…6}`.
+- `accentTokensFor()`, `accentCssFor()`, `dataOrderFor()`, `DATA_SLOTS` and a
+  `dataLast` field per app in `app-registry.js`.
+- `npm run check` (118 checks, also in CI): the default accent matches the
+  registry, and every label, glyph, data colour and ramp step meets its
+  contrast and colour-blind separation floor, for every registered app.
+- `guidelines/data.md` and its specimen card.
+
+### Changed
+
+- `accentFor()` uses lightness 0.54 for the light theme.
+- `ADOPTING.md` tells apps to paste `accentCssFor` output instead of applying
+  the formula by hand.
+
+### Fixed
+
+- `accentFor()` printed floating-point noise for some dark accents
+  (`0.11900000000000001` for IdleAirport); it now rounds to four places.
+
+## [0.4.0] — 2026-09-22
+
+Correctness: states, types and consistency. (#2, #3, #4, #5, #6, #7)
+
+### Upgrading
+
+- **Controls in apps with a Tailwind preflight get 3–9px shorter.** Button,
+  Chip, Input, Segmented and StatTile now fix their line height at 1.3 instead
+  of inheriting the host's (Tailwind sets 1.5), so they're the same height in
+  every app.
+- **Secondary buttons are 2px shorter**, matching primary (40px).
+- **Input now fits its container.** It overflowed by 30px without a host
+  box-sizing reset; drop any workaround.
+- **TypeScript now sees the prop types**, so code that leaned on untyped
+  imports may surface type errors.
+- A `className` on Row, Switch, Button or Input now adds to the component's
+  own class instead of replacing it (which used to drop separators and focus
+  rings).
+
+### Added
+
+- Focus rings on Button and Input, and disabled states that fade to 50% like
+  Row and Switch.
+- Eleven control and tile type tokens (`--text-button`, `--text-input`,
+  `--text-chip`, `--text-segment`, `--text-tile-value` and the rest); the
+  components use them instead of literal sizes.
+- A `types` entry in `package.json`.
+- CI that fails when the committed `dist/` doesn't match the sources.
+
+### Changed
+
+- `--row-inset` is derived with `calc()`, and Row moves it for a GlyphTile
+  with its own `size`.
+- Chip tracking is `--tracking-caps` (0.05em, was 0.04em).
+
+### Fixed
+
+- `readme.md` and `ADOPTING.md` still told Next.js apps to add
+  `transpilePackages`, and the readme listed files that aren't in the repo.
+- `index.d.ts` used the global `JSX` namespace, which `@types/react` 19
+  removed.
+
+## [0.3.0] — 2026-08-20
+
+### Upgrading
+
+- `transpilePackages` is no longer needed. It's harmless if it stays.
+- **Known issue: TypeScript lost the package's prop types in this release.**
+  Moving the entry to `dist/index.js` left no types beside it, and the package
+  declared no `types` entry. Fixed in 0.4.0.
+
+### Changed
+
+- Components ship compiled to plain JS (`dist/index.js`, ESM, React external)
+  instead of raw `.jsx`. Next on DollarDeploy declined to transpile the `.jsx`
+  and failed with "Module parse failed: Unexpected token".
+
+### Added
+
+- Markdown guidelines (`guidelines/*.md`) beside the specimen cards, and the
+  inputs for syncing the system to the lookwhatibuilt.today Claude Design
+  project (`.design-sync/`).
+
+## [0.2.1] — 2026-07-16
+
+### Changed
+
+- `ADOPTING.md` teaches the grouped-list language: the primitives in the
+  import example, `core.css` required when cherry-picking token files, font
+  variables declared on `<html>`, data colour never bridged to the accent, and
+  a kickoff prompt that converts one screen.
+
+## [0.2.0] — 2026-07-16
+
+The Apple HIG grouped-list language becomes the default UX.
+
+### Upgrading
+
+- Apps that cherry-pick token files instead of importing `styles.css` must
+  also import `core.css`, or Row separators and focus rings don't render.
+- Group's corner is 12px (was 14px) and GlyphTile is 23px (was 22px).
+
+### Added
+
+- Group, Row, GlyphTile, Segmented, Switch and StatStrip.
+- `components/core/core.css`: Row hairlines, hover, focus rings and the
+  box-sizing the rows depend on.
+- Tokens: `--hairline`, `--glyph-size`, `--row-pad-x`, `--row-gap`,
+  `--row-inset`, `--radius-card`, the grouped-list type roles, a motion scale
+  that honours `prefers-reduced-motion`, and `.material-glass`.
+
+### Fixed
+
+- The default accent shipped lightness 0.58 while the registry computed 0.60;
+  it now matches the registry.
+
+## [0.1.2] — 2026-07-04
+
+### Fixed
+
+- `components/core/index.d.ts`: TypeScript couldn't resolve the package's
+  exports at all.
+
+## [0.1.1] — 2026-07-03
+
+### Added
+
+- `ADOPTING.md`: per-stack wiring, dark-mode and framework bridging, accent
+  registration and a kickoff prompt for coding agents.
+
+## [0.1.0] — 2026-07-03
+
+### Added
+
+- The system, imported from the Claude Design project: tokens, specimen
+  cards, Button, Card, Chip, Input and StatTile, and the accent registry.
+- Status tokens (`--success`, `--warning`, `--danger` with `-soft` and
+  `-text`) and the matching Chip tones.
+- npm packaging as `@misterbeardy/design-system`.
+
+### Fixed
+
+- `styles.css` imports `typography.css` first, so its Google Fonts `@import`
+  stays valid.
+
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/MisterBeardy/design-system/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/MisterBeardy/design-system/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/MisterBeardy/design-system/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/MisterBeardy/design-system/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/MisterBeardy/design-system/compare/v0.1.2...v0.2.0
+[0.1.2]: https://github.com/MisterBeardy/design-system/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/MisterBeardy/design-system/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/MisterBeardy/design-system/releases/tag/v0.1.0

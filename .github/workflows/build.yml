@@ -11,8 +11,10 @@ on:
   pull_request:
 
 jobs:
-  # The default accent matches app-registry.js, and every label and glyph on a
-  # coloured fill meets its contrast floor for every registered app.
+  # The default accent matches app-registry.js, every label and glyph on a
+  # coloured fill meets its contrast floor for every registered app, and
+  # CHANGELOG.md has an entry for the version in package.json. (The job keeps
+  # its original name so a required status check doesn't break.)
   colour-checks:
     runs-on: ubuntu-latest
     steps:

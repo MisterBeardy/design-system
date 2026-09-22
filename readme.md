@@ -192,6 +192,9 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 - `guidelines/` — foundation specimen cards (neutrals, accent, status, data colour, type
   scale, spacing, radius, grouped list)
 - `app-registry.js` — accent hue registry + gap-finding helpers
+- `CHANGELOG.md` — what changed in each release, with **Upgrading** notes for
+  apps moving between tags; `CONTRIBUTING.md` — the per-change and release
+  routine
 - Not in this repository: the interactive tools (**App Theme Kit**, **Accent
   Registry**, **Palette Check**), the printable **Theme Spec**, and the three
   real-app applied examples (**That'll Be 5 Bucks**, **OneOfUs Beer**, **Idle

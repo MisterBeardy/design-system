@@ -14,6 +14,9 @@ file only covers the how.
 - **Deploys must always use a pinned tag.** `file:` dependencies break cloud
   builds (the sibling folder doesn't exist there). Switching is one command:
   `npm install github:MisterBeardy/design-system#vX.Y.Z`.
+- **Moving to a newer tag?** Read the **Upgrading** notes in `CHANGELOG.md`
+  for every release between the app's tag and the new one first. They list
+  what the app will see change and anything it has to do.
 
 ## 1. Register the app's accent
 

@@ -74,6 +74,13 @@ take the Google Fonts download.
   `--font-display` and `--font-mono` in your own CSS, as you do now: the type
   scale is built on those two names. If you copied the `--text-*` type tokens
   into your own CSS to make up for the missing file, delete the copy.
+
+  In a Tailwind 4 app, `--font-mono` is also the variable Tailwind's own
+  `font-mono` class reads, so one setting serves both. Point it at JetBrains
+  Mono and every `font-mono` in your app changes with it. Leave it on your
+  app's mono face and the design system's mono text (chips, tile and stat
+  labels) uses that face instead. Either works; the second leaves your app
+  looking as it does today.
 - **(before 0.2.0) Import `core.css`.** It carries the rules components can't
   set inline: Row separators, hover states, focus rings, touch targets.
   Without it, those don't render, and nothing warns you:
@@ -293,3 +300,7 @@ built and passed its tests, and its screens were compared before and after.
 It found two more things, fixed above: step 5's search also listed HTML
 reports and a stylesheet nothing loads; and step 6 treated the app's copied
 type tokens as uses to rename, when they're copies to delete.
+
+idrovewhere.today was then upgraded again from v0.1.2 by the corrected guide,
+with no further errors. It added the note on `--font-mono` in Tailwind 4
+apps to step 4.

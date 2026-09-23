@@ -28,6 +28,11 @@ under its version (see `CONTRIBUTING.md`).
   - Step 8: shorter controls aren't only a Tailwind effect.
 
   `ADOPTING.md` gets the same accent warning. No package change.
+- **`UPGRADING-1.0.md` refined after a third test upgrade**, on oneofus.beer
+  from v0.1.2. Step 5's accent search now looks only at stylesheets, and
+  says a stylesheet the app never loads can be ignored. Step 6 now splits
+  into two searches: copied type tokens to delete, then uses to rename.
+  No package change.
 
 ## [1.0.0] — 2026-09-23
 

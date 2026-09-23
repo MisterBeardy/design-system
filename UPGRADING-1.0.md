@@ -122,13 +122,17 @@ A complete list, for an app hosting its own fonts:
   Then **delete every other place your CSS sets the accent**, not just the
   old block. A leftover can outrank the new one without any error: an app
   that sets its light theme on `:root[data-theme="light"]` beats the
-  printed `:root`, so the old light accent stays, and in light the high-contrast
-  one never applies. From your app's root, this lists them; every line it prints
-  should be inside the block you just pasted:
+  printed `:root`, so the old light accent stays, and in light the
+  high-contrast one never applies. From your app's root, this lists them in
+  your stylesheets:
 
   ```sh
-  grep -rnE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--(accent|accent-soft|accent-text|on-accent):' .
+  grep -rnE --include='*.css' --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--(accent|accent-soft|accent-text|on-accent):' .
   ```
+
+  Every line it prints should be inside the block you just pasted, or in a
+  stylesheet your app never loads (a leftover from a starter kit, say).
+  Those don't reach the page and can stay.
 
 - **(before 1.0) If your CSS sets its own neutrals, high contrast only
   reaches your accent.** The package's high-contrast theme also moves
@@ -146,19 +150,30 @@ A complete list, for an app hosting its own fonts:
   from `--text-*` to `--type-*`, because `--text-ink` and `--text-muted` are
   colours and one prefix for both invited `color: var(--text-body)`. **The
   two colours don't change.** The old names still work until 2.0, as aliases,
-  so nothing breaks today; move them while you're here. From your app's root,
-  this lists every one to rename:
+  so nothing breaks today; move them while you're here. It takes two
+  searches, from your app's root. First, **copies to delete**: lines that
+  declare one of the 26 themselves.
 
   ```sh
-  grep -rnoE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--text-[a-z-]+' . \
-    | grep -E -e ':--text-(body|button|button-sm|chip|chip-display|display|heading|input|label|message|message-title|page-sub|row-label|row-sub|row-value|section|segment|segment-sm|segment-sub|stat|stat-label|subhead|tab|tile-label|tile-sub|tile-value)$'
+  grep -rnE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--text-(body|button|button-sm|chip|chip-display|display|heading|input|label|message|message-title|page-sub|row-label|row-sub|row-value|section|segment|segment-sm|segment-sub|stat|stat-label|subhead|tab|tile-label|tile-sub|tile-value):' .
   ```
 
-  and rename each `--text-<name>` to `--type-<name>`. Every one of the 26
-  keeps its name after the prefix: `--text-row-label` → `--type-row-label`.
-  The search names the 26 on purpose. Your app may have `--text-*` names
+  Each is a copy of the package's value, left from before your app imported
+  it. Delete the line; don't rename it. Renamed, it would become a copy of
+  `--type-*` that overrides the package's own. Then, **uses to rename**:
+
+  ```sh
+  grep -rnoE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e 'var\(--text-[a-z-]+' . \
+    | grep -E -e ':var\(--text-(body|button|button-sm|chip|chip-display|display|heading|input|label|message|message-title|page-sub|row-label|row-sub|row-value|section|segment|segment-sm|segment-sub|stat|stat-label|subhead|tab|tile-label|tile-sub|tile-value)$'
+  ```
+
+  Rename each `var(--text-<name>)` to `var(--type-<name>)`. Every one of the
+  26 keeps its name after the prefix: `--text-row-label` → `--type-row-label`.
+  Both searches name the 26 on purpose. Your app may have `--text-*` names
   of its own, usually colours like `--text-faint`. Those aren't type
-  tokens, and renaming them would leave that text with no colour.
+  tokens, and renaming them would leave that text with no colour. Notes that
+  mention the old names (a `CLAUDE.md`, a README) aren't in either search;
+  update those by hand.
 - **(before 1.0) `.material-glass` is `.ds-glass`.** Unlike the tokens, the
   class has **no alias**: rename it wherever you use it.
 - **(before 0.8.0) Guidelines copied into your app** should come from
@@ -240,8 +255,9 @@ surprise, and so you can drop workarounds you no longer need.
 1. **Build and type-check** as you normally would. Any type error mentioning a
    design-system prop is step 7, or step 3's second point.
 2. **Search for leftovers:**
-   - anything step 6's search still prints is step 6
-   - an accent line outside your pasted block is step 5
+   - anything step 6's two searches still print is step 6
+   - an accent line outside your pasted block, in a stylesheet your app
+     loads, is step 5
    - `material-glass` is step 6
    - `transpilePackages` is step 3
 3. **Look at one screen in light and one in dark,** against step 8's list.
@@ -270,3 +286,10 @@ GitHub pin (step 2); leftover accent lines can outrank the pasted block, and
 high contrast doesn't reach neutrals an app sets itself (step 5); step 6's
 search listed the app's own `--text-faint` colour as a type token; and the
 shorter controls in step 8 weren't only a Tailwind effect.
+
+Last, it was followed on a copy of oneofus.beer, from v0.1.2: an app that
+imports `styles.css`, with Tailwind and shadcn/ui on top. It type-checked,
+built and passed its tests, and its screens were compared before and after.
+It found two more things, fixed above: step 5's search also listed HTML
+reports and a stylesheet nothing loads; and step 6 treated the app's copied
+type tokens as uses to rename, when they're copies to delete.

@@ -11,17 +11,19 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
-### Changed
+## [0.8.0] — 2026-09-23
 
-- The guidelines are generated. `guidelines/*.md` and `guidelines/*.card.html`
-  are now written by `npm run build` from `guidelines/src/`, with every token
-  value filled in from `tokens/*.css`, and CI fails when they're out of date.
-  They used to restate the values by hand in two forms, kept honest only by a
-  note asking for both to be edited. Generating them also fixed the drift it
-  was there to prevent: `type-scale.md` was missing `--text-message-title` and
-  `--text-message` (added in 0.6.0), and `radius.md` still described
-  `--radius-xl` as app-code-only after the `Sheet` started using it. Nothing an
-  app imports changed. (#20)
+Elevation and app chrome, and generated guidelines. (#11, #16, #20)
+
+### Upgrading
+
+- Nothing changes for existing code. This release adds components, tokens
+  and documentation; no existing component, token or class behaves
+  differently.
+- The guidelines are still at `guidelines/*.md` and `guidelines/*.card.html`.
+  They're now built from `guidelines/src/`, which the package also ships, so
+  a copy of a guideline in an app should be taken from `guidelines/`, never
+  `src/`: the sources hold `{{--token}}` placeholders instead of values.
 
 ### Added
 
@@ -47,6 +49,18 @@ under its version (see `CONTRIBUTING.md`).
   tokens: `--header-height`, `--tabbar-height`, `--text-page-sub`,
   `--text-tab`. A new `guidelines/chrome.md` says which screens take which and
   how they compose with `Group`. (#16)
+
+### Changed
+
+- The guidelines are generated. `guidelines/*.md` and `guidelines/*.card.html`
+  are now written by `npm run build` from `guidelines/src/`, with every token
+  value filled in from `tokens/*.css`, and CI fails when they're out of date.
+  They used to restate the values by hand in two forms, kept honest only by a
+  note asking for both to be edited. Generating them also fixed the drift it
+  was there to prevent: `type-scale.md` was missing `--text-message-title` and
+  `--text-message` (added in 0.6.0), and `radius.md` still described
+  `--radius-xl` as app-code-only after the `Sheet` started using it. Nothing an
+  app imports changed. (#20)
 
 ## [0.7.0] — 2026-09-22
 
@@ -302,7 +316,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/MisterBeardy/design-system/compare/v0.4.0...v0.5.0

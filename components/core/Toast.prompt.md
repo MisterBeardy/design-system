@@ -35,5 +35,5 @@ shows, so the border does most of that work.
 
 It's announced to screen readers through a live region that's always in the
 page, so render the Toast once and keep it rendered with `open={false}`,
-rather than mounting it when there's something to say. `inline` drops the
-fixed positioning, for a toast inside a panel and for previews.
+rather than mounting it when there's something to say. `fixed={false}` drops
+the fixed positioning, for a toast inside a panel and for previews.

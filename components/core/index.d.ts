@@ -9,7 +9,7 @@ import type { RowProps } from "./Row";
 import type { GlyphTileProps, GlyphTone } from "./GlyphTile";
 import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
-import type { StatStripProps, Stat } from "./StatStrip";
+import type { StatStripProps, StatStripItem } from "./StatStrip";
 import type { IconProps, IconName } from "./Icon";
 import type { SheetProps } from "./Sheet";
 import type { PopoverProps } from "./Popover";
@@ -40,7 +40,7 @@ export type {
   SegmentedOption,
   SwitchProps,
   StatStripProps,
-  Stat,
+  StatStripItem,
   IconProps,
   SheetProps,
   PopoverProps,

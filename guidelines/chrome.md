@@ -14,7 +14,7 @@ it loses twice: the top third of a phone goes to the word you just tapped to
 get here, and the header becomes a second thing to learn, because it looks
 different depending on where you are in a list you can't see the top of.
 
-So: one height, title centred, `--text-subhead`, on `--surface`. Same material
+So: one height, title centred, `--type-subhead`, on `--surface`. Same material
 as a `Group`, so the chrome is the app's frame rather than a card floating
 above the page.
 
@@ -42,7 +42,7 @@ A `Toolbar` brings nothing new to draw: it's `Segmented`, `Button`, `Chip` and
 ## How they compose with Group
 
 ```jsx
-<PageHeader title="Trips" subtitle="128 mi this month" actions={…} />
+<PageHeader title="Trips" sub="128 mi this month" trailing={…} />
 <main style={{ padding: "0 var(--space-4)",
                paddingBottom: "calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px))" }}>
   <Toolbar label="Filter trips">…</Toolbar>

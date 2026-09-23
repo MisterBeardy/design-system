@@ -23,9 +23,9 @@ export function EmptyState({ icon, title, action, children, className, style, ..
       }}
     >
       <GlyphTile tone="neutral" size={44}>{icon ?? <Icon name="inbox" size={22} />}</GlyphTile>
-      {title && <div style={{ font: "var(--text-subhead)", color: "var(--text-ink)" }}>{title}</div>}
+      {title && <div style={{ font: "var(--type-subhead)", color: "var(--text-ink)" }}>{title}</div>}
       {children && (
-        <div style={{ font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }}>{children}</div>
+        <div style={{ font: "var(--type-body)", color: "var(--text-muted)", maxWidth: 300 }}>{children}</div>
       )}
       {action && <div style={{ marginTop: 4 }}>{action}</div>}
     </div>

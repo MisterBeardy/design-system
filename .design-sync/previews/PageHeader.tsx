@@ -18,7 +18,7 @@ const Add = ({ label }: { label: string }) => (
 export function WithSubtitleAndActions() {
   return (
     <Screen>
-      <PageHeader sticky={false} title="Trips" subtitle="128 mi this month" leading={<Back />} actions={<Add label="Add trip" />} />
+      <PageHeader sticky={false} title="Trips" sub="128 mi this month" leading={<Back />} trailing={<Add label="Add trip" />} />
     </Screen>
   );
 }
@@ -37,7 +37,7 @@ export function LongTitle() {
   return (
     <Screen>
       <PageHeader sticky={false} headingLevel={2} title="Weekend coast run and the long way back"
-                  leading={<Back />} actions={<Add label="Add stop" />} />
+                  leading={<Back />} trailing={<Add label="Add stop" />} />
     </Screen>
   );
 }

@@ -15,7 +15,7 @@ Deliberately **flat** — no shadow. Depth here comes from the border plus the
 `--surface`/`--bg` contrast, which only exists because the page behind it is
 tinted (`--bg`, never white). If a Group ever looks like it's floating on a
 white page, the fix is the page background, not a shadow. The one sanctioned
-elevation in the system is a panel over live content — see `.material-glass`.
+elevation in the system is a panel over live content — see `.ds-glass`.
 
 The Group has no padding of its own: rows own their padding so their separators
 can run edge to edge. Don't wrap rows in a padded div to "fix" that — you'll

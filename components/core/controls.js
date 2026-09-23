@@ -19,7 +19,7 @@ export function controlStyle({ bare, invalid, disabled }) {
       ...base,
       flex: "1 1 0",
       width: "auto",
-      font: "var(--text-row-label)",
+      font: "var(--type-row-label)",
       textAlign: "right",
       background: "transparent",
       border: "none",
@@ -30,7 +30,7 @@ export function controlStyle({ bare, invalid, disabled }) {
   return {
     ...base,
     width: "100%",
-    font: "var(--text-input)",
+    font: "var(--type-input)",
     background: "var(--surface)",
     border: `1px solid ${invalid ? "var(--danger)" : "var(--border)"}`,
     // A second pixel of danger inside the border, so an invalid field reads

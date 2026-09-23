@@ -142,7 +142,7 @@ version, because it's what most conversions are:
   become `Switch`.
 - Cards stay flat. The one sanctioned elevation and the one sanctioned
   translucency are the same thing: a panel floating over live content
-  (`.material-glass`). Vibrancy is a signal, not a texture.
+  (`.ds-glass`). Vibrancy is a signal, not a texture.
 
 An app that only bridges tokens has adopted the palette, not the design. The
 palette was never the hard part.

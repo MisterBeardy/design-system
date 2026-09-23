@@ -37,7 +37,7 @@ export function Select({ options, value, onChange, disabled = false, bare = fals
             ? {
                 // In a row it reads like a Row's value: mono, muted, then the chevron.
                 width: "100%",
-                font: "var(--text-row-value)",
+                font: "var(--type-row-value)",
                 fontVariantNumeric: "tabular-nums",
                 color: invalid ? "var(--danger-text)" : "var(--text-muted)",
                 textAlignLast: "right",

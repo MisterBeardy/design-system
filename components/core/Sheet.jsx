@@ -122,7 +122,7 @@ export function Sheet({
             padding: grabber ? "2px var(--space-4) 0" : "14px var(--space-4) 0",
           }}
         >
-          <span style={{ flex: 1, minWidth: 0, font: "var(--text-subhead)", color: "var(--text-ink)" }}>{title}</span>
+          <span style={{ flex: 1, minWidth: 0, font: "var(--type-subhead)", color: "var(--text-ink)" }}>{title}</span>
           {trailing}
         </div>
       )}

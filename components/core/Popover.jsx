@@ -119,7 +119,7 @@ export function Popover({
                 borderBottom: "var(--hairline) solid var(--border)",
               }}
             >
-              <span style={{ flex: 1, minWidth: 0, font: "var(--text-message-title)", color: "var(--text-ink)" }}>{title}</span>
+              <span style={{ flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }}>{title}</span>
               <button
                 type="button"
                 aria-label="Close"

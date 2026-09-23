@@ -52,8 +52,8 @@ export function Checkbox({ checked, onChange, label, sub, disabled = false, row 
       </span>
       {(label || sub) && (
         <span style={{ minWidth: 0, paddingTop: sub ? 1 : 0 }}>
-          <span style={{ display: "block", font: row ? "var(--text-row-label)" : "var(--text-input)", color: "var(--text-ink)" }}>{label}</span>
-          {sub && <span style={{ display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 2 }}>{sub}</span>}
+          <span style={{ display: "block", font: row ? "var(--type-row-label)" : "var(--type-input)", color: "var(--text-ink)" }}>{label}</span>
+          {sub && <span style={{ display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 2 }}>{sub}</span>}
         </span>
       )}
     </label>

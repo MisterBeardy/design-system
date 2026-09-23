@@ -17,7 +17,7 @@ export interface SegmentedProps<T extends string = string>
   options: ReadonlyArray<SegmentedOption<T>>;
   value: T;
   onChange: (next: T) => void;
-  /** Accessible name for the group. Required. */
+  /** Not shown; read by screen readers. The name of the group. Required. */
   label: string;
   size?: "sm" | "md";
 }

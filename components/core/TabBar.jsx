@@ -74,7 +74,7 @@ export function TabBar({
             }}
           >
             {item.icon && <Icon name={item.icon} size={20} />}
-            <span style={{ ...truncate, font: "var(--text-tab)" }}>{item.label}</span>
+            <span style={{ ...truncate, font: "var(--type-tab)" }}>{item.label}</span>
           </button>
         );
       })}

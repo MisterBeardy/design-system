@@ -16,7 +16,7 @@ Releases up to v0.8.0 were made straight from `main`, before this.
   both and fails if either is out of date.
 - Guidelines are edited in `guidelines/src/`, never in `guidelines/`. Where a
   guideline states a token's value, write a placeholder — `{{--space-3}}`,
-  `{{dark:--bg}}`, `{{spec:--text-body}}` — and the build fills it in from
+  `{{dark:--bg}}`, `{{spec:--type-body}}` — and the build fills it in from
   `tokens/*.css` (the forms are listed at the top of
   `scripts/build-guidelines.mjs`). Then a token change can't leave a guideline
   saying the old value.

@@ -9,7 +9,7 @@ export function Toast({
   action,
   onClose,
   duration,
-  inline = false,
+  fixed = true,
   className,
   style,
   ...props
@@ -42,7 +42,7 @@ export function Toast({
       aria-live="polite"
       className="ds-toast-region"
       style={
-        inline
+        !fixed
           ? { display: "flex" }
           : {
               position: "fixed",
@@ -76,7 +76,7 @@ export function Toast({
             alignItems: "center",
             gap: 12,
             boxSizing: "border-box",
-            width: inline ? "100%" : "min(420px, calc(100% - 32px))",
+            width: fixed ? "min(420px, calc(100% - 32px))" : "100%",
             minHeight: 48,
             padding: action ? "2px 6px 2px 16px" : "12px 16px",
             borderRadius: "var(--radius-md)",
@@ -89,7 +89,7 @@ export function Toast({
             ...style,
           }}
         >
-          <span style={{ flex: 1, minWidth: 0, font: "var(--text-message-title)" }}>{message}</span>
+          <span style={{ flex: 1, minWidth: 0, font: "var(--type-message-title)" }}>{message}</span>
           {action && (
             <button
               type="button"
@@ -106,7 +106,7 @@ export function Toast({
                 borderRadius: "var(--radius-sm)",
                 background: "transparent",
                 color: "var(--accent-text)",
-                font: "var(--text-button)",
+                font: "var(--type-button)",
                 cursor: "pointer",
               }}
             >

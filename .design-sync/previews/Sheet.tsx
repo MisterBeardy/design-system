@@ -19,7 +19,7 @@ export function OverAMap() {
       {!open && <div style={{ padding: 16 }}><Button onClick={() => setOpen(true)}>Chargers nearby</Button></div>}
       <Sheet open={open} onClose={() => setOpen(false)} title="Chargers nearby" height={300}
              style={{ position: 'absolute' }}
-             trailing={<span style={{ font: 'var(--text-row-value)', color: 'var(--text-muted)' }}>3 within 2 mi</span>}>
+             trailing={<span style={{ font: 'var(--type-row-value)', color: 'var(--text-muted)' }}>3 within 2 mi</span>}>
         <Group>
           <Row label="Fast charge · Harbour Road" sub="4 of 6 free · 150 kW" value="0.4 mi" chevron onClick={() => {}} />
           <Row label="Meridian Garage" sub="2 of 8 free · 50 kW" value="0.9 mi" chevron onClick={() => {}} />

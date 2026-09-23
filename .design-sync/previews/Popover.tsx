@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Popover, Button, Segmented, Checkbox, Group, Row } from '@misterbeardy/design-system';
+import { Popover, Button, Segmented, Checkbox, Group, Row, Icon } from '@misterbeardy/design-system';
 
 const Frame = ({ children }: { children: any }) => (
   <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minHeight: 300, padding: 4 }}>{children}</div>
@@ -36,7 +36,8 @@ export function AsAMenu() {
                trigger={<Button variant="secondary" size="sm" onClick={() => setOpen(!open)}>Sort</Button>}>
         <Group>
           {['Newest first', 'Longest first', 'Most expensive', 'Nearest'].map((o) => (
-            <Row key={o} label={o} value={o === sort ? '✓' : undefined} onClick={() => { setSort(o); setOpen(false); }} />
+            <Row key={o} label={o} trailing={o === sort ? <Icon name="check" label="Selected" /> : undefined}
+                 onClick={() => { setSort(o); setOpen(false); }} />
           ))}
         </Group>
       </Popover>

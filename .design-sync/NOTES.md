@@ -1,7 +1,9 @@
 # design-sync notes — @misterbeardy/design-system
 
 Target Claude Design project: **lookwhatibuilt.today** (`38437aad-2039-4a1a-ad1d-73b3aeb3cec2`).
-Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored previews, all graded good.
+Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good.
+
+**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (a major release, or v0.8.0 until 1.0.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 
@@ -40,6 +42,17 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
   story is wider than a grid cell, so the card cropped it (`[GRID_OVERFLOW]`).
 - **`Input` uses `cardMode: column`** (`cfg.overrides.Input`) — its 320px stories overflow
   a grid cell otherwise (`[GRID_OVERFLOW]`).
+- **`Sheet`, `PageHeader`, `TabBar` and `Toolbar` use `cardMode: column`** — their previews
+  are 390px phone-width frames (a Sheet needs a stand-in map under it, a TabBar a whole
+  screen for the list to run under, a Toolbar the content column it lines up with), wider
+  than a grid cell (`[GRID_OVERFLOW]`).
+- **Overlay previews position the component inside a frame** instead of letting it fix to
+  the viewport: `Sheet` gets `style={{ position: 'absolute' }}` over a relative map frame,
+  `TabBar` gets `fixed={false}` plus absolute positioning at the foot of a phone frame.
+  `Popover` is absolutely positioned already and needs only a tall enough frame.
+- **Preview glyphs come from `Icon`, never a typed character.** The design agent imitates
+  previews, so a `✓` in a preview becomes `✓` in its designs (caught on the v0.8.0 sync in
+  Popover's sort menu).
 - **Fonts load remotely.** `typography.css` `@import`s Google Fonts (Space Grotesk +
   JetBrains Mono) → `[FONT_REMOTE]`, non-blocking, assumed served at runtime. No local
   fonts shipped, no `fonts/` dir.
@@ -58,7 +71,7 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
 
 ## Known render warns
 
-- None. Render check is fully clean (21/21, bad 0, thin 0).
+- None. Render check is fully clean (26/26, bad 0, thin 0).
 - `[DTS_STYLE_SYSTEM]` fires on **Icon**, whose props extend `SVGAttributes`: the
   converter drops the inherited presentational attributes and keeps the real API
   (`name`, `size`, `label`, plus the `IconName` union inlined). Expected, not a

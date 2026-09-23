@@ -29,13 +29,28 @@
     "Toast": "components/core/Toast.prompt.md",
     "Skeleton": "components/core/Skeleton.prompt.md",
     "EmptyState": "components/core/EmptyState.prompt.md",
-    "ErrorState": "components/core/ErrorState.prompt.md"
+    "ErrorState": "components/core/ErrorState.prompt.md",
+    "PageHeader": "components/core/PageHeader.prompt.md",
+    "Toolbar": "components/core/Toolbar.prompt.md",
+    "TabBar": "components/core/TabBar.prompt.md"
   },
   "overrides": {
     "Input": {
       "cardMode": "column"
     },
     "Icon": {
+      "cardMode": "column"
+    },
+    "PageHeader": {
+      "cardMode": "column"
+    },
+    "Sheet": {
+      "cardMode": "column"
+    },
+    "TabBar": {
+      "cardMode": "column"
+    },
+    "Toolbar": {
       "cardMode": "column"
     }
   },

@@ -15,7 +15,7 @@ const Add = ({ label }: { label: string }) => (
   <Button variant="ghost" size="sm" aria-label={label}><Icon name="plus" /></Button>
 );
 
-export function WithSubtitleAndActions() {
+export function WithSubAndTrailing() {
   return (
     <Screen>
       <PageHeader sticky={false} title="Trips" sub="128 mi this month" leading={<Back />} trailing={<Add label="Add trip" />} />

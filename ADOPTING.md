@@ -106,9 +106,13 @@ node -e 'import("@misterbeardy/design-system/app-registry").then(r => console.lo
 ```
 
 It prints `--accent`, `--accent-soft`, `--accent-text` and `--on-accent` for
-`:root` and for `[data-theme="dark"]`. A new app goes into `app-registry.js`
-first (step 1); `npm run check` in this package then confirms its button
-label and glyphs meet their contrast floor in both themes.
+`:root` and for `[data-theme="dark"]`, then the app's high-contrast accent in an
+`@media (prefers-contrast: more)` part. Paste all of it: the block comes after
+the package's CSS, so leaving that part out would override the package's
+high-contrast accent with your normal one. A new app goes into
+`app-registry.js` first (step 1); `npm run check` in this package then confirms
+its button label and glyphs meet their contrast floor in both themes, and 7:1
+in high contrast.
 
 Never override neutrals or the status tokens — those are identical across
 the portfolio by design.

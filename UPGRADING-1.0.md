@@ -86,18 +86,27 @@ A complete list, for an app hosting its own fonts:
 
 ## 5. Your accent
 
-- **(before 0.5.0) Replace your accent block with the registry's.** Light-theme
-  accents moved darker (lightness 0.60 → 0.54) so a primary button's label
-  clears 4.5:1, and the slot gained `--on-accent`, the colour of whatever sits
-  on an accent fill. A block written before 0.5.0 fails contrast and has no
-  `--on-accent`. From the design system repo, print the current block for
-  your app and paste it over the old one:
+- **(before 1.0) Replace your accent block with the registry's.** Every app
+  does this once for 1.0, for up to two reasons:
+  - **1.0 adds the high-contrast theme**, and your accent block has to carry
+    its part: an `@media (prefers-contrast: more)` section with your app's
+    high-contrast accent. Your block comes after the package's CSS, so an old
+    one without that section overrides the package's high-contrast accent,
+    and your primary buttons stay at normal contrast when a reader asks for
+    more.
+  - **(before 0.5.0)** Light-theme accents also moved darker (lightness 0.60
+    → 0.54) so a primary button's label clears 4.5:1, and the slot gained
+    `--on-accent`, the colour of whatever sits on an accent fill.
+
+  From the design system repo, print the current block for your app and paste
+  it over the old one, all of it:
 
   ```sh
   node -e 'import("./app-registry.js").then(r => console.log(r.accentCssFor("<your-app-key>")))'
   ```
 
-  It prints a `:root { … }` block and a `[data-theme="dark"] { … }` block. If
+  It prints a `:root { … }` block, a `[data-theme="dark"] { … }` block and an
+  `@media (prefers-contrast: more) { … }` block. If
   your app isn't registered yet, add it to `app-registry.js` first (see
   `ADOPTING.md`).
 

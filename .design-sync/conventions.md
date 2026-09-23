@@ -18,6 +18,10 @@ classes, no provider, no build step required.**
    fix is the page background, not a shadow.
 3. **Dark mode** is `[data-theme="dark"]` on a root element — every token has a
    dark value. **No provider or ThemeProvider exists or is needed.**
+4. **High contrast is automatic.** When the reader's system asks for more
+   contrast (`prefers-contrast: more`) the tokens move to a 7:1 theme by
+   themselves, light and dark. Style with the tokens and it works; a
+   hard-coded colour won't follow, and never add a contrast theme of your own.
 
 ## The styling idiom: tokens, not classes
 

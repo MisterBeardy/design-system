@@ -1,3 +1,5 @@
+import { cx } from "./cx.js";
+
 const SIZES = {
   sm: { padding: "4px 8px",   font: "var(--type-segment-sm)" },
   md: { padding: "6px 12px",  font: "var(--type-segment)" },
@@ -5,12 +7,13 @@ const SIZES = {
 
 const truncate = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 
-export function Segmented({ options, value, onChange, label, size = "md", style, ...props }) {
+export function Segmented({ options, value, onChange, label, size = "md", className, style, ...props }) {
   return (
     <div
       role="radiogroup"
       aria-label={label}
       {...props}
+      className={cx("ds-segmented", className)}
       style={{
         display: "flex",
         gap: 2,

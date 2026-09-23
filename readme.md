@@ -39,6 +39,11 @@ preserved as the accent rather than replaced.
 ## Visual foundations
 - **Color**: warm, slightly desaturated neutrals (`tokens/colors.css`).
   Dark mode is the same roles inverted, not a separate palette.
+- **High contrast**: a third theme, applied by itself when the reader's system
+  asks for more contrast (`prefers-contrast: more`), in light and dark. The same
+  warm palette moved only as far as each role needs: every text colour 7:1,
+  every border 3:1, separators 1px, and the Sheet and TabBar opaque. Apps do
+  nothing but paste their current accent block. See `guidelines/contrast.md`.
 - **Status**: `--success` / `--warning` / `--danger`, each with `-soft` and
   `-text` variants mirroring the accent slot. App-agnostic — never override
   these per app; the same state must read identically across the portfolio.
@@ -178,7 +183,10 @@ One formula for every app, and `accentCssFor(key)` prints it: light
 `--accent: oklch(0.54 C H)` with a white label, dark
 `--accent: oklch(0.74 max(0.85C, 0.09) H)` with a dark label (`--on-accent`).
 The light lightness was 0.60 until 0.5.0, where neither white nor dark text
-reached 4.5:1 on a primary button for most apps.
+reached 4.5:1 on a primary button for most apps. The block also carries each
+app's high-contrast accent, in an `@media (prefers-contrast: more)` part: the
+app's block comes after the package's CSS, so without it the app's normal
+accent would win in high contrast too.
 
 **Adding app #9:**
 1. Run `suggestOpenSlots()` from `app-registry.js` (or open the Accent Registry
@@ -187,7 +195,7 @@ reached 4.5:1 on a primary button for most apps.
    tradeoff if it lands near another app). Greens and cyans (roughly H156–226)
    need chroma of 0.13 or less, or the button label misses 4.5:1.
 3. Add a row to `app-registry.js` and run `npm run check`, which fails if the
-   new app's labels miss their contrast floor, and names the `dataLast` slot
+   new app's labels miss their contrast floor (4.5:1, and 7:1 in high contrast), and names the `dataLast` slot
    (the data colour nearest its accent) to put in the row. Every tool reads
    the registry; nothing else needs updating.
 4. Build real screens from the app's actual repo/data where possible.

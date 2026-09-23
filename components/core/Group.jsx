@@ -4,7 +4,7 @@ export function Group({ header, footer, children, style, ...props }) {
       {header && (
         <div
           style={{
-            font: "var(--text-section)",
+            font: "var(--type-section)",
             letterSpacing: "var(--tracking-caps)",
             textTransform: "uppercase",
             color: "var(--text-muted)",
@@ -27,7 +27,7 @@ export function Group({ header, footer, children, style, ...props }) {
       {footer && (
         <div
           style={{
-            font: "var(--text-row-sub)",
+            font: "var(--type-row-sub)",
             color: "var(--text-muted)",
             padding: "6px var(--row-pad-x) 0",
           }}

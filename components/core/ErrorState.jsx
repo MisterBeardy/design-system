@@ -25,9 +25,9 @@ export function ErrorState({
     >
       <GlyphTile tone="danger">{icon ?? <Icon name="alert" size={13} />}</GlyphTile>
       <div style={{ flex: 1, minWidth: 0 }}>
-        {title && <div style={{ font: "var(--text-message-title)", color: "var(--text-ink)" }}>{title}</div>}
+        {title && <div style={{ font: "var(--type-message-title)", color: "var(--text-ink)" }}>{title}</div>}
         {children && (
-          <div style={{ font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }}>{children}</div>
+          <div style={{ font: "var(--type-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }}>{children}</div>
         )}
         {(action || onRetry) && (
           <div style={{ marginTop: 10 }}>

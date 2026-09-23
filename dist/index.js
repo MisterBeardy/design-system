@@ -12,8 +12,8 @@ var VARIANTS = {
   ghost: { background: "transparent", color: "var(--text-muted)", borderColor: "transparent" }
 };
 var SIZES = {
-  sm: { font: "var(--text-button-sm)", padding: "7px 13px" },
-  md: { font: "var(--text-button)", padding: "10px 19px" }
+  sm: { font: "var(--type-button-sm)", padding: "7px 13px" },
+  md: { font: "var(--type-button)", padding: "10px 19px" }
 };
 function Button({ variant = "primary", size = "md", disabled = false, className, children, style, ...props }) {
   return /* @__PURE__ */ jsx(
@@ -74,7 +74,7 @@ function Chip({ tone = "neutral", mono = true, children, style, ...props }) {
       ...props,
       style: {
         display: "inline-block",
-        font: mono ? "var(--text-chip)" : "var(--text-chip-display)",
+        font: mono ? "var(--type-chip)" : "var(--type-chip-display)",
         letterSpacing: mono ? "var(--tracking-caps)" : "normal",
         borderRadius: "var(--radius-pill)",
         padding: "5px 12px",
@@ -101,7 +101,7 @@ function controlStyle({ bare, invalid, disabled }) {
       ...base,
       flex: "1 1 0",
       width: "auto",
-      font: "var(--text-row-label)",
+      font: "var(--type-row-label)",
       textAlign: "right",
       background: "transparent",
       border: "none",
@@ -112,7 +112,7 @@ function controlStyle({ bare, invalid, disabled }) {
   return {
     ...base,
     width: "100%",
-    font: "var(--text-input)",
+    font: "var(--type-input)",
     background: "var(--surface)",
     border: `1px solid ${invalid ? "var(--danger)" : "var(--border)"}`,
     // A second pixel of danger inside the border, so an invalid field reads
@@ -154,9 +154,9 @@ function StatTile({ label, value, sub, accent = false, style, ...props }) {
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx5("div", { style: { font: "var(--text-tile-label)", letterSpacing: "var(--tracking-label)", textTransform: "uppercase", color: "var(--text-muted)" }, children: label }),
-        /* @__PURE__ */ jsx5("div", { style: { font: "var(--text-tile-value)", color: accent ? "var(--accent)" : "var(--text-ink)", marginTop: 4 }, children: value }),
-        sub && /* @__PURE__ */ jsx5("div", { style: { font: "var(--text-tile-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
+        /* @__PURE__ */ jsx5("div", { style: { font: "var(--type-tile-label)", letterSpacing: "var(--tracking-label)", textTransform: "uppercase", color: "var(--text-muted)" }, children: label }),
+        /* @__PURE__ */ jsx5("div", { style: { font: "var(--type-tile-value)", color: accent ? "var(--accent)" : "var(--text-ink)", marginTop: 4 }, children: value }),
+        sub && /* @__PURE__ */ jsx5("div", { style: { font: "var(--type-tile-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
       ]
     }
   );
@@ -170,7 +170,7 @@ function Group({ header, footer, children, style, ...props }) {
       "div",
       {
         style: {
-          font: "var(--text-section)",
+          font: "var(--type-section)",
           letterSpacing: "var(--tracking-caps)",
           textTransform: "uppercase",
           color: "var(--text-muted)",
@@ -195,7 +195,7 @@ function Group({ header, footer, children, style, ...props }) {
       "div",
       {
         style: {
-          font: "var(--text-row-sub)",
+          font: "var(--type-row-sub)",
           color: "var(--text-muted)",
           padding: "6px var(--row-pad-x) 0"
         },
@@ -325,10 +325,10 @@ function Row({
   const body = /* @__PURE__ */ jsxs3(Fragment, { children: [
     glyph,
     /* @__PURE__ */ jsxs3("span", { style: { minWidth: 0, flex: 1, textAlign: "left" }, children: [
-      /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--text-row-label)", color: "var(--text-ink)", ...truncate }, children: label }),
-      sub && /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }, children: sub })
+      /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--type-row-label)", color: "var(--text-ink)", ...truncate }, children: label }),
+      sub && /* @__PURE__ */ jsx9("span", { style: { display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }, children: sub })
     ] }),
-    value !== void 0 && value !== null && /* @__PURE__ */ jsx9("span", { style: { flexShrink: 0, font: "var(--text-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }, children: value }),
+    value !== void 0 && value !== null && /* @__PURE__ */ jsx9("span", { style: { flexShrink: 0, font: "var(--type-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }, children: value }),
     trailing,
     chevron && /* @__PURE__ */ jsx9(Icon, { name: "chevron-right", size: 14, style: { color: "var(--text-muted)", opacity: 0.5 } })
   ] });
@@ -348,8 +348,8 @@ function Row({
 // components/core/Segmented.jsx
 import { jsx as jsx10, jsxs as jsxs4 } from "react/jsx-runtime";
 var SIZES2 = {
-  sm: { padding: "4px 8px", font: "var(--text-segment-sm)" },
-  md: { padding: "6px 12px", font: "var(--text-segment)" }
+  sm: { padding: "4px 8px", font: "var(--type-segment-sm)" },
+  md: { padding: "6px 12px", font: "var(--type-segment)" }
 };
 var truncate2 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function Segmented({ options, value, onChange, label, size = "md", style, ...props }) {
@@ -391,7 +391,7 @@ function Segmented({ options, value, onChange, label, size = "md", style, ...pro
             },
             children: [
               /* @__PURE__ */ jsx10("span", { style: truncate2, children: opt.label }),
-              opt.sub && /* @__PURE__ */ jsx10("span", { style: { ...truncate2, font: "var(--text-segment-sub)", color: "var(--text-muted)" }, children: opt.sub })
+              opt.sub && /* @__PURE__ */ jsx10("span", { style: { ...truncate2, font: "var(--type-segment-sub)", color: "var(--text-muted)" }, children: opt.sub })
             ]
           },
           opt.value
@@ -500,7 +500,7 @@ function StatStrip({ stats, style, ...props }) {
           "div",
           {
             style: {
-              font: "var(--text-stat)",
+              font: "var(--type-stat)",
               letterSpacing: "var(--tracking-stat)",
               fontVariantNumeric: "tabular-nums",
               color: s.accent ? "var(--accent)" : "var(--text-ink)",
@@ -513,7 +513,7 @@ function StatStrip({ stats, style, ...props }) {
           "div",
           {
             style: {
-              font: "var(--text-stat-label)",
+              font: "var(--type-stat-label)",
               letterSpacing: "var(--tracking-caps)",
               textTransform: "uppercase",
               color: "var(--text-muted)",
@@ -527,7 +527,7 @@ function StatStrip({ stats, style, ...props }) {
           "div",
           {
             style: {
-              font: "var(--text-row-sub)",
+              font: "var(--type-row-sub)",
               fontVariantNumeric: "tabular-nums",
               color: SUB_COLOR[s.subTone ?? "neutral"],
               ...truncate3
@@ -648,7 +648,7 @@ function Sheet({
               padding: grabber ? "2px var(--space-4) 0" : "14px var(--space-4) 0"
             },
             children: [
-              /* @__PURE__ */ jsx13("span", { style: { flex: 1, minWidth: 0, font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
+              /* @__PURE__ */ jsx13("span", { style: { flex: 1, minWidth: 0, font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
               trailing
             ]
           }
@@ -765,7 +765,7 @@ function Popover({
                 borderBottom: "var(--hairline) solid var(--border)"
               },
               children: [
-                /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
+                /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
                 /* @__PURE__ */ jsx14(
                   "button",
                   {
@@ -871,7 +871,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
                 {
                   style: {
                     flexShrink: 0,
-                    font: stacked ? "var(--text-row-sub)" : "var(--text-row-label)",
+                    font: stacked ? "var(--type-row-sub)" : "var(--type-row-label)",
                     color: error ? "var(--danger-text)" : stacked ? "var(--text-muted)" : "var(--text-ink)"
                   },
                   children: label
@@ -887,7 +887,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
           {
             id: msgId,
             style: {
-              font: "var(--text-row-sub)",
+              font: "var(--type-row-sub)",
               color: error ? "var(--danger-text)" : "var(--text-muted)",
               // Under the label's leading edge, past the glyph if there is one.
               marginLeft: glyph && !stacked ? "calc(var(--row-inset) - var(--row-pad-x))" : 0
@@ -936,7 +936,7 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
               ...bare ? {
                 // In a row it reads like a Row's value: mono, muted, then the chevron.
                 width: "100%",
-                font: "var(--text-row-value)",
+                font: "var(--type-row-value)",
                 fontVariantNumeric: "tabular-nums",
                 color: invalid ? "var(--danger-text)" : "var(--text-muted)",
                 textAlignLast: "right",
@@ -1026,8 +1026,8 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
           }
         ),
         (label || sub) && /* @__PURE__ */ jsxs11("span", { style: { minWidth: 0, paddingTop: sub ? 1 : 0 }, children: [
-          /* @__PURE__ */ jsx18("span", { style: { display: "block", font: row ? "var(--text-row-label)" : "var(--text-input)", color: "var(--text-ink)" }, children: label }),
-          sub && /* @__PURE__ */ jsx18("span", { style: { display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
+          /* @__PURE__ */ jsx18("span", { style: { display: "block", font: row ? "var(--type-row-label)" : "var(--type-input)", color: "var(--text-ink)" }, children: label }),
+          sub && /* @__PURE__ */ jsx18("span", { style: { display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
         ] })
       ]
     }
@@ -1076,8 +1076,8 @@ function Banner({
       children: [
         glyph && /* @__PURE__ */ jsx19("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
         /* @__PURE__ */ jsxs12("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx19("div", { style: { font: "var(--text-message-title)" }, children: title }),
-          children && /* @__PURE__ */ jsx19("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
+          title && /* @__PURE__ */ jsx19("div", { style: { font: "var(--type-message-title)" }, children: title }),
+          children && /* @__PURE__ */ jsx19("div", { style: { font: "var(--type-message)", marginTop: title ? 2 : 0 }, children }),
           action && /* @__PURE__ */ jsx19("div", { style: { marginTop: 10 }, children: action })
         ] }),
         onClose && /* @__PURE__ */ jsx19(
@@ -1185,7 +1185,7 @@ function Toast({
             ...style
           },
           children: [
-            /* @__PURE__ */ jsx20("span", { style: { flex: 1, minWidth: 0, font: "var(--text-message-title)" }, children: message }),
+            /* @__PURE__ */ jsx20("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)" }, children: message }),
             action && /* @__PURE__ */ jsx20(
               "button",
               {
@@ -1203,7 +1203,7 @@ function Toast({
                   borderRadius: "var(--radius-sm)",
                   background: "transparent",
                   color: "var(--accent-text)",
-                  font: "var(--text-button)",
+                  font: "var(--type-button)",
                   cursor: "pointer"
                 },
                 children: action.label
@@ -1292,8 +1292,8 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
       },
       children: [
         /* @__PURE__ */ jsx22(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx22(Icon, { name: "inbox", size: 22 }) }),
-        title && /* @__PURE__ */ jsx22("div", { style: { font: "var(--text-subhead)", color: "var(--text-ink)" }, children: title }),
-        children && /* @__PURE__ */ jsx22("div", { style: { font: "var(--text-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
+        title && /* @__PURE__ */ jsx22("div", { style: { font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
+        children && /* @__PURE__ */ jsx22("div", { style: { font: "var(--type-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
         action && /* @__PURE__ */ jsx22("div", { style: { marginTop: 4 }, children: action })
       ]
     }
@@ -1323,8 +1323,8 @@ function ErrorState({
       children: [
         /* @__PURE__ */ jsx23(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx23(Icon, { name: "alert", size: 13 }) }),
         /* @__PURE__ */ jsxs16("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx23("div", { style: { font: "var(--text-message-title)", color: "var(--text-ink)" }, children: title }),
-          children && /* @__PURE__ */ jsx23("div", { style: { font: "var(--text-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
+          title && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
+          children && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
           (action || onRetry) && /* @__PURE__ */ jsx23("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx23(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
         ] })
       ]
@@ -1372,10 +1372,10 @@ function PageHeader({
         /* @__PURE__ */ jsxs17("div", { style: { minWidth: 0, textAlign: "center" }, children: [
           createElement2(
             `h${headingLevel}`,
-            { style: { margin: 0, font: "var(--text-subhead)", color: "var(--text-ink)", ...truncate4 } },
+            { style: { margin: 0, font: "var(--type-subhead)", color: "var(--text-ink)", ...truncate4 } },
             title
           ),
-          sub && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--text-page-sub)", color: "var(--text-muted)" }, children: sub })
+          sub && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--type-page-sub)", color: "var(--text-muted)" }, children: sub })
         ] }),
         /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-end" }, children: trailing })
       ]
@@ -1469,7 +1469,7 @@ function TabBar({
             },
             children: [
               item.icon && /* @__PURE__ */ jsx26(Icon, { name: item.icon, size: 20 }),
-              /* @__PURE__ */ jsx26("span", { style: { ...truncate5, font: "var(--text-tab)" }, children: item.label })
+              /* @__PURE__ */ jsx26("span", { style: { ...truncate5, font: "var(--type-tab)" }, children: item.label })
             ]
           },
           item.value

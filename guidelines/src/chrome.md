@@ -13,7 +13,7 @@ it loses twice: the top third of a phone goes to the word you just tapped to
 get here, and the header becomes a second thing to learn, because it looks
 different depending on where you are in a list you can't see the top of.
 
-So: one height, title centred, `--text-subhead`, on `--surface`. Same material
+So: one height, title centred, `--type-subhead`, on `--surface`. Same material
 as a `Group`, so the chrome is the app's frame rather than a card floating
 above the page.
 
@@ -74,7 +74,7 @@ behind it is the top of a list you've already scrolled past. A translucent
 `Toolbar` would be texture for the same reason. Neither gets it.
 
 `solid` on the `TabBar` is there for an app whose content is busy enough to
-make {{size:--text-tab}}px labels swim over it, and a reader who has asked their system for
+make {{size:--type-tab}}px labels swim over it, and a reader who has asked their system for
 reduced transparency gets the opaque version without asking.
 
 Unlike the `Sheet`, the tab bar carries **no shadow**. The `Sheet` is the
@@ -87,7 +87,7 @@ The `TabBar` uses the accent for the current tab and nothing else — the one
 place on the screen that says "you are here". A second accent-coloured item in
 the bar makes the first one decoration.
 
-It's `--accent-text`, not `--accent`: a {{size:--text-tab}}px label and a line-art glyph on the
+It's `--accent-text`, not `--accent`: a {{size:--type-tab}}px label and a line-art glyph on the
 page background have to clear 4.5:1, and the raw accent is tuned to carry
 white on a filled button, not to be read as text. `npm run check` fails if
 either colour drops below its floor, for every app in the registry, in both

@@ -33,7 +33,7 @@ CSS). Components carry their own look; you compose them and space them.
 | Data (categories, series) | `--data-1`…`--data-6` (in that order), `--on-data` (glyph on a data fill) |
 | Ramp (counts, density) | `--ramp-1` (least) … `--ramp-7` (most) |
 | Fonts | `--font-display` (Space Grotesk), `--font-mono` (JetBrains Mono) |
-| Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` `--text-message-title` `--text-message` |
+| Type shorthands | `--type-display` `--type-heading` `--type-subhead` `--type-body` `--type-section` `--type-row-label` `--type-row-sub` `--type-row-value` `--type-stat` `--type-stat-label` `--type-message-title` `--type-message` |
 | Spacing | `--space-1`…`--space-6` |
 | Radius | `--radius-sm` `--radius-md` `--radius-lg` `--radius-card` `--radius-pill` `--radius-xl` |
 | Tracking | `--tracking-caps` `--tracking-label` `--tracking-stat` |

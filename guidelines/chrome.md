@@ -14,7 +14,7 @@ it loses twice: the top third of a phone goes to the word you just tapped to
 get here, and the header becomes a second thing to learn, because it looks
 different depending on where you are in a list you can't see the top of.
 
-So: one height, title centred, `--text-subhead`, on `--surface`. Same material
+So: one height, title centred, `--type-subhead`, on `--surface`. Same material
 as a `Group`, so the chrome is the app's frame rather than a card floating
 above the page.
 

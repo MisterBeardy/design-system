@@ -11,8 +11,42 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Upgrading
+
+The public API was reviewed as a whole before 1.0 (#46), and everything that
+named one idea two ways now names it one way. Each change below is a rename:
+nothing renders differently.
+
+- **Type tokens are `--type-*`.** The 26 font shorthands move from `--text-*`
+  to `--type-*`: `font: var(--text-body)` becomes `font: var(--type-body)`,
+  and the same for `display`, `heading`, `subhead`, `label`, `row-label`,
+  `row-sub`, `row-value`, `section`, `stat`, `stat-label`, `button`,
+  `button-sm`, `input`, `segment`, `segment-sm`, `segment-sub`, `chip`,
+  `chip-display`, `tile-label`, `tile-value`, `tile-sub`, `page-sub`, `tab`,
+  `message-title` and `message`. `--text-ink` and `--text-muted` are colours
+  and **don't change**. The old names still work, as aliases, until 2.0: to
+  move now, replace every `var(--text-…)` in your CSS that isn't `--text-ink`
+  or `--text-muted`.
+- **`PageHeader`:** `actions` → `trailing`, `subtitle` → `sub`.
+- **`Banner`:** `onDismiss` → `onClose`, `dismissLabel` → `closeLabel`.
+- **`Toast`:** `inline` → `fixed={false}`. The polarity flips: `fixed`
+  defaults to `true`, as TabBar's does.
+- **`StatStrip`:** `subTone: "muted"` → `subTone: "neutral"`. The type of a
+  `stats` entry is `StatStripItem`, not `Stat`.
+- **`Checkbox`:** `onChange` is required in the types, as Switch's is.
+  A checkbox without one couldn't be ticked anyway.
+- **`.material-glass` → `.ds-glass`**, the one public class that lacked the
+  `ds-` prefix.
+
+None of the renamed props is used by an app today; the type tokens are, in
+about 20 places across two apps, and the aliases cover them.
+
 ### Changed
 
+- Every `label` that's read by screen readers but not shown now says so, in
+  the same words, where it's declared (Segmented, Switch, Sheet, Popover,
+  TabBar, Toolbar, Icon, Skeleton). Toast's `action` says why it's an object
+  where Banner's and EmptyState's are nodes. (#46)
 - Work now lands on `dev`, and `main` moves only at a major release: the
   next version on `main` is 1.0.0. Until then an app that needs something
   early can pin a pre-release tag on `dev` (`v1.0.0-beta.1`, …); pinning

@@ -2,7 +2,7 @@ Sheet — a panel over live content.
 
 ```jsx
 <Sheet open={open} onClose={() => setOpen(false)} title="Chargers nearby"
-       trailing={<span style={{ font: "var(--text-row-value)", color: "var(--text-muted)" }}>3 within 2 mi</span>}>
+       trailing={<span style={{ font: "var(--type-row-value)", color: "var(--text-muted)" }}>3 within 2 mi</span>}>
   <Group>
     {chargers.map((c) => <Row key={c.id} label={c.name} sub={c.status} value={c.distance} chevron onClick={...} />)}
   </Group>

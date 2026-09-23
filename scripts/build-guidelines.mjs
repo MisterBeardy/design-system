@@ -15,9 +15,9 @@
 //   {{dark:--bg}}         the [data-theme="dark"] value, or the light one when
 //                         dark doesn't override it
 //   {{px:--space-3}}      the number alone, var() chains followed: 12
-//   {{spec:--text-body}}  a type token's weight size/line-height, plus " mono"
+//   {{spec:--type-body}}  a type token's weight size/line-height, plus " mono"
 //                         for the mono face: 400 15px/1.65
-//   {{size:--text-body}}  a type token's size alone: 15
+//   {{size:--type-body}}  a type token's size alone: 15
 //
 // No spaces inside the braces: that's what keeps a JSX example's
 // style={{ … }} from being read as one.

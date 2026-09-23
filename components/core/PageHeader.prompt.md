@@ -27,5 +27,5 @@ a screen's own header — the title is that screen's heading, and a screen
 reader's heading list is how people jump to it.
 
 `sub` is the quiet second line: a count, a date range, a state. It's
-`--text-page-sub`, and it's muted, because it's context for the title, not a
+`--type-page-sub`, and it's muted, because it's context for the title, not a
 second title.

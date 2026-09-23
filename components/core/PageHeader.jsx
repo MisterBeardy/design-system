@@ -54,11 +54,11 @@ export function PageHeader({
       <div style={{ minWidth: 0, textAlign: "center" }}>
         {createElement(
           `h${headingLevel}`,
-          { style: { margin: 0, font: "var(--text-subhead)", color: "var(--text-ink)", ...truncate } },
+          { style: { margin: 0, font: "var(--type-subhead)", color: "var(--text-ink)", ...truncate } },
           title,
         )}
         {sub && (
-          <span style={{ ...truncate, font: "var(--text-page-sub)", color: "var(--text-muted)" }}>{sub}</span>
+          <span style={{ ...truncate, font: "var(--type-page-sub)", color: "var(--text-muted)" }}>{sub}</span>
         )}
       </div>
       <div style={{ ...side, justifyContent: "flex-end" }}>{trailing}</div>

@@ -38,17 +38,17 @@ export function Row({
     <>
       {glyph}
       <span style={{ minWidth: 0, flex: 1, textAlign: "left" }}>
-        <span style={{ display: "block", font: "var(--text-row-label)", color: "var(--text-ink)", ...truncate }}>
+        <span style={{ display: "block", font: "var(--type-row-label)", color: "var(--text-ink)", ...truncate }}>
           {label}
         </span>
         {sub && (
-          <span style={{ display: "block", font: "var(--text-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }}>
+          <span style={{ display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }}>
             {sub}
           </span>
         )}
       </span>
       {value !== undefined && value !== null && (
-        <span style={{ flexShrink: 0, font: "var(--text-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
+        <span style={{ flexShrink: 0, font: "var(--type-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
           {value}
         </span>
       )}

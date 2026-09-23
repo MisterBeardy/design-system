@@ -89,7 +89,7 @@ export function Toast({
             ...style,
           }}
         >
-          <span style={{ flex: 1, minWidth: 0, font: "var(--text-message-title)" }}>{message}</span>
+          <span style={{ flex: 1, minWidth: 0, font: "var(--type-message-title)" }}>{message}</span>
           {action && (
             <button
               type="button"
@@ -106,7 +106,7 @@ export function Toast({
                 borderRadius: "var(--radius-sm)",
                 background: "transparent",
                 color: "var(--accent-text)",
-                font: "var(--text-button)",
+                font: "var(--type-button)",
                 cursor: "pointer",
               }}
             >

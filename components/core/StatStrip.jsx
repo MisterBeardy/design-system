@@ -30,7 +30,7 @@ export function StatStrip({ stats, style, ...props }) {
         >
           <div
             style={{
-              font: "var(--text-stat)",
+              font: "var(--type-stat)",
               letterSpacing: "var(--tracking-stat)",
               fontVariantNumeric: "tabular-nums",
               color: s.accent ? "var(--accent)" : "var(--text-ink)",
@@ -41,7 +41,7 @@ export function StatStrip({ stats, style, ...props }) {
           </div>
           <div
             style={{
-              font: "var(--text-stat-label)",
+              font: "var(--type-stat-label)",
               letterSpacing: "var(--tracking-caps)",
               textTransform: "uppercase",
               color: "var(--text-muted)",
@@ -54,7 +54,7 @@ export function StatStrip({ stats, style, ...props }) {
           {s.sub && (
             <div
               style={{
-                font: "var(--text-row-sub)",
+                font: "var(--type-row-sub)",
                 fontVariantNumeric: "tabular-nums",
                 color: SUB_COLOR[s.subTone ?? "neutral"],
                 ...truncate,

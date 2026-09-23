@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Where the two faces come from: Space Grotesk for everything a person reads,
+   JetBrains Mono for data. This file downloads them from Google Fonts and
+   names them; tokens/typography.css builds the type scale on the names.
+
+   An app that hosts its own fonts (a strict font-src CSP blocks the download,
+   and Turbopack rejects an @import that isn't first in the file) skips this
+   file and declares the two variables itself, pointing at its own faces:
+
+     :root {
+       --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+       --font-mono:    var(--font-jetbrains-mono), ui-monospace, monospace;
+     }
+
+   Everything else, typography.css included, is still imported as normal. */
+:root {
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}

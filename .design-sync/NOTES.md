@@ -53,7 +53,7 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
 - **Preview glyphs come from `Icon`, never a typed character.** The design agent imitates
   previews, so a `✓` in a preview becomes `✓` in its designs (caught on the v0.8.0 sync in
   Popover's sort menu).
-- **Fonts load remotely.** `typography.css` `@import`s Google Fonts (Space Grotesk +
+- **Fonts load remotely.** `tokens/fonts.css` (split out of `typography.css` for 1.0) `@import`s Google Fonts (Space Grotesk +
   JetBrains Mono) → `[FONT_REMOTE]`, non-blocking, assumed served at runtime. No local
   fonts shipped, no `fonts/` dir.
 - **Guidelines are synced as markdown.** The `guidelines/*.card.html` visual preview

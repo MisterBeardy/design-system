@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
+/* The type scale: font shorthands for every text role, and nothing that
+   touches the network. The two families they name, --font-display and
+   --font-mono, come from tokens/fonts.css, or from the app when it hosts its
+   own fonts. So every app can import this file, whatever its CSP or bundler:
+   the Google Fonts download lives in fonts.css, not here. */
 :root {
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-
   /* Type shorthands: weight size/line-height family, used as
      `font: var(--type-body)`. They're `--type-*`, not `--text-*`: `--text-ink`
      and `--text-muted` are colours (tokens/colors.css), and one prefix for both

@@ -20,6 +20,10 @@ Releases up to v0.8.0 were made straight from `main`, before this.
   `tokens/*.css` (the forms are listed at the top of
   `scripts/build-guidelines.mjs`). Then a token change can't leave a guideline
   saying the old value.
+- A new token has to be named in a guideline, in `guidelines/src/`, or the
+  build fails and says which. The rare token that genuinely needn't be (a
+  deprecated alias) goes in `UNDOCUMENTED` in the same script, with the
+  reason.
 - A pull request that changes what a person sees carries before and after
   screenshots, on the `session-screenshots` branch under `issue-N/`.
 

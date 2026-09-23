@@ -42,7 +42,7 @@ The components set their own type from a third group of role tokens, so the scal
 | `--text-tile-sub` | 400 11px/1.3 mono | `StatTile` sub-line |
 | `--text-message-title` | 600 14px/1.35 | `Banner` and `ErrorState` title, `Toast` message, `Popover` title |
 | `--text-message` | 400 13px/1.45 | `Banner` and `ErrorState` sentence |
-| `--text-page-sub` | 400 11px/1.35 | `PageHeader` subtitle |
+| `--text-page-sub` | 400 11px/1.35 | `PageHeader` sub-line |
 | `--text-tab` | 500 10px/1.2 | `TabBar` label |
 
 Data (numbers, codes, deltas) goes in `--font-mono` with `font-variant-numeric: tabular-nums`; everything a person reads goes in `--font-display`. Pair mono values with `--tracking-caps` / `--tracking-stat` where the components already do.

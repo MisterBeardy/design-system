@@ -19,7 +19,7 @@ export interface TabBarProps extends Omit<HTMLAttributes<HTMLElement>, "onChange
   /** The `value` of the current item. */
   value?: string;
   onChange?: (value: string) => void;
-  /** Accessible name for the navigation region. */
+  /** Not shown; read by screen readers. The name of the navigation region; "Main" by default. */
   label?: string;
   /** Opaque instead of translucent, for busy content behind. Readers who ask
    *  for reduced transparency get this anyway. */

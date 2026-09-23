@@ -1,7 +1,7 @@
 Banner — an outcome message in the page, until it's dismissed or resolved.
 
 ```jsx
-<Banner tone="success" title="Trip saved" onDismiss={() => setSaved(false)}>
+<Banner tone="success" title="Trip saved" onClose={() => setSaved(false)}>
   It's in your log for March.
 </Banner>
 
@@ -34,5 +34,5 @@ decoration: a green Banner saying "Welcome back" is a wash.
 
 Write a short `title` for what happened, and one plain sentence under it for
 what it means or what to do. Give it at most one `action`, a small secondary
-Button. `onDismiss` adds a close button; leave it off when the Banner should
+Button. `onClose` adds a close button; leave it off when the Banner should
 stay until the problem is fixed (offline clears itself when you're back).

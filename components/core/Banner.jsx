@@ -17,8 +17,8 @@ export function Banner({
   title,
   icon,
   action,
-  onDismiss,
-  dismissLabel = "Dismiss",
+  onClose,
+  closeLabel = "Dismiss",
   children,
   className,
   style,
@@ -51,11 +51,11 @@ export function Banner({
         {children && <div style={{ font: "var(--text-message)", marginTop: title ? 2 : 0 }}>{children}</div>}
         {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
-      {onDismiss && (
+      {onClose && (
         <button
           type="button"
-          aria-label={dismissLabel}
-          onClick={onDismiss}
+          aria-label={closeLabel}
+          onClick={onClose}
           className="ds-button"
           style={{
             flexShrink: 0,

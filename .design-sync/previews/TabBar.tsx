@@ -28,8 +28,8 @@ export function OnAScreen() {
   const [range, setRange] = useState('30d');
   return (
     <Phone>
-      <PageHeader title="Trips" subtitle="128 mi this month"
-                  actions={<Button variant="ghost" size="sm" aria-label="Add trip"><Icon name="plus" /></Button>} />
+      <PageHeader title="Trips" sub="128 mi this month"
+                  trailing={<Button variant="ghost" size="sm" aria-label="Add trip"><Icon name="plus" /></Button>} />
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px calc(var(--tabbar-height) + 8px)' }}>
         <Toolbar label="Filter trips">
           <Segmented label="Range" options={[{ value: '30d', label: '30 days' }, { value: '1y', label: 'Year' }, { value: 'all', label: 'All' }]}

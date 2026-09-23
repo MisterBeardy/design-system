@@ -139,7 +139,7 @@
 
 /* The two places translucency is spent, on the same argument: the content
    behind is live and still matters — the map under a Sheet, the list running
-   under a TabBar. They share .material-glass's recipe rather than each
+   under a TabBar. They share .ds-glass's recipe rather than each
    redefining it, so there's one material to tune. `solid` (and a reader who
    has asked for less transparency) gets the opaque fallback, which is correct
    rather than degraded: an opaque panel over a map is still a panel above the

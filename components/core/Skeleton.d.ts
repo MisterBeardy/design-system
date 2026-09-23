@@ -10,6 +10,6 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "rows" | "tiles";
   /** How many rows or tiles to stand in for. */
   count?: number;
-  /** What screen readers hear while it's showing. */
+  /** Not shown; read by screen readers. What they hear while it's showing; "Loading" by default. */
   label?: string;
 }

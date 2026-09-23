@@ -17,10 +17,11 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
   icon?: ReactNode;
   /** One way forward, usually a small secondary `Button`. */
   action?: ReactNode;
-  /** Shows a dismiss button when given. */
-  onDismiss?: () => void;
-  /** Accessible name of the dismiss button. */
-  dismissLabel?: string;
+  /** Shows a close button when given, and is called when it's pressed. The
+   *  same name as Sheet's, Popover's and Toast's. */
+  onClose?: () => void;
+  /** Accessible name of the close button. Defaults to "Dismiss". */
+  closeLabel?: string;
   /** One plain sentence: what it means, or what to do. */
   children?: ReactNode;
 }

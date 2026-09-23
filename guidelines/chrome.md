@@ -42,7 +42,7 @@ A `Toolbar` brings nothing new to draw: it's `Segmented`, `Button`, `Chip` and
 ## How they compose with Group
 
 ```jsx
-<PageHeader title="Trips" subtitle="128 mi this month" actions={…} />
+<PageHeader title="Trips" sub="128 mi this month" trailing={…} />
 <main style={{ padding: "0 var(--space-4)",
                paddingBottom: "calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px))" }}>
   <Toolbar label="Filter trips">…</Toolbar>

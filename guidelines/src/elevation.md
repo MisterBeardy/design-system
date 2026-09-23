@@ -21,7 +21,7 @@ Translucency is spent twice, and on one argument: the content behind is live and
 - `solid` gives the opaque version, for content that must stay legible over busy video.
 - A reader who asks their system for reduced transparency gets the opaque version automatically. That's correct rather than degraded: an opaque panel over a map is still a panel above the map.
 - The `TabBar` shares the recipe but not the shadow: it's part of the frame, not something floating above it, so the Sheet stays the one elevation.
-- `.material-glass` carries the same recipe for app code that needs the material elsewhere.
+- `.ds-glass` carries the same recipe for app code that needs the material elsewhere.
 
 ## Focus and dismissal
 

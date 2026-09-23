@@ -473,7 +473,7 @@ function Switch({ checked, onChange, disabled = false, label, className, style, 
 // components/core/StatStrip.jsx
 import { jsx as jsx12, jsxs as jsxs6 } from "react/jsx-runtime";
 var SUB_COLOR = {
-  muted: "var(--text-muted)",
+  neutral: "var(--text-muted)",
   success: "var(--success-text)",
   warning: "var(--warning-text)",
   danger: "var(--danger-text)"
@@ -529,7 +529,7 @@ function StatStrip({ stats, style, ...props }) {
             style: {
               font: "var(--text-row-sub)",
               fontVariantNumeric: "tabular-nums",
-              color: SUB_COLOR[s.subTone ?? "muted"],
+              color: SUB_COLOR[s.subTone ?? "neutral"],
               ...truncate3
             },
             children: s.sub
@@ -1047,8 +1047,8 @@ function Banner({
   title,
   icon,
   action,
-  onDismiss,
-  dismissLabel = "Dismiss",
+  onClose,
+  closeLabel = "Dismiss",
   children,
   className,
   style,
@@ -1080,12 +1080,12 @@ function Banner({
           children && /* @__PURE__ */ jsx19("div", { style: { font: "var(--text-message)", marginTop: title ? 2 : 0 }, children }),
           action && /* @__PURE__ */ jsx19("div", { style: { marginTop: 10 }, children: action })
         ] }),
-        onDismiss && /* @__PURE__ */ jsx19(
+        onClose && /* @__PURE__ */ jsx19(
           "button",
           {
             type: "button",
-            "aria-label": dismissLabel,
-            onClick: onDismiss,
+            "aria-label": closeLabel,
+            onClick: onClose,
             className: "ds-button",
             style: {
               flexShrink: 0,
@@ -1119,7 +1119,7 @@ function Toast({
   action,
   onClose,
   duration,
-  inline = false,
+  fixed = true,
   className,
   style,
   ...props
@@ -1142,7 +1142,7 @@ function Toast({
       role: "status",
       "aria-live": "polite",
       className: "ds-toast-region",
-      style: inline ? { display: "flex" } : {
+      style: !fixed ? { display: "flex" } : {
         position: "fixed",
         left: 0,
         right: 0,
@@ -1172,7 +1172,7 @@ function Toast({
             alignItems: "center",
             gap: 12,
             boxSizing: "border-box",
-            width: inline ? "100%" : "min(420px, calc(100% - 32px))",
+            width: fixed ? "min(420px, calc(100% - 32px))" : "100%",
             minHeight: 48,
             padding: action ? "2px 6px 2px 16px" : "12px 16px",
             borderRadius: "var(--radius-md)",
@@ -1338,9 +1338,9 @@ import { jsx as jsx24, jsxs as jsxs17 } from "react/jsx-runtime";
 var truncate4 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function PageHeader({
   title,
-  subtitle,
+  sub,
   leading,
-  actions,
+  trailing,
   headingLevel = 1,
   sticky = true,
   className,
@@ -1375,9 +1375,9 @@ function PageHeader({
             { style: { margin: 0, font: "var(--text-subhead)", color: "var(--text-ink)", ...truncate4 } },
             title
           ),
-          subtitle && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--text-page-sub)", color: "var(--text-muted)" }, children: subtitle })
+          sub && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--text-page-sub)", color: "var(--text-muted)" }, children: sub })
         ] }),
-        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-end" }, children: actions })
+        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-end" }, children: trailing })
       ]
     }
   );

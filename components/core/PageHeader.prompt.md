@@ -3,9 +3,9 @@ PageHeader — the bar at the top of a screen.
 ```jsx
 <PageHeader
   title="Trips"
-  subtitle="128 mi this month"
+  sub="128 mi this month"
   leading={<Button variant="ghost" size="sm" aria-label="Back"><Icon name="chevron-right" style={{ transform: "rotate(180deg)" }} /></Button>}
-  actions={<Button variant="ghost" size="sm" aria-label="Add trip"><Icon name="plus" /></Button>}
+  trailing={<Button variant="ghost" size="sm" aria-label="Add trip"><Icon name="plus" /></Button>}
 />
 ```
 
@@ -22,10 +22,10 @@ browsed.
 
 The title is optically centred by a three-column grid, so it stays centred
 when only one side carries a control. It's the only thing that truncates; keep
-`actions` to one or two icon-only buttons at this size. `headingLevel` is 1 on
+`trailing` to one or two icon-only buttons at this size. `headingLevel` is 1 on
 a screen's own header — the title is that screen's heading, and a screen
 reader's heading list is how people jump to it.
 
-`subtitle` is the quiet second line: a count, a date range, a state. It's
+`sub` is the quiet second line: a count, a date range, a state. It's
 `--text-page-sub`, and it's muted, because it's context for the title, not a
 second title.

@@ -17,6 +17,15 @@ under its version (see `CONTRIBUTING.md`).
 collects every step from v0.1.0 onwards, in order, marked by the version it
 applies to. (#47)
 
+- **Paste your accent block again.** `accentCssFor("<app-key>")` now prints
+  a third part, `@media (prefers-contrast: more) { … }`, with your app's
+  high-contrast accent. Your block comes after the package's CSS, so an old
+  one without that part keeps your primary buttons at normal contrast when a
+  reader asks for more. (#18)
+- **Input and Textarea placeholders** are `--text-muted` instead of the
+  browser's grey: warmer in light, lighter in dark, where the browser's grey
+  was 3.2:1 on the surface, under the 4.5:1 floor. (#18)
+
 The public API was reviewed as a whole before 1.0 (#46), and everything that
 named one idea two ways now names it one way. Each change below is a rename:
 nothing renders differently.
@@ -57,6 +66,18 @@ about 20 places across two apps, and the aliases cover them.
 
 ### Added
 
+- **A high-contrast theme.** When the reader's system asks for more contrast
+  (`prefers-contrast: more`), the tokens move by themselves, in light and
+  dark: every text colour to 7:1 on every surface it sits on (4.5:1 for large
+  text), every border to 3:1, status fills to 4.5:1 under their glyphs, and
+  separators to a full 1px. It's the same warm palette, moved only as far as
+  each role needs; ink, the surfaces and the data palette already pass. The
+  Segmented track and the Banner, told apart by shade alone before, get an
+  edge, and the Sheet and TabBar turn opaque, since text on glass has no
+  fixed contrast. Each app's accent gets a high-contrast value from the
+  registry. `npm run check` holds all of it to target for every app in both
+  themes, and `guidelines/contrast.md` documents it. Light and dark are
+  unchanged. (#18)
 - `guidelines/motion.md`: the four durations and three curves, what each is
   for, and why motion never carries meaning. Motion was the one token family
   with no guideline; the check below found it. (#44)

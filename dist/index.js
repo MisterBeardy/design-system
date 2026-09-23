@@ -352,13 +352,14 @@ var SIZES2 = {
   md: { padding: "6px 12px", font: "var(--type-segment)" }
 };
 var truncate2 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
-function Segmented({ options, value, onChange, label, size = "md", style, ...props }) {
+function Segmented({ options, value, onChange, label, size = "md", className, style, ...props }) {
   return /* @__PURE__ */ jsx10(
     "div",
     {
       role: "radiogroup",
       "aria-label": label,
       ...props,
+      className: cx("ds-segmented", className),
       style: {
         display: "flex",
         gap: 2,

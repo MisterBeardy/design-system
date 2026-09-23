@@ -139,3 +139,42 @@
   --ramp-6:       oklch(0.822 0.025 70);
   --ramp-7:       oklch(0.930 0.025 70);
 }
+
+/* High contrast: applied whenever the reader's system asks for more contrast
+   (prefers-contrast: more), in either theme, with nothing for an app to do.
+   It's the same warm palette, moved only as far as each role needs: every
+   text colour reaches 7:1 on every surface it sits on, every border 3:1, and
+   a status fill carries its glyph at 4.5:1. The values were solved for
+   exactly that, and npm run check holds them to it. Ink, the surfaces and
+   the data palette already pass, so they don't move.
+
+   The accent here is the default app's. Each app's accentCssFor() block
+   carries its own high-contrast accent, for the same reason as its normal
+   one: it comes after this file, so it wins. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-muted:   #524e46;
+    --border:       #8b8781;
+    --border-soft:  #8b8781;
+    --success:      oklch(0.55 0.13 150);
+    --warning:      oklch(0.56 0.13 80);
+    --warning-text: oklch(0.43 0.11 70);
+    --accent:       oklch(0.42 0.15 256);
+    --accent-text:  oklch(0.39 0.15 256);
+  }
+
+  /* Restates every token the block above sets, with its dark value, even
+     where dark doesn't change: :root and [data-theme="dark"] are equally
+     specific, so on the same element the one written later wins, and without
+     these the light high-contrast values above would land in dark mode. */
+  [data-theme="dark"] {
+    --text-muted:   #c4bdb2;
+    --border:       #7e7871;
+    --border-soft:  #7e7871;
+    --success:      oklch(0.72 0.11 150);
+    --warning:      oklch(0.76 0.12 80);
+    --warning-text: oklch(0.87 0.09 85);
+    --accent:       oklch(0.76 0.1275 256);
+    --accent-text:  oklch(0.85 0.1 256);
+  }
+}

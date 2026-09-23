@@ -1,9 +1,9 @@
 # design-sync notes — @misterbeardy/design-system
 
 Target Claude Design project: **lookwhatibuilt.today** (`38437aad-2039-4a1a-ad1d-73b3aeb3cec2`).
-Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good.
+Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good. Last synced: v1.0.0 (2026-09-23).
 
-**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (a major release, or v0.8.0 until 1.0.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
+**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (the last major release: v1.0.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 
@@ -92,4 +92,7 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
 - **Remote fonts** depend on Google Fonts being reachable at render time.
 - **Authored previews** in `.design-sync/previews/*.tsx` import from
   `@misterbeardy/design-system` and are tied to the current component APIs (props like
-  `variant`, `tone`, `options`, `stats`). A breaking API change needs the preview updated.
+  `variant`, `tone`, `options`, `stats`). A breaking API change needs the preview updated, and its
+  story names too: the export names become the card labels the design agent reads, so
+  they follow the props (1.0 renamed PageHeader's `WithSubtitleAndActions` story to
+  `WithSubAndTrailing` when the props became `sub` and `trailing`).

@@ -19,6 +19,9 @@
 //                         for the mono face: 400 15px/1.65
 //   {{size:--text-body}}  a type token's size alone: 15
 //
+// No spaces inside the braces: that's what keeps a JSX example's
+// style={{ … }} from being read as one.
+//
 // An unknown token fails the build, so renaming or removing a token breaks
 // every guideline that names it until the guideline is fixed.
 
@@ -136,10 +139,12 @@ export async function buildGuidelines() {
 
   for (const file of sources) {
     const src = await readFile(`${SRC}/${file}`, "utf8");
-    // Anything in double braces is meant as a placeholder, so one this doesn't
-    // understand ({{bogus:--bg}}, {{space-3}}) is a mistake, not text.
-    const out = src.replace(/\{\{([^}]*)\}\}/g, (whole, inner) => {
-      const m = inner.trim().match(/^(?:(dark|px|spec|size):)?(--[\w-]+)$/);
+    // Double braces with no whitespace inside are meant as a placeholder, so
+    // one this doesn't understand ({{bogus:--bg}}, {{space-3}}) is a mistake,
+    // not text. Whitespace is what tells a JSX style object in a code example
+    // (style={{ padding: 0 }}) apart from a placeholder.
+    const out = src.replace(/\{\{([^\s{}]+)\}\}/g, (whole, inner) => {
+      const m = inner.match(/^(?:(dark|px|spec|size):)?(--[\w-]+)$/);
       if (!m) {
         problems.push(`${SRC}/${file}: ${whole} isn't a placeholder this understands (see the top of scripts/build-guidelines.mjs)`);
         return whole;

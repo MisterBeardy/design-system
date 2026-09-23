@@ -19,12 +19,18 @@
 import { build } from 'esbuild';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { buildIcons } from './scripts/build-icons.mjs';
+import { buildGuidelines } from './scripts/build-guidelines.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
 
 // icons/*.svg -> components/core/iconData.js, before the bundle reads it.
 const icons = await buildIcons();
 console.log(`components/core/iconData.js written (${icons.length} icons)`);
+
+// guidelines/src/ + tokens/*.css -> guidelines/, so a guideline can't state a
+// value the tokens no longer have.
+const guidelines = await buildGuidelines();
+console.log(`guidelines/ written (${guidelines.length} files)`);
 
 await mkdir('dist', { recursive: true });
 

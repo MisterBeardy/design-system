@@ -1,7 +1,6 @@
 ---
 category: Iconography
 ---
-<!-- Generated from guidelines/src/iconography.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Iconography — the house glyphs
 
@@ -25,7 +24,7 @@ In React: `<Icon name="pin" />`. Without React: `icons/pin.svg` (exported as `@m
 
 | Size | Where |
 |---|---|
-| 13px | Inside a 23px `GlyphTile` |
+| 13px | Inside a {{--glyph-size}} `GlyphTile` |
 | 16px | Beside text: Buttons, Chips, copy (the default) |
 | 20px | Alone in a control: an icon-only button |
 | 24px | Standing alone: empty and error states, headings |

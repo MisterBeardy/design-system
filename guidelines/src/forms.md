@@ -1,7 +1,6 @@
 ---
 category: Components
 ---
-<!-- Generated from guidelines/src/forms.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Forms — grouped lists that take input
 

@@ -6,8 +6,14 @@
   app can see. Anything an app has to act on, or will notice, goes under
   **Upgrading**.
 - Run `npm run check` (colour rules and the changelog) and `npm run build`
-  (commit the rebuilt `dist/`). CI runs both and fails if either is out of
-  date.
+  (commit what it rebuilds: `dist/`, the icon data and `guidelines/`). CI runs
+  both and fails if either is out of date.
+- Guidelines are edited in `guidelines/src/`, never in `guidelines/`. Where a
+  guideline states a token's value, write a placeholder — `{{--space-3}}`,
+  `{{dark:--bg}}`, `{{spec:--text-body}}` — and the build fills it in from
+  `tokens/*.css` (the forms are listed at the top of
+  `scripts/build-guidelines.mjs`). Then a token change can't leave a guideline
+  saying the old value.
 - A pull request that changes what a person sees carries before and after
   screenshots, on the `session-screenshots` branch under `issue-N/`.
 

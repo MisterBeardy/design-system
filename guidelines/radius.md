@@ -1,6 +1,7 @@
 ---
 category: Spacing
 ---
+<!-- Generated from guidelines/src/radius.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Radius — the corner scale
 
@@ -9,7 +10,7 @@ category: Spacing
 | `--radius-sm` | 6px | `GlyphTile` |
 | `--radius-md` | 10px | Inputs, buttons, segmented track |
 | `--radius-lg` | 14px | `Card`, `StatTile` |
-| `--radius-xl` | 20px | For app code: large panels (a sheet, a modal) |
+| `--radius-xl` | 20px | `Sheet` top corners; for app code, other large panels (a modal, a hero card) |
 | `--radius-pill` | 999px | `Chip`, `Switch` track |
 | `--radius-card` | 12px | The grouped `Group` card |
 

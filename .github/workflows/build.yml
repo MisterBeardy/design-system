@@ -11,7 +11,7 @@ name: build
 
 on:
   push:
-    # dev is where work lands; main moves only at a release.
+    # dev is where work lands; main moves only at a major release.
     branches: [main, dev]
   pull_request:
 

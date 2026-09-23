@@ -13,10 +13,11 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Changed
 
-- Work now lands on `dev`, and `main` moves only when a version is released:
-  a release is `dev` merged into `main`, tagged there. `CONTRIBUTING.md`
-  has the routine, and CI runs on pushes to `dev` as well as `main`. Nothing
-  changes for apps: every tag is still on `main`.
+- Work now lands on `dev`, and `main` moves only at a major release: the
+  next version on `main` is 1.0.0. Until then an app that needs something
+  early can pin a pre-release tag on `dev` (`v1.0.0-beta.1`, …); pinning
+  `v0.8.0` keeps working exactly as before. `CONTRIBUTING.md` has both
+  routines, and CI runs on pushes to `dev` as well as `main`.
 
 ### Fixed
 

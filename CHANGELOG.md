@@ -55,8 +55,27 @@ nothing renders differently.
 None of the renamed props is used by an app today; the type tokens are, in
 about 20 places across two apps, and the aliases cover them.
 
+### Added
+
+- `guidelines/motion.md`: the four durations and three curves, what each is
+  for, and why motion never carries meaning. Motion was the one token family
+  with no guideline; the check below found it. (#44)
+
 ### Changed
 
+- The guideline build now fails when a token in `tokens/*.css` is named by
+  no guideline, and says which. It already caught a guideline stating a wrong
+  value; this catches a token nobody documented, which is how `--type-page-sub`,
+  `--type-tab` and the message roles each went unlisted for a release. It also
+  filled the gaps it found: `--on-neutral` in the neutrals table, and the
+  glass recipe's `--glass-blur` and `--glass-saturate` in the elevation
+  guide. The deprecated `--text-*` aliases are exempt, with the reason in
+  the script. (#44)
+- The conventions header the Claude Design agent reads lists the chrome
+  tokens (`--type-page-sub`, `--type-tab`, `--header-height`,
+  `--tabbar-height`) and `--type-label`, names the Popover among the three
+  things that carry a shadow, and describes what `_ds_bundle.css` holds as it
+  is now. It reaches the project at the 1.0 sync. (#45)
 - Every `label` that's read by screen readers but not shown now says so, in
   the same words, where it's declared (Segmented, Switch, Sheet, Popover,
   TabBar, Toolbar, Icon, Skeleton). Toast's `action` says why it's an object

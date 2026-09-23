@@ -15,6 +15,7 @@ A warm (not blue-grey) neutral scale, tinted so surfaces read as calm paper rath
 | `--border` | 1px hairline borders and dividers | `#e2ded7` | `#3a352f` |
 | `--border-soft` | For app code: a divider inside a card between loose content (1.17:1, decoration only) | `#f1ede6` | `#332f29` |
 | `--text-muted` | Secondary text, labels, values | `#6c675f` | `#a39c91` |
+| `--on-neutral` | The glyph on a neutral `GlyphTile`, which is filled with `--text-muted` | `#ffffff` | `#211f1c` |
 | `--text-ink` | Primary text | `#1c1b19` | `#f3f1ed` |
 
 The whole system depends on `--bg` being tinted: a card is just `--surface` + a 1px `--border` sitting on `--bg`, and that contrast is the only depth there is (no shadows). Dark mode is `[data-theme="dark"]` on a root element.

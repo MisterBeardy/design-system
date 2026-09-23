@@ -23,7 +23,9 @@
 // style={{ … }} from being read as one.
 //
 // An unknown token fails the build, so renaming or removing a token breaks
-// every guideline that names it until the guideline is fixed.
+// every guideline that names it until the guideline is fixed. And the
+// reverse: a token defined in tokens/*.css that no guideline names fails it
+// too, unless UNDOCUMENTED below says why it needn't be.
 
 import { readdir, readFile, writeFile } from "node:fs/promises";
 
@@ -31,11 +33,24 @@ const SRC = "guidelines/src";
 const OUT = "guidelines";
 const KINDS = [".md", ".card.html"];
 
+// Tokens that no guideline has to mention, each with the reason. Everything
+// else defined in tokens/*.css must be named somewhere in guidelines/src/, or
+// the build fails: a token the guidelines never mention is one nobody reading
+// them will ever use correctly. An entry here that stops matching any token
+// fails too, so the list can't outlive what it excuses.
+const UNDOCUMENTED = [
+  {
+    match: /^--text-(?!ink$|muted$)/,
+    reason: "the pre-1.0 names of the --type-* shorthands, kept as aliases until 2.0; UPGRADING-1.0.md and the changelog document them",
+  },
+];
+
 // --- tokens/*.css --------------------------------------------------------
 
 async function readTokens() {
   const light = {};
   const dark = {};
+  const source = {};
   for (const file of (await readdir("tokens")).filter((f) => f.endsWith(".css")).sort()) {
     // Comments first: they mention tokens in prose ("--accent / --accent-soft"),
     // and a colon in the wrong place would read as a definition.
@@ -60,6 +75,7 @@ async function readTokens() {
           if (target) {
             for (const [, name, value] of css.slice(start, i).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
               target[name] = value.trim().replace(/\s+/g, " ");
+              source[name] ??= `tokens/${file}`;
             }
           }
           start = i + 1;
@@ -67,7 +83,7 @@ async function readTokens() {
       }
     }
   }
-  return { light, dark };
+  return { light, dark, source };
 }
 
 function formatter({ light, dark }) {
@@ -132,7 +148,8 @@ function withNote(file, text) {
 }
 
 export async function buildGuidelines() {
-  const format = formatter(await readTokens());
+  const tokens = await readTokens();
+  const format = formatter(tokens);
   const sources = (await readdir(SRC)).filter(kindOf).sort();
   const problems = [];
   const written = [];
@@ -164,6 +181,25 @@ export async function buildGuidelines() {
   const outputs = (await readdir(OUT)).filter(kindOf);
   for (const file of outputs) {
     if (!sources.includes(file)) problems.push(`${OUT}/${file} has no source in ${SRC}/ — move it there (or delete it)`);
+  }
+
+  // Every token is named somewhere in the sources, as a placeholder or in
+  // prose, unless UNDOCUMENTED says why not.
+  let everything = "";
+  for (const file of sources) everything += await readFile(`${SRC}/${file}`, "utf8");
+  const used = new Set();
+  for (const [name, file] of Object.entries(tokens.source)) {
+    const exempt = UNDOCUMENTED.find((u) => u.match.test(name));
+    if (exempt) {
+      used.add(exempt);
+      continue;
+    }
+    if (!new RegExp(`${name}(?![\\w-])`).test(everything)) {
+      problems.push(`${name} (${file}) isn't mentioned in any guideline — name it in the guideline for its family, or add it to UNDOCUMENTED in scripts/build-guidelines.mjs with a reason`);
+    }
+  }
+  for (const u of UNDOCUMENTED) {
+    if (!used.has(u)) problems.push(`UNDOCUMENTED entry ${u.match} matches no token any more — remove it`);
   }
 
   if (problems.length) throw new Error(`guidelines:\n  ${problems.join("\n  ")}`);

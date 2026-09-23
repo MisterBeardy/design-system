@@ -16,12 +16,13 @@ The shadow is load-bearing in both: it says the surface is above the content rat
 
 ## Translucency
 
-`Sheet` is the one translucent surface, and only because the content behind it is live and still matters: you are reading the list *and* watching the map. **Vibrancy is a signal, not a texture.** A translucent panel over a static page is decoration, and decoration isn't what the material is for.
+Translucency is spent twice, and on one argument: the content behind is live and still matters. Under a `Sheet` you are reading the list *and* watching the map; under the `TabBar` the list keeps moving, which is how you know there's more below (see [chrome](chrome.md)). **Vibrancy is a signal, not a texture.** A translucent panel over a static page is decoration, and decoration isn't what the material is for.
 
 - The sheet never dims what's behind it. If the content behind doesn't matter, the panel should be a screen, a `Group` or a `Card` instead.
 - `solid` gives the opaque version, for content that must stay legible over busy video.
 - A reader who asks their system for reduced transparency gets the opaque version automatically. That's correct rather than degraded: an opaque panel over a map is still a panel above the map.
-- `.material-glass` carries the same recipe for app code that needs the material outside a Sheet.
+- The `TabBar` shares the recipe but not the shadow: it's part of the frame, not something floating above it, so the Sheet stays the one elevation.
+- `.material-glass` carries the same recipe for app code that needs the material elsewhere.
 
 ## Focus and dismissal
 

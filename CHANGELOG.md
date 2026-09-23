@@ -11,6 +11,13 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Fixed
+
+- `guidelines/elevation.md` still called the `Sheet` the one translucent
+  surface; since 0.8.0 the `TabBar` is too, on the same argument, and
+  `guidelines/chrome.md` already said so. It now says translucency is spent
+  twice, and that the TabBar takes the recipe but not the shadow.
+
 ## [0.8.0] — 2026-09-23
 
 Elevation and app chrome, and generated guidelines. (#11, #16, #20)

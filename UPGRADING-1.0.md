@@ -21,15 +21,24 @@ Every step below says which versions it applies to, like **(before 0.5.0)**.
 Do a step only if your version is older than the one it names. An app on
 v0.6.0 skips everything marked before 0.6.0 or earlier.
 
-## 2. Move the pin, then reinstall
+## 2. Move the pin
 
-```json
-"@misterbeardy/design-system": "github:MisterBeardy/design-system#v1.0.0"
+Install the new tag by name. This one command both installs 1.0 and rewrites
+the pin in `package.json`:
+
+```sh
+npm install github:MisterBeardy/design-system#v1.0.0
 ```
 
-Then reinstall: `npm install`, or your package manager's equivalent. To try
-1.0 before it's released, pin a beta instead (`#v1.0.0-beta.1`); the steps
-are the same.
+(`pnpm add` or `yarn add` with the same argument, if you use those.)
+
+Don't only edit the tag in `package.json` and run `npm install`. For a
+GitHub dependency, npm keeps the commit recorded in `package-lock.json`,
+reports "up to date", and leaves you on the old version. Check what you
+have with `npm ls @misterbeardy/design-system`: it should say `1.0.0`.
+
+To try 1.0 before it's released, install a beta instead (`#v1.0.0-beta.1`);
+the steps are the same.
 
 ## 3. Build setup
 
@@ -110,6 +119,27 @@ A complete list, for an app hosting its own fonts:
   your app isn't registered yet, add it to `app-registry.js` first (see
   `ADOPTING.md`).
 
+  Then **delete every other place your CSS sets the accent**, not just the
+  old block. A leftover can outrank the new one without any error: an app
+  that sets its light theme on `:root[data-theme="light"]` beats the
+  printed `:root`, so the old light accent stays, and in light the high-contrast
+  one never applies. From your app's root, this lists them; every line it prints
+  should be inside the block you just pasted:
+
+  ```sh
+  grep -rnE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--(accent|accent-soft|accent-text|on-accent):' .
+  ```
+
+- **(before 1.0) If your CSS sets its own neutrals, high contrast only
+  reaches your accent.** The package's high-contrast theme also moves
+  `--text-muted`, the borders, the status colours and `--hairline`, but only
+  through `tokens/colors.css` and `tokens/spacing.css`. An app that declares
+  those itself instead (a dark-first app, or one whose tokens were copied in
+  before the package existed) keeps them at normal contrast. The fix is
+  what `ADOPTING.md` asks anyway: delete the copies and import the files, so
+  the app follows the package. Don't copy the high-contrast values in; a
+  copy drifts from the package the next time they change.
+
 ## 6. Tokens in your own CSS
 
 - **(before 1.0) Type tokens are `--type-*`.** The 26 font shorthands moved
@@ -117,16 +147,18 @@ A complete list, for an app hosting its own fonts:
   colours and one prefix for both invited `color: var(--text-body)`. **The
   two colours don't change.** The old names still work until 2.0, as aliases,
   so nothing breaks today; move them while you're here. From your app's root,
-  this lists every one to rename (it prints matches, not lines, so a line
-  that also uses `--text-muted` isn't hidden):
+  this lists every one to rename:
 
   ```sh
   grep -rnoE --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist -e '--text-[a-z-]+' . \
-    | grep -vE -e '--text-(ink|muted)$'
+    | grep -E -e ':--text-(body|button|button-sm|chip|chip-display|display|heading|input|label|message|message-title|page-sub|row-label|row-sub|row-value|section|segment|segment-sm|segment-sub|stat|stat-label|subhead|tab|tile-label|tile-sub|tile-value)$'
   ```
 
   and rename each `--text-<name>` to `--type-<name>`. Every one of the 26
   keeps its name after the prefix: `--text-row-label` → `--type-row-label`.
+  The search names the 26 on purpose. Your app may have `--text-*` names
+  of its own, usually colours like `--text-faint`. Those aren't type
+  tokens, and renaming them would leave that text with no colour.
 - **(before 1.0) `.material-glass` is `.ds-glass`.** Unlike the tokens, the
   class has **no alias**: rename it wherever you use it.
 - **(before 0.8.0) Guidelines copied into your app** should come from
@@ -173,9 +205,11 @@ None of these need an edit. They're here so a changed screenshot isn't a
 surprise, and so you can drop workarounds you no longer need.
 
 - **(before 0.4.0)**
-  - **In a Tailwind app, controls get 3–9px shorter.** Button, Chip, Input,
-    Segmented and StatTile fix their line height instead of inheriting
-    Tailwind's 1.5, so they're the same height in every app.
+  - **Controls get shorter in an app with a tall line height.** Button,
+    Chip, Input, Segmented and StatTile fix their own line height instead of
+    inheriting yours, so they're the same height in every app. With
+    Tailwind's 1.5 that's 3–9px per control; with a taller body line height
+    it's more: a StatTile under a 1.65 body is 16px shorter.
   - **Secondary buttons are 2px shorter**, matching primary (40px).
   - **Input fits its container.** It used to overflow by 30px without a
     box-sizing reset. Remove any width workaround.
@@ -206,10 +240,14 @@ surprise, and so you can drop workarounds you no longer need.
 1. **Build and type-check** as you normally would. Any type error mentioning a
    design-system prop is step 7, or step 3's second point.
 2. **Search for leftovers:**
-   - `--text-` (other than `--text-ink` and `--text-muted`) is step 6
+   - anything step 6's search still prints is step 6
+   - an accent line outside your pasted block is step 5
    - `material-glass` is step 6
    - `transpilePackages` is step 3
 3. **Look at one screen in light and one in dark,** against step 8's list.
+   Then turn on your system's increased-contrast setting and look again: the
+   primary buttons should darken in light and brighten in dark. If nothing
+   changes, step 5.
 
 If something changed that this guide doesn't mention, that's a gap in the
 guide: open an issue on the design system repo.
@@ -223,3 +261,12 @@ draft got wrong, all fixed above: apps that import token files one by one
 had silently lost component type since 0.4.0 (step 4, and the reason
 `tokens/fonts.css` exists); `core.css`'s import path was not the one the
 package exports; and the search command in step 6 missed matches.
+
+It was then followed on a copy of that-will-be-five-bucks, from v0.3.0: a
+dark-first app that copied its tokens into its own CSS. That copy built and
+passed its tests, and its screens were compared before and after. It found
+five more things, also fixed above: `npm install` alone doesn't move a
+GitHub pin (step 2); leftover accent lines can outrank the pasted block, and
+high contrast doesn't reach neutrals an app sets itself (step 5); step 6's
+search listed the app's own `--text-faint` colour as a type token; and the
+shorter controls in step 8 weren't only a Tailwind effect.

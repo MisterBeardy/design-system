@@ -11,6 +11,24 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`UPGRADING-1.0.md` corrected after a second test upgrade**, on
+  that-will-be-five-bucks from v0.3.0:
+  - Step 2 now installs the tag by name. Editing it in `package.json` and
+    running `npm install` leaves a GitHub dependency on its old version.
+  - Step 5 now says to delete every other accent declaration: one on a
+    more specific selector silently outranks the pasted block. It also
+    says high contrast reaches only the accent in an app that sets its
+    own neutrals.
+  - Step 6's search now lists only the 26 type tokens. It used to list an
+    app's own `--text-*` colours too, such as `--text-faint`. The 1.0.0
+    notes below have the same slip: rename only the names they list, not
+    "every `var(--text-…)`".
+  - Step 8: shorter controls aren't only a Tailwind effect.
+
+  `ADOPTING.md` gets the same accent warning. No package change.
+
 ## [1.0.0] — 2026-09-23
 
 The first stable release. From here the public API (every component's props,

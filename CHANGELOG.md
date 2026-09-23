@@ -11,6 +11,16 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-09-23
+
+The first stable release. From here the public API (every component's props,
+the tokens, the classes) only changes in a major version, so an app on 1.x can
+take any 1.x release without editing its code. What 1.0 adds over 0.8.0: the
+API made consistent before it's frozen (#46), a high-contrast theme that turns
+on with the reader's system setting (#18), `tokens/fonts.css`, so every app
+can import the type scale (#47), and a build that fails on an undocumented
+token (#44).
+
 ### Upgrading
 
 **Moving from any 0.x version? Start with `UPGRADING-1.0.md`**, which
@@ -419,7 +429,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...v1.0.0
 [0.8.0]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...v0.6.0

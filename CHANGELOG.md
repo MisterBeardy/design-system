@@ -13,6 +13,10 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Upgrading
 
+**Moving from any 0.x version? Start with `UPGRADING-1.0.md`**, which
+collects every step from v0.1.0 onwards, in order, marked by the version it
+applies to. (#47)
+
 The public API was reviewed as a whole before 1.0 (#46), and everything that
 named one idea two ways now names it one way. Each change below is a rename:
 nothing renders differently.
@@ -27,6 +31,16 @@ nothing renders differently.
   and **don't change**. The old names still work, as aliases, until 2.0: to
   move now, replace every `var(--text-…)` in your CSS that isn't `--text-ink`
   or `--text-muted`.
+- **The Google Fonts download has its own file, `tokens/fonts.css`**, along
+  with `--font-display` and `--font-mono`. `tokens/typography.css` is now just
+  the type scale and downloads nothing, so every app can import it. Apps that
+  import `styles.css` see no change. Apps that import token files one by one
+  should now import `typography.css` too: without it, since 0.4.0, Button,
+  Chip, StatTile and every other component have fallen back to the page's
+  font. Add `fonts.css` as well unless you host the fonts yourself, in which
+  case keep setting the two families in your own CSS. If you copied the type
+  tokens into your CSS by hand, delete the copy and import the file. Found by
+  testing the 1.0 upgrade guide on idrovewhere.today (#47).
 - **`PageHeader`:** `actions` → `trailing`, `subtitle` → `sub`.
 - **`Banner`:** `onDismiss` → `onClose`, `dismissLabel` → `closeLabel`.
 - **`Toast`:** `inline` → `fixed={false}`. The polarity flips: `fixed`

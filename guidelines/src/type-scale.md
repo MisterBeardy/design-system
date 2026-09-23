@@ -4,7 +4,7 @@ category: Type
 
 # Type scale
 
-Two families: **Space Grotesk** (`--font-display`) for all UI copy, **JetBrains Mono** (`--font-mono`) for data — numbers, codes, status labels. Both load via a remote `@import` in `tokens/typography.css`.
+Two families: **Space Grotesk** (`--font-display`) for all UI copy, **JetBrains Mono** (`--font-mono`) for data — numbers, codes, status labels. Both load via a remote `@import` in `tokens/fonts.css`; an app that hosts its own fonts skips that file and sets the two variables itself. The type scale below is `tokens/typography.css`, which downloads nothing.
 
 Use the `--text-*` shorthands (each packs weight/size/line-height/family) rather than setting font properties by hand.
 

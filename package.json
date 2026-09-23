@@ -11,6 +11,7 @@
     },
     "./styles.css": "./styles.css",
     "./tokens/colors.css": "./tokens/colors.css",
+    "./tokens/fonts.css": "./tokens/fonts.css",
     "./tokens/typography.css": "./tokens/typography.css",
     "./tokens/spacing.css": "./tokens/spacing.css",
     "./tokens/motion.css": "./tokens/motion.css",
@@ -22,6 +23,7 @@
   "files": [
     "dist",
     "ADOPTING.md",
+    "UPGRADING-1.0.md",
     "CHANGELOG.md",
     "components",
     "icons",

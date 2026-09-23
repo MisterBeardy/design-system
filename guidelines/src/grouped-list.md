@@ -1,7 +1,6 @@
 ---
 category: Foundations
 ---
-<!-- Generated from guidelines/src/grouped-list.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Grouped lists — the default UX
 
@@ -10,7 +9,7 @@ The grouped-list vocabulary (`Group` + `Row` + `GlyphTile` + `Segmented` + `Swit
 - **Cards group, they don't decorate.** Related rows live in one `Group` card. The system is **flat — no shadow**; depth is the `--surface`/`--bg` contrast plus a 1px border. If a card looks like it's floating, fix the page background (`--bg`), don't add a shadow.
 - **One idea per row.** The reading order is glyph → label → value → chevron. A row that needs two sentences is two rows, or a row with a chevron into a screen.
 - **The tile carries colour, never the card surface.** `GlyphTile` is where colour lives: `tone` when colour means *state* (semantic status tokens), `data={n}` when it means *data* (a slot of the data palette; see [data](data.md)). Keeping colour off surfaces is what keeps it meaningful.
-- **Hairlines inset to the label's leading edge** (`--row-inset`) so the list reads as tidy rather than a ladder of full-width rules — and the last separator is suppressed so the Group's own border closes the list. The inset is derived: `--row-pad-x` + `--glyph-size` + `--row-gap` (45px at the defaults), and a `GlyphTile` given its own `size` moves it too.
+- **Hairlines inset to the label's leading edge** (`--row-inset`) so the list reads as tidy rather than a ladder of full-width rules — and the last separator is suppressed so the Group's own border closes the list. The inset is derived: `--row-pad-x` + `--glyph-size` + `--row-gap` ({{px:--row-inset}}px at the defaults), and a `GlyphTile` given its own `size` moves it too.
 - **The number is the hero, its label is furniture.** In `StatStrip`/`StatTile`, only **one** metric per screen sets `accent`, so the accent keeps meaning "this is the important number".
 - **Vibrancy is a signal, not a texture.** Translucency is only for a panel over live content, a map or a video — never decoration. See [elevation](elevation.md).
 

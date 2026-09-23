@@ -11,6 +11,18 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- The guidelines are generated. `guidelines/*.md` and `guidelines/*.card.html`
+  are now written by `npm run build` from `guidelines/src/`, with every token
+  value filled in from `tokens/*.css`, and CI fails when they're out of date.
+  They used to restate the values by hand in two forms, kept honest only by a
+  note asking for both to be edited. Generating them also fixed the drift it
+  was there to prevent: `type-scale.md` was missing `--text-message-title` and
+  `--text-message` (added in 0.6.0), and `radius.md` still described
+  `--radius-xl` as app-code-only after the `Sheet` started using it. Nothing an
+  app imports changed. (#20)
+
 ### Added
 
 - `Sheet` and `Popover`, the elevation vocabulary the tokens have described

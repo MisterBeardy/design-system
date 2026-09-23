@@ -1,6 +1,7 @@
 ---
 category: Colors
 ---
+<!-- Generated from guidelines/src/neutrals.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Neutrals — the warm greyscale
 

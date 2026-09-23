@@ -1,7 +1,6 @@
 ---
 category: Colors
 ---
-<!-- Generated from guidelines/src/status.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Status — success / warning / danger
 
@@ -13,7 +12,7 @@ Semantic outcome colours, each in the same solid / soft / text structure as the 
 | warning | `--warning` | `--warning-soft` | `--warning-text` | PENDING, LOW STOCK |
 | danger | `--danger` | `--danger-soft` | `--danger-text` | OVERDUE, FAILED |
 
-Light values: `success oklch(0.58 0.13 150)`, `warning oklch(0.64 0.13 80)`, `danger oklch(0.55 0.18 25)` (each with matching soft/text; all themed for dark).
+Light values: `success {{--success}}`, `warning {{--warning}}`, `danger {{--danger}}` (each with matching soft/text; all themed for dark).
 
 - Reach for status **only for real outcome states** — `accent`/`neutral` cover everything that isn't a genuine success/warning/danger. Don't use status tones decoratively.
 - The soft/text pair is the `Chip` recipe: `<Chip tone="success">PAID</Chip>`. The solid is for `GlyphTile tone=…` and `Switch` (on = `--success`); what sits on a solid takes its on-colour (`--on-success`, `--on-warning`, `--on-danger`: white in light, dark ink in dark, where every solid is too light for white).

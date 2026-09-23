@@ -1,7 +1,6 @@
 ---
 category: Colors
 ---
-<!-- Generated from guidelines/src/data.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Data colour — categories, series and counts
 
@@ -11,13 +10,13 @@ Data colour says **what** something is: which category, which series, how many. 
 
 | Token | Light | Dark | Use it for |
 |---|---|---|---|
-| `--data-1` | `oklch(0.66 0.10 95)` ochre | `oklch(0.88 0.10 95)` | The first series or category |
-| `--data-2` | `oklch(0.44 0.10 340)` plum | `oklch(0.60 0.10 340)` | The second |
-| `--data-3` | `oklch(0.64 0.10 210)` teal | `oklch(0.84 0.10 210)` | The third |
-| `--data-4` | `oklch(0.44 0.18 280)` indigo | `oklch(0.72 0.12 280)` | The fourth |
-| `--data-5` | `oklch(0.52 0.16 40)` rust | `oklch(0.70 0.12 40)` | The fifth |
-| `--data-6` | `oklch(0.60 0.20 290)` violet | `oklch(0.60 0.18 290)` | The sixth |
-| `--on-data` | `#ffffff` | `#211f1c` | A glyph or label on any data fill |
+| `--data-1` | `{{--data-1}}` ochre | `{{dark:--data-1}}` | The first series or category |
+| `--data-2` | `{{--data-2}}` plum | `{{dark:--data-2}}` | The second |
+| `--data-3` | `{{--data-3}}` teal | `{{dark:--data-3}}` | The third |
+| `--data-4` | `{{--data-4}}` indigo | `{{dark:--data-4}}` | The fourth |
+| `--data-5` | `{{--data-5}}` rust | `{{dark:--data-5}}` | The fifth |
+| `--data-6` | `{{--data-6}}` violet | `{{dark:--data-6}}` | The sixth |
+| `--on-data` | `{{--on-data}}` | `{{dark:--on-data}}` | A glyph or label on any data fill |
 
 - **Use the slots in order.** They're ordered so the first ones are the most distinct: slots 1 and 2 are 22.6 apart (OKLab × 100) for every kind of vision, and the first three stay at least 13.8 apart. A two-series chart uses 1 and 2.
 - **Each app lists the slot nearest its accent last.** `dataOrderFor("<app-key>")` in `app-registry.js` gives the order, so an app's first series never reads as its accent.

@@ -3,6 +3,10 @@
 # (see build.mjs). That makes it easy to change a component and forget to
 # rebuild: the stale dist then ships silently to every app. This rebuilds from
 # the sources and fails if the result differs from what's committed.
+#
+# The same build writes guidelines/ from guidelines/src/ with values from
+# tokens/*.css, so a token change that leaves a guideline stating the old value
+# fails here too.
 name: build
 
 on:
@@ -35,11 +39,11 @@ jobs:
       - run: npm ci
       # Also runs build.mjs's own guard: it throws if any JSX survived.
       - run: npm run build
-      - name: Committed dist/ matches the sources
+      - name: Committed dist/, icon data and guidelines/ match the sources
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git status --short
             git diff --stat
-            echo "::error::dist/ is out of date. Run 'npm run build' and commit the result."
+            echo "::error::Generated files are out of date (dist/, the icon data or guidelines/). Run 'npm run build' and commit the result."
             exit 1
           fi

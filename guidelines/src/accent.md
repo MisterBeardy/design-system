@@ -1,7 +1,6 @@
 ---
 category: Colors
 ---
-<!-- Generated from guidelines/src/accent.md by scripts/build-guidelines.mjs, with values from tokens/*.css. Edit that file, not this one, then run npm run build. -->
 
 # Accent — the per-app colour slot
 
@@ -9,10 +8,10 @@ The accent is a **slot**, not a fixed colour. Every consuming app overrides four
 
 | Token | Role | Default (iDroveWhere blue, H256) |
 |---|---|---|
-| `--accent` | Solid fill — primary buttons, active states, the one headline metric | `oklch(0.54 0.15 256)` |
-| `--accent-soft` | Tinted fill — soft buttons, accent chips (lower emphasis) | `oklch(0.95 0.03 256)` |
-| `--accent-text` | Readable accent text on soft/surface backgrounds | `oklch(0.42 0.15 256)` |
-| `--on-accent` | The label on a solid accent (primary button) and the glyph on an accent tile | `#ffffff` light, `#211f1c` dark |
+| `--accent` | Solid fill — primary buttons, active states, the one headline metric | `{{--accent}}` |
+| `--accent-soft` | Tinted fill — soft buttons, accent chips (lower emphasis) | `{{--accent-soft}}` |
+| `--accent-text` | Readable accent text on soft/surface backgrounds | `{{--accent-text}}` |
+| `--on-accent` | The label on a solid accent (primary button) and the glyph on an accent tile | `{{--on-accent}}` light, `{{dark:--on-accent}}` dark |
 
 - Apps paste the block `accentCssFor("<key>")` prints from `app-registry.js` — the registry is the single source of truth, and `npm run check` fails if the default in `tokens/colors.css` drifts from it.
 - Dark mode has its own accent values (lighter L, slightly reduced chroma), and so a dark label: white can't reach 4.5:1 on any dark-theme accent.

@@ -43,15 +43,18 @@ Shape: **package** (no Storybook). 16 components (since v0.6.0), all authored pr
 - **Fonts load remotely.** `typography.css` `@import`s Google Fonts (Space Grotesk +
   JetBrains Mono) → `[FONT_REMOTE]`, non-blocking, assumed served at runtime. No local
   fonts shipped, no `fonts/` dir.
-- **Guidelines are synced as markdown.** The repo's original `guidelines/*.card.html`
-  are visual preview cards (not synced — they're HTML, not the markdown `guidelinesGlob`
-  copies). We hand-wrote markdown equivalents at `guidelines/*.md` (accent, neutrals,
-  status, spacing, radius, type-scale, grouped-list) capturing the real token values +
-  rules, and set `cfg.guidelinesGlob="guidelines/*.md"`. They land at
+- **Guidelines are synced as markdown.** The `guidelines/*.card.html` visual preview
+  cards aren't synced (they're HTML, not the markdown `guidelinesGlob` copies); the
+  `guidelines/*.md` are, via `cfg.guidelinesGlob="guidelines/*.md"`. They land at
   `guidelines/guidelines/*.md` in the bundle (the glob preserves the package-relative
   subpath) with a generated `guidelines/index.md` — the double-nesting is cosmetic; the
-  index links resolve correctly. Keep the `.md` and `.card.html` in sync if the tokens
-  change; the `category:` frontmatter sets each card's group in the DS pane.
+  index links resolve correctly. The `category:` frontmatter sets each card's group in
+  the DS pane.
+- **Both forms are generated.** `guidelines/*.md` and `guidelines/*.card.html` are
+  written by `npm run build` from `guidelines/src/`, with every token value filled in
+  from `tokens/*.css` (`scripts/build-guidelines.mjs`). Edit `guidelines/src/`, never
+  `guidelines/` directly. The glob is one level deep, so `guidelines/src/` (which still
+  has `{{--token}}` placeholders) is never picked up by the sync.
 
 ## Known render warns
 

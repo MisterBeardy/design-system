@@ -14,7 +14,8 @@ export interface SheetProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
   title?: ReactNode;
   /** Sits opposite the title: a count, a small action. */
   trailing?: ReactNode;
-  /** Accessible name, when `title` isn't a plain string. */
+  /** Not shown; read by screen readers. Needed only when `title` isn't a plain string; otherwise the
+   *  title is the name. */
   label?: string;
   /** Height in px (or any CSS length), capped at 85vh. */
   height?: number | string;

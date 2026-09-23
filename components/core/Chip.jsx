@@ -12,7 +12,7 @@ export function Chip({ tone = "neutral", mono = true, children, style, ...props 
       {...props}
       style={{
         display: "inline-block",
-        font: mono ? "var(--text-chip)" : "var(--text-chip-display)",
+        font: mono ? "var(--type-chip)" : "var(--type-chip-display)",
         letterSpacing: mono ? "var(--tracking-caps)" : "normal",
         borderRadius: "var(--radius-pill)",
         padding: "5px 12px",

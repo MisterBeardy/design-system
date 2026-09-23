@@ -12,9 +12,9 @@ const truncate = { display: "block", overflow: "hidden", textOverflow: "ellipsis
 // the app's frame rather than as a card floating above the page.
 export function PageHeader({
   title,
-  subtitle,
+  sub,
   leading,
-  actions,
+  trailing,
   headingLevel = 1,
   sticky = true,
   className,
@@ -54,14 +54,14 @@ export function PageHeader({
       <div style={{ minWidth: 0, textAlign: "center" }}>
         {createElement(
           `h${headingLevel}`,
-          { style: { margin: 0, font: "var(--text-subhead)", color: "var(--text-ink)", ...truncate } },
+          { style: { margin: 0, font: "var(--type-subhead)", color: "var(--text-ink)", ...truncate } },
           title,
         )}
-        {subtitle && (
-          <span style={{ ...truncate, font: "var(--text-page-sub)", color: "var(--text-muted)" }}>{subtitle}</span>
+        {sub && (
+          <span style={{ ...truncate, font: "var(--type-page-sub)", color: "var(--text-muted)" }}>{sub}</span>
         )}
       </div>
-      <div style={{ ...side, justifyContent: "flex-end" }}>{actions}</div>
+      <div style={{ ...side, justifyContent: "flex-end" }}>{trailing}</div>
     </header>
   );
 }

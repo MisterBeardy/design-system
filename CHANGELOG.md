@@ -11,6 +11,112 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-09-23
+
+The first stable release. From here the public API (every component's props,
+the tokens, the classes) only changes in a major version, so an app on 1.x can
+take any 1.x release without editing its code. What 1.0 adds over 0.8.0: the
+API made consistent before it's frozen (#46), a high-contrast theme that turns
+on with the reader's system setting (#18), `tokens/fonts.css`, so every app
+can import the type scale (#47), and a build that fails on an undocumented
+token (#44).
+
+### Upgrading
+
+**Moving from any 0.x version? Start with `UPGRADING-1.0.md`**, which
+collects every step from v0.1.0 onwards, in order, marked by the version it
+applies to. (#47)
+
+- **Paste your accent block again.** `accentCssFor("<app-key>")` now prints
+  a third part, `@media (prefers-contrast: more) { … }`, with your app's
+  high-contrast accent. Your block comes after the package's CSS, so an old
+  one without that part keeps your primary buttons at normal contrast when a
+  reader asks for more. (#18)
+- **Input and Textarea placeholders** are `--text-muted` instead of the
+  browser's grey: warmer in light, lighter in dark, where the browser's grey
+  was 3.2:1 on the surface, under the 4.5:1 floor. (#18)
+
+The public API was reviewed as a whole before 1.0 (#46), and everything that
+named one idea two ways now names it one way. Each change below is a rename:
+nothing renders differently.
+
+- **Type tokens are `--type-*`.** The 26 font shorthands move from `--text-*`
+  to `--type-*`: `font: var(--text-body)` becomes `font: var(--type-body)`,
+  and the same for `display`, `heading`, `subhead`, `label`, `row-label`,
+  `row-sub`, `row-value`, `section`, `stat`, `stat-label`, `button`,
+  `button-sm`, `input`, `segment`, `segment-sm`, `segment-sub`, `chip`,
+  `chip-display`, `tile-label`, `tile-value`, `tile-sub`, `page-sub`, `tab`,
+  `message-title` and `message`. `--text-ink` and `--text-muted` are colours
+  and **don't change**. The old names still work, as aliases, until 2.0: to
+  move now, replace every `var(--text-…)` in your CSS that isn't `--text-ink`
+  or `--text-muted`.
+- **The Google Fonts download has its own file, `tokens/fonts.css`**, along
+  with `--font-display` and `--font-mono`. `tokens/typography.css` is now just
+  the type scale and downloads nothing, so every app can import it. Apps that
+  import `styles.css` see no change. Apps that import token files one by one
+  should now import `typography.css` too: without it, since 0.4.0, Button,
+  Chip, StatTile and every other component have fallen back to the page's
+  font. Add `fonts.css` as well unless you host the fonts yourself, in which
+  case keep setting the two families in your own CSS. If you copied the type
+  tokens into your CSS by hand, delete the copy and import the file. Found by
+  testing the 1.0 upgrade guide on idrovewhere.today (#47).
+- **`PageHeader`:** `actions` → `trailing`, `subtitle` → `sub`.
+- **`Banner`:** `onDismiss` → `onClose`, `dismissLabel` → `closeLabel`.
+- **`Toast`:** `inline` → `fixed={false}`. The polarity flips: `fixed`
+  defaults to `true`, as TabBar's does.
+- **`StatStrip`:** `subTone: "muted"` → `subTone: "neutral"`. The type of a
+  `stats` entry is `StatStripItem`, not `Stat`.
+- **`Checkbox`:** `onChange` is required in the types, as Switch's is.
+  A checkbox without one couldn't be ticked anyway.
+- **`.material-glass` → `.ds-glass`**, the one public class that lacked the
+  `ds-` prefix.
+
+None of the renamed props is used by an app today; the type tokens are, in
+about 20 places across two apps, and the aliases cover them.
+
+### Added
+
+- **A high-contrast theme.** When the reader's system asks for more contrast
+  (`prefers-contrast: more`), the tokens move by themselves, in light and
+  dark: every text colour to 7:1 on every surface it sits on (4.5:1 for large
+  text), every border to 3:1, status fills to 4.5:1 under their glyphs, and
+  separators to a full 1px. It's the same warm palette, moved only as far as
+  each role needs; ink, the surfaces and the data palette already pass. The
+  Segmented track and the Banner, told apart by shade alone before, get an
+  edge, and the Sheet and TabBar turn opaque, since text on glass has no
+  fixed contrast. Each app's accent gets a high-contrast value from the
+  registry. `npm run check` holds all of it to target for every app in both
+  themes, and `guidelines/contrast.md` documents it. Light and dark are
+  unchanged. (#18)
+- `guidelines/motion.md`: the four durations and three curves, what each is
+  for, and why motion never carries meaning. Motion was the one token family
+  with no guideline; the check below found it. (#44)
+
+### Changed
+
+- The guideline build now fails when a token in `tokens/*.css` is named by
+  no guideline, and says which. It already caught a guideline stating a wrong
+  value; this catches a token nobody documented, which is how `--type-page-sub`,
+  `--type-tab` and the message roles each went unlisted for a release. It also
+  filled the gaps it found: `--on-neutral` in the neutrals table, and the
+  glass recipe's `--glass-blur` and `--glass-saturate` in the elevation
+  guide. The deprecated `--text-*` aliases are exempt, with the reason in
+  the script. (#44)
+- The conventions header the Claude Design agent reads lists the chrome
+  tokens (`--type-page-sub`, `--type-tab`, `--header-height`,
+  `--tabbar-height`) and `--type-label`, names the Popover among the three
+  things that carry a shadow, and describes what `_ds_bundle.css` holds as it
+  is now. It reaches the project at the 1.0 sync. (#45)
+- Every `label` that's read by screen readers but not shown now says so, in
+  the same words, where it's declared (Segmented, Switch, Sheet, Popover,
+  TabBar, Toolbar, Icon, Skeleton). Toast's `action` says why it's an object
+  where Banner's and EmptyState's are nodes. (#46)
+- Work now lands on `dev`, and `main` moves only at a major release: the
+  next version on `main` is 1.0.0. Until then an app that needs something
+  early can pin a pre-release tag on `dev` (`v1.0.0-beta.1`, …); pinning
+  `v0.8.0` keeps working exactly as before. `CONTRIBUTING.md` has both
+  routines, and CI runs on pushes to `dev` as well as `main`.
+
 ### Fixed
 
 - `guidelines/elevation.md` still called the `Sheet` the one translucent
@@ -323,7 +429,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...v1.0.0
 [0.8.0]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/MisterBeardy/design-system/compare/v0.5.0...v0.6.0

@@ -12,8 +12,8 @@ const VARIANTS = {
 };
 
 const SIZES = {
-  sm: { font: "var(--text-button-sm)", padding: "7px 13px" },
-  md: { font: "var(--text-button)", padding: "10px 19px" },
+  sm: { font: "var(--type-button-sm)", padding: "7px 13px" },
+  md: { font: "var(--type-button)", padding: "10px 19px" },
 };
 
 export function Button({ variant = "primary", size = "md", disabled = false, className, children, style, ...props }) {

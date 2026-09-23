@@ -15,15 +15,21 @@
 //   {{dark:--bg}}         the [data-theme="dark"] value, or the light one when
 //                         dark doesn't override it
 //   {{px:--space-3}}      the number alone, var() chains followed: 12
-//   {{spec:--text-body}}  a type token's weight size/line-height, plus " mono"
+//   {{spec:--type-body}}  a type token's weight size/line-height, plus " mono"
 //                         for the mono face: 400 15px/1.65
-//   {{size:--text-body}}  a type token's size alone: 15
+//   {{size:--type-body}}  a type token's size alone: 15
+//   {{contrast:--border}} its value under prefers-contrast: more, light
+//   {{contrast-dark:--border}}  the same, dark. Both resolve the way the
+//                         cascade does, so a token high contrast leaves
+//                         alone gives its normal value
 //
 // No spaces inside the braces: that's what keeps a JSX example's
 // style={{ … }} from being read as one.
 //
 // An unknown token fails the build, so renaming or removing a token breaks
-// every guideline that names it until the guideline is fixed.
+// every guideline that names it until the guideline is fixed. And the
+// reverse: a token defined in tokens/*.css that no guideline names fails it
+// too, unless UNDOCUMENTED below says why it needn't be.
 
 import { readdir, readFile, writeFile } from "node:fs/promises";
 
@@ -31,11 +37,28 @@ const SRC = "guidelines/src";
 const OUT = "guidelines";
 const KINDS = [".md", ".card.html"];
 
+// Tokens that no guideline has to mention, each with the reason. Everything
+// else defined in tokens/*.css must be named somewhere in guidelines/src/, or
+// the build fails: a token the guidelines never mention is one nobody reading
+// them will ever use correctly. An entry here that stops matching any token
+// fails too, so the list can't outlive what it excuses.
+const UNDOCUMENTED = [
+  {
+    match: /^--text-(?!ink$|muted$)/,
+    reason: "the pre-1.0 names of the --type-* shorthands, kept as aliases until 2.0; UPGRADING-1.0.md and the changelog document them",
+  },
+];
+
 // --- tokens/*.css --------------------------------------------------------
 
 async function readTokens() {
   const light = {};
   const dark = {};
+  const source = {};
+  // The high-contrast theme: :root and [data-theme="dark"] blocks inside a
+  // top-level @media (prefers-contrast: more).
+  const contrastLight = {};
+  const contrastDark = {};
   for (const file of (await readdir("tokens")).filter((f) => f.endsWith(".css")).sort()) {
     // Comments first: they mention tokens in prose ("--accent / --accent-soft"),
     // and a colon in the wrong place would read as a definition.
@@ -56,10 +79,18 @@ async function readTokens() {
       } else if (css[i] === "}") {
         depth--;
         if (depth === 0) {
+          if (/^@media\s*\(prefers-contrast:\s*more\)$/.test(selector)) {
+            for (const [, sel, body] of css.slice(start, i).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+              const into = sel.trim() === ":root" ? contrastLight : sel.trim() === '[data-theme="dark"]' ? contrastDark : null;
+              if (!into) continue;
+              for (const [, name, value] of body.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) into[name] = value.trim().replace(/\s+/g, " ");
+            }
+          }
           const target = selector === ":root" ? light : selector === '[data-theme="dark"]' ? dark : null;
           if (target) {
             for (const [, name, value] of css.slice(start, i).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
               target[name] = value.trim().replace(/\s+/g, " ");
+              source[name] ??= `tokens/${file}`;
             }
           }
           start = i + 1;
@@ -67,12 +98,20 @@ async function readTokens() {
       }
     }
   }
-  return { light, dark };
+  return { light, dark, source, contrastLight, contrastDark };
 }
 
-function formatter({ light, dark }) {
+function formatter({ light, dark, contrastLight, contrastDark }) {
+  // Each theme resolves the way the cascade does on one element: high
+  // contrast dark, then high contrast light, then dark, then light.
+  const chains = {
+    light: [light],
+    dark: [dark, light],
+    "contrast-light": [contrastLight, light],
+    "contrast-dark": [contrastDark, contrastLight, dark, light],
+  };
   const get = (theme, name) => {
-    const value = theme === "dark" ? dark[name] ?? light[name] : light[name];
+    const value = chains[theme].map((t) => t[name]).find((v) => v !== undefined);
     if (value === undefined) throw new Error(`no token ${name}`);
     return value;
   };
@@ -105,6 +144,8 @@ function formatter({ light, dark }) {
   return {
     "": (n) => get("light", n),
     dark: (n) => get("dark", n),
+    contrast: (n) => get("contrast-light", n),
+    "contrast-dark": (n) => get("contrast-dark", n),
     px: (n) => String(pixels(n)),
     spec: (n) => {
       const f = font(n);
@@ -132,7 +173,8 @@ function withNote(file, text) {
 }
 
 export async function buildGuidelines() {
-  const format = formatter(await readTokens());
+  const tokens = await readTokens();
+  const format = formatter(tokens);
   const sources = (await readdir(SRC)).filter(kindOf).sort();
   const problems = [];
   const written = [];
@@ -144,7 +186,7 @@ export async function buildGuidelines() {
     // not text. Whitespace is what tells a JSX style object in a code example
     // (style={{ padding: 0 }}) apart from a placeholder.
     const out = src.replace(/\{\{([^\s{}]+)\}\}/g, (whole, inner) => {
-      const m = inner.match(/^(?:(dark|px|spec|size):)?(--[\w-]+)$/);
+      const m = inner.match(/^(?:(dark|px|spec|size|contrast|contrast-dark):)?(--[\w-]+)$/);
       if (!m) {
         problems.push(`${SRC}/${file}: ${whole} isn't a placeholder this understands (see the top of scripts/build-guidelines.mjs)`);
         return whole;
@@ -164,6 +206,25 @@ export async function buildGuidelines() {
   const outputs = (await readdir(OUT)).filter(kindOf);
   for (const file of outputs) {
     if (!sources.includes(file)) problems.push(`${OUT}/${file} has no source in ${SRC}/ — move it there (or delete it)`);
+  }
+
+  // Every token is named somewhere in the sources, as a placeholder or in
+  // prose, unless UNDOCUMENTED says why not.
+  let everything = "";
+  for (const file of sources) everything += await readFile(`${SRC}/${file}`, "utf8");
+  const used = new Set();
+  for (const [name, file] of Object.entries(tokens.source)) {
+    const exempt = UNDOCUMENTED.find((u) => u.match.test(name));
+    if (exempt) {
+      used.add(exempt);
+      continue;
+    }
+    if (!new RegExp(`${name}(?![\\w-])`).test(everything)) {
+      problems.push(`${name} (${file}) isn't mentioned in any guideline — name it in the guideline for its family, or add it to UNDOCUMENTED in scripts/build-guidelines.mjs with a reason`);
+    }
+  }
+  for (const u of UNDOCUMENTED) {
+    if (!used.has(u)) problems.push(`UNDOCUMENTED entry ${u.match} matches no token any more — remove it`);
   }
 
   if (problems.length) throw new Error(`guidelines:\n  ${problems.join("\n  ")}`);

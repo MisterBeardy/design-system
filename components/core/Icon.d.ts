@@ -14,8 +14,8 @@ export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, "name"> {
   name: IconName;
   /** Rendered width and height in px. The stroke scales with it. */
   size?: number;
-  /** An accessible name. Give one only when the icon is the only thing saying
-   *  what something is; otherwise it's hidden from screen readers. */
+  /** Not shown; read by screen readers. Give one only when the icon is the only thing saying what
+   *  something is; without it the icon is hidden from screen readers. */
   label?: string;
 }
 

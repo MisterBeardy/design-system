@@ -18,7 +18,7 @@ A form is a grouped list whose rows take input. Related fields share a `Group` w
 
 ## Layout
 
-- Label on the left in `text-row-label`, value on the right, drawn bare: no border or fill of its own. A Field row is 44px tall on a touch screen, and the whole row draws the focus ring.
+- Label on the left in `type-row-label`, value on the right, drawn bare: no border or fill of its own. A Field row is 44px tall on a touch screen, and the whole row draws the focus ring.
 - One line of help under a row when the label isn't enough. A sentence about the whole group goes in the Group footer.
 - One primary action after the last Group: a full-width `Button` on a phone. Cancel, when there is one, is a secondary Button or the navigation's back.
 - On their own (a search box, a single field on a card), `Input`, `Select` and `Textarea` are boxed: Input's surface, 1px border and `radius-md`.

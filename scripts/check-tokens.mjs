@@ -221,6 +221,56 @@ for (const app of APPS) {
   }
 }
 
+// 10. High contrast (prefers-contrast: more). Each theme is built the way the
+//     cascade builds it on one element: the base theme, then the high-contrast
+//     :root block, then (in dark) the high-contrast dark block. So a dark block
+//     that forgets to restate a light high-contrast value fails here, as it
+//     would on screen. Targets, from #18: every text colour 7:1 on every
+//     surface it sits on, borders 3:1, a glyph on a fill 4.5:1, the focus
+//     ring 3:1; for every app's accent too.
+const mediaAt = css.indexOf("@media (prefers-contrast: more)");
+expect(mediaAt >= 0, "colors.css has a @media (prefers-contrast: more) block");
+const contrastBlock = (selector) => {
+  const start = css.indexOf(`${selector} {`, mediaAt);
+  const body = css.slice(start, css.indexOf("}", start)).replace(/\/\*[\s\S]*?\*\//g, "");
+  return Object.fromEntries([...body.matchAll(/(--[\w-]+):\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+};
+const contrastThemes = {
+  light: { ...themes.light, ...contrastBlock(":root") },
+  dark: { ...themes.dark, ...contrastBlock(":root"), ...contrastBlock('[data-theme="dark"]') },
+};
+const floor = (r, min, line) => expect(r >= min, `${line}: ${r.toFixed(2)}:1${r >= min ? "" : ` (needs ${min})`}`);
+for (const theme of ["light", "dark"]) {
+  const v = contrastThemes[theme];
+  const grounds = ["--bg", "--surface", "--surface-alt"];
+  for (const ink of ["--text-ink", "--text-muted"])
+    for (const g of grounds) floor(contrast(v[ink], v[g]), 7, `high contrast ${theme}: ${ink} on ${g}`);
+  for (const g of grounds) floor(contrast(v["--border"], v[g]), 3, `high contrast ${theme}: --border on ${g}`);
+  for (const s of ["success", "warning", "danger"]) {
+    for (const g of [`--${s}-soft`, "--surface", "--bg"]) floor(contrast(v[`--${s}-text`], v[g]), 7, `high contrast ${theme}: --${s}-text on ${g}`);
+    floor(contrast(v[`--on-${s}`], v[`--${s}`]), 4.5, `high contrast ${theme}: --on-${s} on --${s}`);
+  }
+  floor(contrast(v["--on-neutral"], v["--text-muted"]), 4.5, `high contrast ${theme}: --on-neutral on the neutral tile (--text-muted)`);
+}
+// The default accent in colors.css is the registry's high-contrast one, exactly.
+const defaultContrast = accentTokensFor("idrovewhere").contrast;
+for (const theme of ["light", "dark"]) {
+  const block = theme === "light" ? contrastBlock(":root") : contrastBlock('[data-theme="dark"]');
+  for (const [name, value] of Object.entries(defaultContrast[theme])) {
+    expect(block[name] === value, `high contrast ${theme} ${name} in colors.css is ${block[name] ?? "missing"}, registry says ${value}`);
+  }
+}
+for (const app of APPS) {
+  const t = accentTokensFor(app.key);
+  for (const theme of ["light", "dark"]) {
+    // The app's own block, applied the same way: normal, then high contrast.
+    const a = { ...contrastThemes[theme], ...t[theme], ...t.contrast.light, ...(theme === "dark" ? t.contrast.dark : {}) };
+    floor(contrast(a["--on-accent"], a["--accent"]), 7, `${app.name}, high contrast ${theme}: button label on --accent`);
+    for (const g of ["--accent-soft", "--surface", "--bg"]) floor(contrast(a["--accent-text"], a[g]), 7, `${app.name}, high contrast ${theme}: --accent-text on ${g}`);
+    for (const g of ["--bg", "--surface"]) floor(contrast(a["--accent"], a[g]), 3, `${app.name}, high contrast ${theme}: focus ring (--accent) on ${g}`);
+  }
+}
+
 if (failures.length) {
   console.error(`${failures.length} colour check(s) failed:\n  ${failures.join("\n  ")}`);
   process.exit(1);

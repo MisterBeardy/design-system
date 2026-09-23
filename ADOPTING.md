@@ -48,12 +48,14 @@ Every app owns exactly one hue. Check `app-registry.js` in this package:
   ```
   Usage rules are in the `.prompt.md` beside each component source.
 
-**If you can't import `styles.css`** — its first line is a Google Fonts
-`@import`, which a strict `font-src` CSP will block, and some bundlers
-(Turbopack) reject an `@import` that isn't first in the file. In that case
-self-host the two faces (e.g. `next/font/google`) and cherry-pick the rest:
+**If you can't import `styles.css`** — it starts by downloading the fonts
+from Google (`tokens/fonts.css`), which a strict `font-src` CSP will block,
+and some bundlers (Turbopack) reject an `@import` that isn't first in the
+file. In that case self-host the two faces (e.g. `next/font/google`) and
+import every other file yourself — everything except `fonts.css`:
 
 ```css
+@import "@misterbeardy/design-system/tokens/typography.css"; /* ← the type scale */
 @import "@misterbeardy/design-system/tokens/colors.css";
 @import "@misterbeardy/design-system/tokens/spacing.css";
 @import "@misterbeardy/design-system/tokens/motion.css";
@@ -61,13 +63,21 @@ self-host the two faces (e.g. `next/font/google`) and cherry-pick the rest:
 @import "@misterbeardy/design-system/core.css";   /* ← easy to forget */
 ```
 
+`typography.css` is not optional either, and it downloads nothing: it's the
+type scale every component sets its text from (`--type-button`,
+`--type-row-label`, …). Before 1.0 it also carried the Google Fonts import,
+so apps that couldn't take the download left it out, and their Buttons,
+Chips and StatTiles fell back to the page's font. Never copy its values into
+your own CSS instead; import it.
+
 `core.css` is not optional. It carries the rules that can't be inline styles —
 `Row`'s hairline separators, `:last-child`, hover, focus rings, and the
 `box-sizing` the rows depend on. Skip it and the list still renders, just
 subtly wrong and with no focus rings, which is the worst kind of broken.
 
-Self-hosting the fonts? Map them onto the token names the components actually
-read — `--font-display` and `--font-mono` — and declare the font variables on
+Self-hosting the fonts? `fonts.css` is the one file you skip, so declare what
+it would have: map your faces onto the two names the type scale reads —
+`--font-display` and `--font-mono` — and declare the font variables on
 `<html>`, not `<body>`: a `:root` custom property can't resolve a variable
 declared on a descendant, and every descendant then inherits the broken value.
 
@@ -96,9 +106,13 @@ node -e 'import("@misterbeardy/design-system/app-registry").then(r => console.lo
 ```
 
 It prints `--accent`, `--accent-soft`, `--accent-text` and `--on-accent` for
-`:root` and for `[data-theme="dark"]`. A new app goes into `app-registry.js`
-first (step 1); `npm run check` in this package then confirms its button
-label and glyphs meet their contrast floor in both themes.
+`:root` and for `[data-theme="dark"]`, then the app's high-contrast accent in an
+`@media (prefers-contrast: more)` part. Paste all of it: the block comes after
+the package's CSS, so leaving that part out would override the package's
+high-contrast accent with your normal one. A new app goes into
+`app-registry.js` first (step 1); `npm run check` in this package then confirms
+its button label and glyphs meet their contrast floor in both themes, and 7:1
+in high contrast.
 
 Never override neutrals or the status tokens — those are identical across
 the portfolio by design.
@@ -142,7 +156,7 @@ version, because it's what most conversions are:
   become `Switch`.
 - Cards stay flat. The one sanctioned elevation and the one sanctioned
   translucency are the same thing: a panel floating over live content
-  (`.material-glass`). Vibrancy is a signal, not a texture.
+  (`.ds-glass`). Vibrancy is a signal, not a texture.
 
 An app that only bridges tokens has adopted the palette, not the design. The
 palette was never the hard part.
@@ -167,7 +181,7 @@ Uses @misterbeardy/design-system (github.com/MisterBeardy/design-system).
 - Accent: hue <H>, chroma <C> (key "<app-key>" in app-registry.js)
 - Dark mode bridge: <how data-theme="dark" gets set>
 - Framework bridge: <none | tailwind @theme | shadcn var map | …>
-- Styles imported: <styles.css | cherry-picked tokens + core.css, because …>
+- Styles imported: <styles.css | every token file but fonts.css, plus core.css, because …>
 - Settings/list/stats UI uses Group/Row/GlyphTile/Segmented/Switch/StatStrip.
   Colour goes on the glyph tile, never on the card surface. Data colour
   (<name the app's categorical palettes>) never collapses into the accent.
@@ -196,7 +210,8 @@ land. Then stop — the rest of the screens migrate incrementally as they're
 touched, never in a mass restyle pass.
 
 Two things that are easy to get wrong: if you can't import styles.css (CSP
-blocks its Google Fonts @import), you must still import core.css explicitly or
+blocks the Google Fonts download in tokens/fonts.css), you must still import
+typography.css and core.css explicitly, or components lose their type and
 separators and focus rings silently won't render. And don't bridge the app's
 categorical/data colours to the accent — data colour is sacred; it comes from
 the data palette (--data-1 … --data-6, <GlyphTile data={n}>), in the order

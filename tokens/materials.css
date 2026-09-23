@@ -11,7 +11,7 @@
 
    Usage — the class, not the raw recipe:
 
-     <div class="material-glass"> … </div>
+     <div class="ds-glass"> … </div>
 
    Falls back to opaque --bg where backdrop-filter isn't supported, which is
    correct rather than degraded: an opaque panel over a map is just a panel. */
@@ -20,7 +20,7 @@
      system's two translucent surfaces, both over live content.
      --shadow-sheet is the Sheet's alone (the TabBar carries no shadow: it's
      part of the frame, and a hairline is all an edge needs), and
-     --shadow-popover the Popover's and the Toast's. The .material-glass class
+     --shadow-popover the Popover's and the Toast's. The .ds-glass class
      is for app code that needs the same material outside those. */
   --glass-blur:       24px;
   --glass-saturate:   180%;
@@ -31,12 +31,12 @@
   --shadow-popover:   0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-.material-glass {
+.ds-glass {
   background: var(--bg);
 }
 
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .material-glass {
+  .ds-glass {
     /* The vertical falloff (88% -> 76%) matters: a flat translucency reads as a
        dirty window, a graded one reads as a material with an edge. */
     background: linear-gradient(

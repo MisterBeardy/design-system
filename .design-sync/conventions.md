@@ -12,11 +12,16 @@ classes, no provider, no build step required.**
 2. **Tint the page.** Set the app background to `var(--bg)` (a warm off-white
    `#f6f5f3`, never pure white). The system is deliberately **flat — no
    shadows**; depth comes entirely from the `--surface`/`--bg` contrast plus 1px
-   borders. (Only things that float over the page, a `Toast` or a sheet, carry
-   a shadow token.) A `Group` or `Card` on a white page looks like it's floating; the
+   borders. (Only three things float over the page and carry a shadow token:
+   a `Sheet`, a `Popover` and a `Toast`. The translucent `TabBar` has none.)
+   A `Group` or `Card` on a white page looks like it's floating; the
    fix is the page background, not a shadow.
 3. **Dark mode** is `[data-theme="dark"]` on a root element — every token has a
    dark value. **No provider or ThemeProvider exists or is needed.**
+4. **High contrast is automatic.** When the reader's system asks for more
+   contrast (`prefers-contrast: more`) the tokens move to a 7:1 theme by
+   themselves, light and dark. Style with the tokens and it works; a
+   hard-coded colour won't follow, and never add a contrast theme of your own.
 
 ## The styling idiom: tokens, not classes
 
@@ -33,8 +38,9 @@ CSS). Components carry their own look; you compose them and space them.
 | Data (categories, series) | `--data-1`…`--data-6` (in that order), `--on-data` (glyph on a data fill) |
 | Ramp (counts, density) | `--ramp-1` (least) … `--ramp-7` (most) |
 | Fonts | `--font-display` (Space Grotesk), `--font-mono` (JetBrains Mono) |
-| Type shorthands | `--text-display` `--text-heading` `--text-subhead` `--text-body` `--text-section` `--text-row-label` `--text-row-sub` `--text-row-value` `--text-stat` `--text-stat-label` `--text-message-title` `--text-message` |
+| Type shorthands | `--type-display` `--type-heading` `--type-subhead` `--type-body` `--type-label` `--type-section` `--type-row-label` `--type-row-sub` `--type-row-value` `--type-stat` `--type-stat-label` `--type-message-title` `--type-message` `--type-page-sub` `--type-tab` |
 | Spacing | `--space-1`…`--space-6` |
+| Chrome | `--header-height` (a sticky offset under `PageHeader`), `--tabbar-height` (the room a list leaves above `TabBar`) |
 | Radius | `--radius-sm` `--radius-md` `--radius-lg` `--radius-card` `--radius-pill` `--radius-xl` |
 | Tracking | `--tracking-caps` `--tracking-label` `--tracking-stat` |
 
@@ -88,8 +94,9 @@ tint is the message.)
 ## Where the truth lives
 
 - `styles.css` → `tokens/*.css` (the token definitions) and `_ds_bundle.css`
-  (the few real selectors: Row separators, Switch, and the focus rings on
-  Button, Input, Row and Segmented).
+  (the rules that need real selectors: Row separators and hover, the focus
+  rings, the Switch and Checkbox inputs, the Sheet's and TabBar's glass, the
+  Toolbar's sideways scroll, the Skeleton's pulse, and touch targets).
 - Per component: `components/core/<Name>/<Name>.prompt.md` (usage + intent, hand
   written) and `<Name>.d.ts` (the props contract).
 

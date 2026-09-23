@@ -90,6 +90,16 @@
   outline-offset: -1px;
 }
 
+/* The placeholder takes the muted text colour, as Select's already does. The
+   browser's own grey (#757575) is 3.2:1 on the dark surface, under the 4.5:1
+   floor, and cold against the warm palette; --text-muted is 4.8:1 or better in
+   both themes and 7:1 in high contrast. Firefox dims placeholders by default,
+   hence the opacity. Textarea carries .ds-input too. */
+.ds-input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
 /* --- Segmented ------------------------------------------------------- */
 
 .ds-segment {
@@ -139,7 +149,7 @@
 
 /* The two places translucency is spent, on the same argument: the content
    behind is live and still matters — the map under a Sheet, the list running
-   under a TabBar. They share .material-glass's recipe rather than each
+   under a TabBar. They share .ds-glass's recipe rather than each
    redefining it, so there's one material to tune. `solid` (and a reader who
    has asked for less transparency) gets the opaque fallback, which is correct
    rather than degraded: an opaque panel over a map is still a panel above the
@@ -172,7 +182,10 @@
   }
 }
 
-@media (prefers-reduced-transparency: reduce) {
+/* Solid, too, when the reader asks for more contrast: text on glass has no
+   fixed contrast, only whatever scrolls behind it, and high contrast
+   promises 7:1. Opaque is correct rather than degraded here as well. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .ds-sheet:not(.ds-sheet-solid),
   .ds-tabbar:not(.ds-tabbar-solid) {
     background: var(--bg);
@@ -284,6 +297,23 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* --- High contrast --------------------------------------------------- */
+
+/* When the reader's system asks for more contrast, the tokens do most of the
+   work (tokens/colors.css): text reaches 7:1 and borders 3:1. These two rules
+   cover the surfaces that were told apart by shade alone: the Segmented
+   track, which has no border of its own, and the Banner, whose tint is its
+   only edge. An outline in the Banner's own text colour holds 7:1. */
+@media (prefers-contrast: more) {
+  .ds-segmented {
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  .ds-banner {
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
 }
 
 /* --- Touch targets --------------------------------------------------- */

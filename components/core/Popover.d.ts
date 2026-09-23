@@ -15,7 +15,8 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, "titl
   trigger?: ReactElement;
   /** Shown in a header row with a close button. Without it there's no header. */
   title?: ReactNode;
-  /** Accessible name, when `title` isn't a plain string. */
+  /** Not shown; read by screen readers. Needed only when `title` isn't a plain string; otherwise the
+   *  title is the name. */
   label?: string;
   /** Panel width in px (or any CSS length); it never exceeds the viewport. */
   width?: number | string;

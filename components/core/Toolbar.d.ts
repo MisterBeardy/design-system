@@ -8,7 +8,7 @@ import type { ReactNode, HTMLAttributes } from "react";
  * @startingPoint section="Chrome" subtitle="Filters and secondary actions" viewport="390x200"
  */
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
-  /** Names the set for a screen reader. Without it the row is unlabelled. */
+  /** Not shown; read by screen readers. Names the set of controls; without it the row is unlabelled. */
   label?: string;
   /** Wrap onto a second line instead of scrolling sideways. */
   wrap?: boolean;

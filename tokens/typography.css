@@ -1,30 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
+/* The type scale: font shorthands for every text role, and nothing that
+   touches the network. The two families they name, --font-display and
+   --font-mono, come from tokens/fonts.css, or from the app when it hosts its
+   own fonts. So every app can import this file, whatever its CSP or bundler:
+   the Google Fonts download lives in fonts.css, not here. */
 :root {
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-
-  /* font shorthand: weight size/line-height family */
-  --text-display: 700 38px/1.05 var(--font-display);
-  --text-heading: 700 24px/1.15 var(--font-display);
-  --text-subhead: 600 17px/1.3  var(--font-display);
-  --text-body:    400 15px/1.65 var(--font-display);
-  --text-label:   500 11px/1.4  var(--font-mono);
+  /* Type shorthands: weight size/line-height family, used as
+     `font: var(--type-body)`. They're `--type-*`, not `--text-*`: `--text-ink`
+     and `--text-muted` are colours (tokens/colors.css), and one prefix for both
+     made `font: var(--text-muted)` and `color: var(--text-body)` look right.
+     Renamed before 1.0; the old names are aliases at the end of this file. */
+  --type-display: 700 38px/1.05 var(--font-display);
+  --type-heading: 700 24px/1.15 var(--font-display);
+  --type-subhead: 600 17px/1.3  var(--font-display);
+  --type-body:    400 15px/1.65 var(--font-display);
+  --type-label:   500 11px/1.4  var(--font-mono);
 
   /* --- Grouped-list roles ---------------------------------------------
      The list vocabulary runs smaller than the page scale above, because a row
-     is furniture: you scan a list, you don't read it. Reaching for --text-body
+     is furniture: you scan a list, you don't read it. Reaching for --type-body
      inside a row is the fastest way to make a settings screen read as a
      document.
 
      Data and labels stay mono (see readme "Content fundamentals"); the row
      label itself is display, because it's language, not data. */
-  --text-row-label:  400 13px/1.35 var(--font-display);
-  --text-row-sub:    400 11px/1.35 var(--font-display);
-  --text-row-value:  400 12px/1.35 var(--font-mono);
-  --text-section:    600 10px/1.4  var(--font-mono);  /* Group header, uppercase */
-  --text-stat:       700 19px/1.15 var(--font-display);
-  --text-stat-label: 400 9px/1.4   var(--font-mono);  /* StatStrip label, uppercase */
+  --type-row-label:  400 13px/1.35 var(--font-display);
+  --type-row-sub:    400 11px/1.35 var(--font-display);
+  --type-row-value:  400 12px/1.35 var(--font-mono);
+  --type-section:    600 10px/1.4  var(--font-mono);  /* Group header, uppercase */
+  --type-stat:       700 19px/1.15 var(--font-display);
+  --type-stat-label: 400 9px/1.4   var(--font-mono);  /* StatStrip label, uppercase */
 
   /* --- Control and tile roles -----------------------------------------
      The type Button, Input, Chip, Segmented and StatTile set on themselves.
@@ -35,41 +39,74 @@
      so a chip or a stat tile was a different height in an app with Tailwind's
      preflight (line-height 1.5) than in one without. 1.3 is what `normal`
      resolved to for these two faces, now fixed. */
-  --text-button:       600 14px/1.3 var(--font-display);
-  --text-button-sm:    600 13px/1.3 var(--font-display);
-  --text-input:        400 14px/1.3 var(--font-display);
-  --text-segment:      500 12px/1.3 var(--font-display);
-  --text-segment-sm:   500 11px/1.3 var(--font-display);
-  --text-segment-sub:  400 10px/1.3 var(--font-display);
-  --text-chip:         600 11px/1.3 var(--font-mono);     /* uppercase, --tracking-caps */
-  --text-chip-display: 600 11px/1.3 var(--font-display);  /* Chip mono={false} */
-  --text-tile-label:   400 10px/1.3 var(--font-mono);     /* StatTile label, uppercase, --tracking-label */
-  --text-tile-value:   700 24px/1.3 var(--font-display);
-  --text-tile-sub:     400 11px/1.3 var(--font-mono);
+  --type-button:       600 14px/1.3 var(--font-display);
+  --type-button-sm:    600 13px/1.3 var(--font-display);
+  --type-input:        400 14px/1.3 var(--font-display);
+  --type-segment:      500 12px/1.3 var(--font-display);
+  --type-segment-sm:   500 11px/1.3 var(--font-display);
+  --type-segment-sub:  400 10px/1.3 var(--font-display);
+  --type-chip:         600 11px/1.3 var(--font-mono);     /* uppercase, --tracking-caps */
+  --type-chip-display: 600 11px/1.3 var(--font-display);  /* Chip mono={false} */
+  --type-tile-label:   400 10px/1.3 var(--font-mono);     /* StatTile label, uppercase, --tracking-label */
+  --type-tile-value:   700 24px/1.3 var(--font-display);
+  --type-tile-sub:     400 11px/1.3 var(--font-mono);
 
   /* --- Chrome roles -----------------------------------------------------
      PageHeader and TabBar — the frame around the content. The header's title
-     is --text-subhead: a screen title genuinely is a subhead, and a
-     --text-page-title with the same numbers would be a second name for one
+     is --type-subhead: a screen title genuinely is a subhead, and a
+     --type-page-title with the same numbers would be a second name for one
      size, drifting apart the first time someone tuned one of them.
 
      The tab label is the smallest type in the system and the only display
      face that small: it's a word under a glyph, read once and then
      recognised by shape. Mono would make four of them a row of ticket
      stubs. */
-  --text-page-sub: 400 11px/1.35 var(--font-display);
-  --text-tab:      500 10px/1.2  var(--font-display);
+  --type-page-sub: 400 11px/1.35 var(--font-display);
+  --type-tab:      500 10px/1.2  var(--font-display);
 
   /* --- Message roles ---------------------------------------------------
      Banner, Toast and ErrorState: a short bold line, then one plain
      sentence. Sized between a row and body copy, because a message
      interrupts the page but isn't the page. */
-  --text-message-title: 600 14px/1.35 var(--font-display);
-  --text-message:       400 13px/1.45 var(--font-display);
+  --type-message-title: 600 14px/1.35 var(--font-display);
+  --type-message:       400 13px/1.45 var(--font-display);
 
   /* Tracking can't ride in the font shorthand, so it's separate. Numerals
      tighten, small uppercase opens up — the usual pairing. */
   --tracking-stat:  -0.02em;
   --tracking-caps:   0.05em;
   --tracking-label:  0.08em;
+}
+
+/* Deprecated: the pre-1.0 names of the type shorthands, kept so an app
+   upgrading to 1.x doesn't lose its type in one step. Each is an alias of its
+   --type-* replacement. Removed in 2.0: search your CSS for `var(--text-` and
+   replace every one that isn't --text-ink or --text-muted. */
+:root {
+  --text-display: var(--type-display);
+  --text-heading: var(--type-heading);
+  --text-subhead: var(--type-subhead);
+  --text-body: var(--type-body);
+  --text-label: var(--type-label);
+  --text-row-label: var(--type-row-label);
+  --text-row-sub: var(--type-row-sub);
+  --text-row-value: var(--type-row-value);
+  --text-section: var(--type-section);
+  --text-stat: var(--type-stat);
+  --text-stat-label: var(--type-stat-label);
+  --text-button: var(--type-button);
+  --text-button-sm: var(--type-button-sm);
+  --text-input: var(--type-input);
+  --text-segment: var(--type-segment);
+  --text-segment-sm: var(--type-segment-sm);
+  --text-segment-sub: var(--type-segment-sub);
+  --text-chip: var(--type-chip);
+  --text-chip-display: var(--type-chip-display);
+  --text-tile-label: var(--type-tile-label);
+  --text-tile-value: var(--type-tile-value);
+  --text-tile-sub: var(--type-tile-sub);
+  --text-page-sub: var(--type-page-sub);
+  --text-tab: var(--type-tab);
+  --text-message-title: var(--type-message-title);
+  --text-message: var(--type-message);
 }

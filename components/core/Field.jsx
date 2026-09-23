@@ -45,7 +45,7 @@ export function Field({ label, help, error, glyph, children, className, style, .
         <span
           style={{
             flexShrink: 0,
-            font: stacked ? "var(--text-row-sub)" : "var(--text-row-label)",
+            font: stacked ? "var(--type-row-sub)" : "var(--type-row-label)",
             color: error ? "var(--danger-text)" : stacked ? "var(--text-muted)" : "var(--text-ink)",
           }}
         >
@@ -59,7 +59,7 @@ export function Field({ label, help, error, glyph, children, className, style, .
         <div
           id={msgId}
           style={{
-            font: "var(--text-row-sub)",
+            font: "var(--type-row-sub)",
             color: error ? "var(--danger-text)" : "var(--text-muted)",
             // Under the label's leading edge, past the glyph if there is one.
             marginLeft: glyph && !stacked ? "calc(var(--row-inset) - var(--row-pad-x))" : 0,

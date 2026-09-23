@@ -54,3 +54,12 @@
      grouped list read as a ladder of rules rather than a set of related things. */
   --row-inset:  calc(var(--row-pad-x) + var(--glyph-size) + var(--row-gap));
 }
+
+/* High contrast: separators are a full 1px, so a Row's hairline reaches the
+   3:1 its border colour is given there (at 0.5px it renders fainter than its
+   colour says). See colors.css for the rest of the high-contrast theme. */
+@media (prefers-contrast: more) {
+  :root {
+    --hairline: 1px;
+  }
+}

@@ -7,7 +7,7 @@ export function TheSet() {
         <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '12px 4px 8px',
           background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', color: 'var(--text-ink)' }}>
           <Icon name={name} size={24} />
-          <span style={{ font: 'var(--text-row-sub)', color: 'var(--text-muted)' }}>{name}</span>
+          <span style={{ font: 'var(--type-row-sub)', color: 'var(--text-muted)' }}>{name}</span>
         </div>
       ))}
     </div>
@@ -23,7 +23,7 @@ export function InUse() {
       <Button variant="secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
         <Icon name="plus" /> Add trip
       </Button>
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, font: 'var(--text-row-label)', color: 'var(--text-muted)' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, font: 'var(--type-row-label)', color: 'var(--text-muted)' }}>
         <Icon name="calendar" /> Tue 22 Sep
       </span>
     </div>
@@ -36,7 +36,7 @@ export function Sizes() {
       {[13, 16, 20, 24].map((s) => (
         <div key={s} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
           <Icon name="bolt" size={s} />
-          <span style={{ font: 'var(--text-row-value)', color: 'var(--text-muted)' }}>{s}px</span>
+          <span style={{ font: 'var(--type-row-value)', color: 'var(--text-muted)' }}>{s}px</span>
         </div>
       ))}
     </div>

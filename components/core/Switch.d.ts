@@ -10,6 +10,6 @@ export interface SwitchProps
   checked: boolean;
   onChange: (next: boolean) => void;
   disabled?: boolean;
-  /** Accessible name. Required when the switch has no adjacent `Row` label. */
+  /** Not shown; read by screen readers. Required when the switch has no adjacent `Row` label. */
   label?: string;
 }

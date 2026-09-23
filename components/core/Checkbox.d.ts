@@ -9,7 +9,9 @@ import type { ReactNode, InputHTMLAttributes } from "react";
 export interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "checked" | "type"> {
   checked: boolean;
-  onChange?: (next: boolean) => void;
+  /** Required, like Switch's: `checked` is controlled, so without this the
+   *  box can't be ticked. */
+  onChange: (next: boolean) => void;
   label?: ReactNode;
   /** A line under the label: what ticking it means. */
   sub?: ReactNode;

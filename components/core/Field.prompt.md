@@ -15,7 +15,7 @@ Field — one labelled control as a row in a Group.
 **Forms are grouped lists.** Related fields go in one `Group`, with a header
 naming the group, the same as settings. The Group is the box, so each control
 inside a Field is drawn bare: no border or fill, the value right-aligned where
-a Row's value would be. The label sits on the left in `text-row-label`.
+a Row's value would be. The label sits on the left in `type-row-label`.
 
 Field does the wiring you'd otherwise forget. It gives the control an id, ties
 the label to it, and points `aria-describedby` at the help or error line.

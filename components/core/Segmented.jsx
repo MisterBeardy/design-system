@@ -1,16 +1,19 @@
+import { cx } from "./cx.js";
+
 const SIZES = {
-  sm: { padding: "4px 8px",   font: "var(--text-segment-sm)" },
-  md: { padding: "6px 12px",  font: "var(--text-segment)" },
+  sm: { padding: "4px 8px",   font: "var(--type-segment-sm)" },
+  md: { padding: "6px 12px",  font: "var(--type-segment)" },
 };
 
 const truncate = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 
-export function Segmented({ options, value, onChange, label, size = "md", style, ...props }) {
+export function Segmented({ options, value, onChange, label, size = "md", className, style, ...props }) {
   return (
     <div
       role="radiogroup"
       aria-label={label}
       {...props}
+      className={cx("ds-segmented", className)}
       style={{
         display: "flex",
         gap: 2,
@@ -47,7 +50,7 @@ export function Segmented({ options, value, onChange, label, size = "md", style,
           >
             <span style={truncate}>{opt.label}</span>
             {opt.sub && (
-              <span style={{ ...truncate, font: "var(--text-segment-sub)", color: "var(--text-muted)" }}>{opt.sub}</span>
+              <span style={{ ...truncate, font: "var(--type-segment-sub)", color: "var(--text-muted)" }}>{opt.sub}</span>
             )}
           </button>
         );

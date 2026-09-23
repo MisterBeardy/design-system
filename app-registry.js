@@ -77,6 +77,15 @@ export function crowdedPairs() {
 const LIGHT_L = 0.54;
 const DARK_L = 0.74;
 
+// High contrast (prefers-contrast: more): the accent moves just far enough
+// that, for every app, the primary button's label reaches 7:1 on the fill and
+// accent text reaches 7:1 on the page, the surface and the soft fill. Solved
+// across all the apps below with a little margin; npm run check holds them to
+// it. Dark accent text (0.85) already clears 7:1, so it doesn't move.
+const CONTRAST_LIGHT_L = 0.42;
+const CONTRAST_LIGHT_TEXT_L = 0.39;
+const CONTRAST_DARK_L = 0.76;
+
 // The label and glyph colour on a solid accent. The dark theme lightens every
 // accent, so white can't reach 4.5:1 on any of them there; a dark label can.
 const ON_ACCENT = { light: "#ffffff", dark: "#211f1c" };
@@ -117,6 +126,20 @@ export function accentTokensFor(app, chroma) {
       "--accent-text": `oklch(0.85 0.1 ${hue})`,
       "--on-accent": ON_ACCENT.dark,
     },
+    // Only what high contrast changes; everything else stays as above.
+    contrast: {
+      light: {
+        "--accent": `oklch(${CONTRAST_LIGHT_L} ${round4(c)} ${hue})`,
+        "--accent-text": `oklch(${CONTRAST_LIGHT_TEXT_L} ${round4(c)} ${hue})`,
+      },
+      // --accent-text doesn't change in dark, but it's restated: the light
+      // block above is just as specific and comes first, so without this its
+      // light value would win in dark mode.
+      dark: {
+        "--accent": `oklch(${CONTRAST_DARK_L} ${round4(Math.max(c * 0.85, 0.09))} ${hue})`,
+        "--accent-text": `oklch(0.85 0.1 ${hue})`,
+      },
+    },
   };
 }
 
@@ -130,10 +153,17 @@ export function dataOrderFor(app) {
   return [...slots.filter((n) => n !== row.dataLast), row.dataLast];
 }
 
-/** The same tokens as the stylesheet block an app pastes into its root CSS. */
+/** The same tokens as the stylesheet block an app pastes into its root CSS,
+ *  high contrast included: an app's own accent block comes after the
+ *  package's, so without its own high-contrast part it would override the
+ *  package's and the accent would stay at normal contrast. */
 export function accentCssFor(app, chroma) {
-  const { light, dark } = accentTokensFor(app, chroma);
-  const block = (selector, vars) =>
-    `${selector} {\n${Object.entries(vars).map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}`;
-  return `${block(":root", light)}\n${block('[data-theme="dark"]', dark)}\n`;
+  const { light, dark, contrast } = accentTokensFor(app, chroma);
+  const block = (selector, vars, pad = "") =>
+    `${pad}${selector} {\n${Object.entries(vars).map(([k, v]) => `${pad}  ${k}: ${v};`).join("\n")}\n${pad}}`;
+  return [
+    block(":root", light),
+    block('[data-theme="dark"]', dark),
+    `@media (prefers-contrast: more) {\n${block(":root", contrast.light, "  ")}\n${block('[data-theme="dark"]', contrast.dark, "  ")}\n}`,
+  ].join("\n") + "\n";
 }

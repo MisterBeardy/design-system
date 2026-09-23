@@ -47,6 +47,19 @@
   --text-tile-value:   700 24px/1.3 var(--font-display);
   --text-tile-sub:     400 11px/1.3 var(--font-mono);
 
+  /* --- Chrome roles -----------------------------------------------------
+     PageHeader and TabBar — the frame around the content. The header's title
+     is --text-subhead: a screen title genuinely is a subhead, and a
+     --text-page-title with the same numbers would be a second name for one
+     size, drifting apart the first time someone tuned one of them.
+
+     The tab label is the smallest type in the system and the only display
+     face that small: it's a word under a glyph, read once and then
+     recognised by shape. Mono would make four of them a row of ticket
+     stubs. */
+  --text-page-sub: 400 11px/1.35 var(--font-display);
+  --text-tab:      500 10px/1.2  var(--font-display);
+
   /* --- Message roles ---------------------------------------------------
      Banner, Toast and ErrorState: a short bold line, then one plain
      sentence. Sized between a row and body copy, because a message

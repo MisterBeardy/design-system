@@ -22,6 +22,9 @@ import type { ToastProps, ToastAction } from "./Toast";
 import type { SkeletonProps } from "./Skeleton";
 import type { EmptyStateProps } from "./EmptyState";
 import type { ErrorStateProps } from "./ErrorState";
+import type { PageHeaderProps } from "./PageHeader";
+import type { ToolbarProps } from "./Toolbar";
+import type { TabBarProps, TabBarItem } from "./TabBar";
 
 export type {
   ButtonProps,
@@ -54,6 +57,10 @@ export type {
   SkeletonProps,
   EmptyStateProps,
   ErrorStateProps,
+  PageHeaderProps,
+  ToolbarProps,
+  TabBarProps,
+  TabBarItem,
 };
 
 export declare const Button: FC<ButtonProps>;
@@ -89,3 +96,8 @@ export declare const Toast: FC<ToastProps>;
 export declare const Skeleton: FC<SkeletonProps>;
 export declare const EmptyState: FC<EmptyStateProps>;
 export declare const ErrorState: FC<ErrorStateProps>;
+
+// App chrome.
+export declare const PageHeader: FC<PageHeaderProps>;
+export declare const Toolbar: FC<ToolbarProps>;
+export declare const TabBar: FC<TabBarProps>;

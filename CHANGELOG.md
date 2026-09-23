@@ -11,6 +11,13 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- Work now lands on `dev`, and `main` moves only when a version is released:
+  a release is `dev` merged into `main`, tagged there. `CONTRIBUTING.md`
+  has the routine, and CI runs on pushes to `dev` as well as `main`. Nothing
+  changes for apps: every tag is still on `main`.
+
 ### Fixed
 
 - `guidelines/elevation.md` still called the `Sheet` the one translucent

@@ -11,6 +11,16 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- **`ADOPTING.md` now says to set the page's own text in the system's faces**,
+  not just the components': `body` in `--font-display`, numbers and data in
+  `--font-mono`, no other faces loaded, and for Tailwind 4, `--font-sans`
+  mapped and `--font-mono` left out of `@theme`. Its `CLAUDE.md` template and
+  the Claude Design conventions header say the same. Found auditing the apps'
+  fonts: idrovewhere.today still sets its own text in Geist and Geist Mono.
+  No package change.
+
 ### Fixed
 
 - **`UPGRADING-1.0.md` corrected after a second test upgrade**, on

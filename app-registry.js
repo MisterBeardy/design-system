@@ -23,13 +23,30 @@
 export const APPS = [
   { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, dataLast: 5, note: 'Real brand color #d97706' },
   { key: 'idleairport',    name: 'IdleAirport',          hue: 75,  chroma: 0.14, dataLast: 5, note: 'Real brand color #ffd24a' },
-  { key: 'drinkwin',       name: "Drink&Win",            hue: 95,  chroma: 0.15, dataLast: 1 },
+  { key: 'wescup',         name: 'Wes Cup',              hue: 95,  chroma: 0.15, dataLast: 1 },
   { key: 'parametricchaos',name: 'ParametricChaos',      hue: 155, chroma: 0.13, dataLast: 3 },
   { key: 'fivebucks',      name: "That'll Be 5 Bucks",   hue: 185, chroma: 0.13, dataLast: 3 },
   { key: 'washmycar',      name: 'WashMyCar',            hue: 230, chroma: 0.13, dataLast: 3 },
   { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15, dataLast: 4 },
-  { key: 'whatwillithink', name: 'WhatWillIThink',       hue: 300, chroma: 0.16, dataLast: 6 },
+  { key: 'modeler',        name: 'Modeler',              hue: 300, chroma: 0.16, dataLast: 6 },
+  { key: 'scoreacardgame', name: 'ScoreACardGame',       hue: 20,  chroma: 0.16, dataLast: 5 },
 ];
+
+// Keys that were renamed, and the key each one now points at. The old key keeps
+// working everywhere a key is accepted, so an app can move to the new one when
+// it next upgrades. Removed at the next major release.
+export const ALIASES = {
+  drinkwin: 'wescup',
+  whatwillithink: 'modeler',
+};
+
+/** The registry row for an app key, following a renamed key to its new one.
+ *  Throws for a key that isn't in the registry. */
+export function appFor(key) {
+  const row = APPS.find((a) => a.key === (ALIASES[key] ?? key));
+  if (!row) throw new Error(`No app "${key}" in the registry. Keys: ${APPS.map((a) => a.key).join(", ")}`);
+  return row;
+}
 
 // The data palette has six slots (--data-1 … --data-6, tokens/colors.css).
 export const DATA_SLOTS = 6;
@@ -96,9 +113,7 @@ const round4 = (n) => Math.round(n * 1e4) / 1e4;
 
 function resolveApp(app, chroma) {
   if (typeof app !== "string") return { hue: app, chroma };
-  const row = APPS.find((a) => a.key === app);
-  if (!row) throw new Error(`No app "${app}" in the registry. Keys: ${APPS.map((a) => a.key).join(", ")}`);
-  return row;
+  return appFor(app);
 }
 
 /** The solid accent colour for a hue and chroma, light or dark. */
@@ -147,8 +162,7 @@ export function accentTokensFor(app, chroma) {
  *  closest to its accent moved to the end. `dataOrderFor("oneofus")` gives
  *  [1, 2, 3, 4, 6, 5]: the first series gets --data-1, and so on. */
 export function dataOrderFor(app) {
-  const row = APPS.find((a) => a.key === app);
-  if (!row) throw new Error(`No app "${app}" in the registry. Keys: ${APPS.map((a) => a.key).join(", ")}`);
+  const row = appFor(app);
   const slots = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1);
   return [...slots.filter((n) => n !== row.dataLast), row.dataLast];
 }

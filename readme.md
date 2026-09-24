@@ -286,7 +286,8 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   (`scripts/build-icons.mjs` generates its data and checks the house style)
 - `app-registry.js` — accent hue registry + gap-finding helpers
 - `CHANGELOG.md` — what changed in each release, with **Upgrading** notes for
-  apps moving between tags; `UPGRADING-1.0.md` — every step from any 0.x
+  apps moving between tags; `PRESSKIT.md` — how an app shows itself on
+  lookwhatibuilt.today, and when to refresh it; `UPGRADING-1.0.md` — every step from any 0.x
   version to 1.0 in one place; `CONTRIBUTING.md` — the per-change and release
   routine
 - Not in this repository: the interactive tools (**App Theme Kit**, **Accent

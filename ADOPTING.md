@@ -224,7 +224,14 @@ Uses @misterbeardy/design-system (github.com/MisterBeardy/design-system).
 - Never copy tokens; never hardcode a color that exists as a token.
 ```
 
-## 8. The universal kickoff prompt
+## 8. Show it off: the presskit
+
+Once the app is on the system, and again whenever it ships a feature worth
+showing, refresh its presskit so lookwhatibuilt.today shows it as it is now.
+`PRESSKIT.md` has the prompt to paste into the app's session and the format
+it produces.
+
+## 9. The universal kickoff prompt
 
 Paste this into a session in any app, any stack:
 

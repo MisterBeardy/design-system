@@ -319,6 +319,13 @@ surprise, and so you can drop workarounds you no longer need.
 If something changed that this guide doesn't mention, that's a gap in the
 guide: open an issue on the design system repo.
 
+## 10. Refresh the presskit
+
+The app looks different now, so its screenshots on lookwhatibuilt.today are
+out of date. Once the upgrade is merged, run the prompt in `PRESSKIT.md` with
+the reason "design-system upgrade": it re-takes the screenshots and sets the
+accent from the registry, and leaves the copy alone.
+
 ## How this guide was checked
 
 It was followed step by step on a copy of idrovewhere.today, upgrading from

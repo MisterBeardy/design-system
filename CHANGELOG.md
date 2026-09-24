@@ -11,6 +11,15 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- **`UPGRADING-1.0.md` starts with "Before you start: check the app"**, the
+  problems a build won't show: `dev` behind `main`, your own variables with
+  the system's names, `data-theme` used for something else, backgrounds fixed
+  to one theme, white text on the accent, fonts loaded twice, emoji as icons,
+  and what the screenshots will need. `ADOPTING.md` points to it. Found by
+  checking all twelve apps before their upgrades.
+
 ## [1.1.0] — 2026-09-24
 
 Registry names that match lookwhatibuilt.today's naming convention (RFC-011),

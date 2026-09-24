@@ -17,6 +17,11 @@ file only covers the how.
 - **Moving to a newer tag?** Read the **Upgrading** notes in `CHANGELOG.md`
   for every release between the app's tag and the new one first. They list
   what the app will see change and anything it has to do.
+- **The app already has its own styling?** Go through "Before you start"
+  in `UPGRADING-1.0.md` first: variables with the system's names,
+  `data-theme` used for something else, backgrounds fixed to one theme.
+  They apply to adopting as much as to upgrading, and a build won't show
+  them.
 
 ## 1. Register the app's accent
 

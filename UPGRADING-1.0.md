@@ -9,6 +9,45 @@ Most of it is looking, not editing. For an app that only uses the tokens and
 a few components, the edits come down to three things: a couple of CSS imports, the
 accent block, and a search-and-replace on the type tokens.
 
+## Before you start: check the app
+
+Upgrading whatwillimodel.today turned up problems nobody had written down,
+and checking the other apps found the same few again and again. None of
+them shows up in a build. Look for each one first, and put what you find in
+the app's upgrade issue: either as a step, or as a follow-up to file once
+the upgrade is merged.
+
+- **Branches.** `git rev-list --count origin/dev..origin/main` should be 0.
+  If `main` has commits `dev` doesn't (usually a release merge that was
+  never brought back), merge `main` into `dev` before branching.
+- **Your own variables with the system's names.** Search your CSS for
+  `--bg`, `--surface`, `--border`, `--accent`, `--text-muted`,
+  `--font-mono`, `--radius-*` and `--space-*`. A declaration loaded after
+  the package's wins for every component, and in high contrast too. Rename
+  yours or delete it; don't leave both.
+- **`data-theme` already in use.** The system goes dark only on
+  `data-theme="dark"` on `<html>`. If the app writes other values there
+  (`auto`, a game's own themes), move those to their own attribute and
+  write `light` or `dark`. If dark is your base (`:root`) and light the
+  variation, turn it round, and default to the system setting.
+- **Backgrounds that don't follow the theme.** Canvases, 3D scenes
+  (`setClearColor`, `scene.background`), map overlays and chart colours
+  are usually hard-coded for one theme. Decide each one: follow the
+  tokens, or stay fixed on purpose and say so.
+- **White or black text on the accent.** `text-white`, `#fff` or
+  `text-black` on an accent fill fails in one of the themes. Use
+  `var(--on-accent)`.
+- **Fonts loaded twice, or blocked.** `styles.css` downloads the fonts from
+  Google. If the app already loads them (`next/font`) or its CSP says
+  `font-src 'self'`, import the token files without `fonts.css` instead.
+  Keep `--font-mono` out of Tailwind 4's `@theme` (ADOPTING.md step 5).
+- **Emoji used as icons.** In buttons, tabs, headings and status text. The
+  ones with an `Icon` (`check`, `close`, `alert`, `pin`, `trophy`…) can
+  change in the upgrade; the rest are a follow-up.
+- **What the screenshots need.** A login, seed data, a location, a camera,
+  a second device. Find out first, so the pull request can say what was
+  staged and what couldn't be.
+
 ## 1. Find where you're starting
 
 Your version is the tag your `package.json` pins:

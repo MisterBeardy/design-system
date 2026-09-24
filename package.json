@@ -1,6 +1,6 @@
 {
   "name": "@misterbeardy/design-system",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared design system for the MisterBeardy app portfolio — tokens, core components, accent registry.",
   "type": "module",
   "types": "./components/core/index.d.ts",

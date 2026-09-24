@@ -3,7 +3,7 @@
 Target Claude Design project: **lookwhatibuilt.today** (`38437aad-2039-4a1a-ad1d-73b3aeb3cec2`).
 Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good. Last synced: v1.0.0 (2026-09-23).
 
-**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (the last release: v1.0.1). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
+**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (the last release: v1.1.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 

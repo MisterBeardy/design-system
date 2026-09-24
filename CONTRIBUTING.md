@@ -1,8 +1,8 @@
 # Contributing
 
 Work happens on `dev`; `main` only moves at a release (a major like 1.0.0, or
-a patch like 1.0.1 to the current one), so `main` is always exactly the last
-one. In between, `dev` can be tagged with
+a minor or patch like 1.1.0 or 1.0.1 to the current one), so `main` is always
+exactly the last one. In between, `dev` can be tagged with
 pre-releases (`v1.0.0-beta.1`) for an app that needs something early.
 Releases up to v0.8.0 were made straight from `main`, before this.
 
@@ -53,10 +53,12 @@ by pinning that tag; `main` and the two mirrors don't move.
    gh release create vX.0.0-beta.N --target dev --prerelease --title "vX.0.0-beta.N" --notes-file /tmp/notes.md
    ```
 
-### A patch release, `dev` to `main`
+### A minor or patch release, `dev` to `main`
 
-For fixes to the current major that apps should get now, without waiting for
-the next one: corrected docs, a bug fix that changes no API. Follow the major
+For changes to the current major that apps should get now, without waiting for
+the next one. A patch (1.0.1) is corrected docs or a bug fix that changes no
+API; a minor (1.1.0) adds something an app can use, like a new registry key,
+and breaks nothing. Follow the major
 release routine below with `X.Y.Z` in place of `X.0.0`: a version pull request
 into `dev` (`package.json`, and `## [Unreleased]` renamed to
 `## [X.Y.Z] — YYYY-MM-DD` with a fresh empty one above it), `dev` to `main`

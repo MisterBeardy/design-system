@@ -11,8 +11,16 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-09-24
+
+Registry names that match lookwhatibuilt.today's naming convention (RFC-011),
+and a registry row for the card game. Nothing renders differently: the renamed
+keys give the same colours as before.
+
 ### Upgrading
 
+- **Pin `#v1.1.0`**, and use each app's new key: `wescup` (was `drinkwin`),
+  `modeler` (was `whatwillithink`) and `scoreacardgame` (new).
 - **Two app keys are renamed; the old ones still work.** `drinkwin` is now
   `wescup` and `whatwillithink` is now `modeler`, to match each project's slug
   under lookwhatibuilt.today's naming convention (RFC-011). The old keys give
@@ -498,7 +506,9 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0
+[1.0.1]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...v1.0.0
 [0.8.0]: https://github.com/MisterBeardy/design-system/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/MisterBeardy/design-system/compare/v0.6.0...v0.7.0

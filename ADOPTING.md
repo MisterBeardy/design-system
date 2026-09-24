@@ -153,6 +153,16 @@ components inherit them:
   reads, so the design system's JetBrains Mono already reaches Tailwind's
   `font-mono`, and a value in `@theme inline` would replace it in every
   `font-mono` utility.
+  The radii clash the same way. Tailwind 4's `rounded-sm`, `-md`, `-lg`
+  and `-xl` read `--radius-sm/md/lg/xl`, which the design system sets to
+  6, 10, 14 and 20px (Tailwind's own are 4, 6, 8 and 12). So importing the
+  tokens makes every `rounded-*` rounder: a `rounded-xl` card goes from
+  12px to 20px. That's right for screens moving to the design system's
+  shapes, but not in a pull request that shouldn't change how anything
+  looks. There, keep Tailwind's scale for now in an `@theme inline
+  reference` block (`--radius-sm: 0.25rem;` …) and drop it when the
+  screens move over. `--ease-out` and `--ease-in-out` are shared names
+  too, with the same curves as Tailwind's, so they change nothing.
 - **shadcn/ui**: map its CSS vars (`--background`, `--foreground`,
   `--primary`, `--border`, …) to the tokens in `globals.css`.
 - **MUI / styled-components**: feed the CSS vars into the theme object.

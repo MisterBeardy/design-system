@@ -41,6 +41,10 @@ the upgrade is merged.
   Google. If the app already loads them (`next/font`) or its CSP says
   `font-src 'self'`, import the token files without `fonts.css` instead.
   Keep `--font-mono` out of Tailwind 4's `@theme` (ADOPTING.md step 5).
+- **Tailwind 4's `rounded-*`.** They read `--radius-sm/md/lg/xl`, which
+  the design system sets rounder than Tailwind's own, so every card gets
+  rounder the moment the tokens load. ADOPTING.md step 5 says how to keep
+  Tailwind's scale until the screens move over.
 - **Emoji used as icons.** In buttons, tabs, headings and status text. The
   ones with an `Icon` (`check`, `close`, `alert`, `pin`, `trophy`…) can
   change in the upgrade; the rest are a follow-up.

@@ -33,6 +33,10 @@ under its version (see `CONTRIBUTING.md`).
   says a stylesheet the app never loads can be ignored. Step 6 now splits
   into two searches: copied type tokens to delete, then uses to rename.
   No package change.
+- **`UPGRADING-1.0.md`, step 4:** in a Tailwind 4 app `--font-mono` is also
+  Tailwind's own `font-mono` variable, so pointing it at JetBrains Mono
+  changes every `font-mono` in the app. Found upgrading idrovewhere.today.
+  No package change.
 
 ## [1.0.0] — 2026-09-23
 

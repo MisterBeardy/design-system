@@ -11,6 +11,24 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Upgrading
+
+- **Two app keys are renamed; the old ones still work.** `drinkwin` is now
+  `wescup` and `whatwillithink` is now `modeler`, to match each project's slug
+  under lookwhatibuilt.today's naming convention (RFC-011). The old keys give
+  the same colours in `accentTokensFor`, `accentCssFor` and `dataOrderFor`, so
+  nothing breaks. Move to the new key when you next upgrade; the old ones are
+  removed at the next major release.
+
+### Added
+
+- **`scoreacardgame` in the app registry**: hue 20, chroma 0.16. It sits in the
+  widest open gap, between Modeler and OneOfUs, and passes every colour check
+  in both themes.
+- **`ALIASES` and `appFor(key)` in `app-registry.js`.** `ALIASES` maps each
+  renamed key to its new one; `appFor` returns an app's registry row and
+  follows a renamed key.
+
 ## [1.0.1] — 2026-09-23
 
 A documentation release. The 1.0 upgrade guide is corrected by following it

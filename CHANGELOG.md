@@ -11,6 +11,20 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- **`UPGRADING-1.0.md` starts with "Before you start: check the app"**, the
+  problems a build won't show: `dev` behind `main`, your own variables with
+  the system's names, `data-theme` used for something else, backgrounds fixed
+  to one theme, white text on the accent, fonts loaded twice, emoji as icons,
+  and what the screenshots will need. `ADOPTING.md` points to it. Found by
+  checking all twelve apps before their upgrades.
+- **`ADOPTING.md` step 5 warns that Tailwind 4's `rounded-*` read the
+  system's radii.** `--radius-sm/md/lg/xl` are 6, 10, 14 and 20px here and 4,
+  6, 8 and 12px in Tailwind, so importing the tokens makes every `rounded-*`
+  rounder. The step says how to keep Tailwind's scale until the screens move
+  over. Found by whatwillimodel.today's Tailwind 4 upgrade.
+
 ## [1.1.0] — 2026-09-24
 
 Registry names that match lookwhatibuilt.today's naming convention (RFC-011),

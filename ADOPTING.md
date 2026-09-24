@@ -39,6 +39,14 @@ Every app owns exactly one hue. Check `app-registry.js` in this package:
   needed.
 - Import `"@misterbeardy/design-system/styles.css"` once at the app root,
   before app-local styles.
+- **Set your own text in the system's two faces**, not just the components'.
+  Components set their own type; everything else on the page inherits from
+  your `body` and your framework. So `body { font-family: var(--font-display); }`,
+  and numbers and data in `var(--font-mono)` with
+  `font-variant-numeric: tabular-nums`. If the app loaded faces of its own
+  (Geist, Inter, …), stop loading them. An app that keeps them ends up with
+  design-system Buttons in Space Grotesk among text in another face. Tailwind
+  and shadcn/ui: see step 5.
 - Use the primitives:
   ```js
   import {
@@ -133,7 +141,13 @@ rip it out. Point the framework's theme layer at the tokens so existing
 components inherit them:
 
 - **Tailwind v4**: `@theme { --color-bg: var(--bg); --color-surface:
-  var(--surface); … }`
+  var(--surface); … }`.
+  For type, add `--font-sans: var(--font-display);` to an `@theme inline`
+  block, so `font-sans` and Tailwind's default body font are Space Grotesk.
+  Leave `--font-mono` out of `@theme`: it's the same name the type scale
+  reads, so the design system's JetBrains Mono already reaches Tailwind's
+  `font-mono`, and a value in `@theme inline` would replace it in every
+  `font-mono` utility.
 - **shadcn/ui**: map its CSS vars (`--background`, `--foreground`,
   `--primary`, `--border`, …) to the tokens in `globals.css`.
 - **MUI / styled-components**: feed the CSS vars into the theme object.
@@ -183,6 +197,9 @@ Uses @misterbeardy/design-system (github.com/MisterBeardy/design-system).
 - Accent: hue <H>, chroma <C> (key "<app-key>" in app-registry.js)
 - Dark mode bridge: <how data-theme="dark" gets set>
 - Framework bridge: <none | tailwind @theme | shadcn var map | …>
+- Type: page text in var(--font-display) (Space Grotesk), numbers and data in
+  var(--font-mono) (JetBrains Mono, tabular). No other faces loaded. Tailwind:
+  --font-sans → var(--font-display); --font-mono stays out of @theme.
 - Styles imported: <styles.css | every token file but fonts.css, plus core.css, because …>
 - Settings/list/stats UI uses Group/Row/GlyphTile/Segmented/Switch/StatStrip.
   Colour goes on the glyph tile, never on the card surface. Data colour

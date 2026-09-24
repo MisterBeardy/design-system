@@ -22,6 +22,11 @@ classes, no provider, no build step required.**
    contrast (`prefers-contrast: more`) the tokens move to a 7:1 theme by
    themselves, light and dark. Style with the tokens and it works; a
    hard-coded colour won't follow, and never add a contrast theme of your own.
+5. **Set your own text in the system's faces.** Components set their own
+   type; your layout glue doesn't inherit it. Put
+   `font-family: var(--font-display)` on the page root, and set every number or
+   data value you lay out yourself in `var(--font-mono)` with
+   `font-variant-numeric: tabular-nums`. Never load another face.
 
 ## The styling idiom: tokens, not classes
 

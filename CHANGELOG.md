@@ -11,6 +11,43 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- **`ADOPTING.md` now says to set the page's own text in the system's faces**,
+  not just the components': `body` in `--font-display`, numbers and data in
+  `--font-mono`, no other faces loaded, and for Tailwind 4, `--font-sans`
+  mapped and `--font-mono` left out of `@theme`. Its `CLAUDE.md` template and
+  the Claude Design conventions header say the same. Found auditing the apps'
+  fonts: idrovewhere.today still sets its own text in Geist and Geist Mono.
+  No package change.
+
+### Fixed
+
+- **`UPGRADING-1.0.md` corrected after a second test upgrade**, on
+  that-will-be-five-bucks from v0.3.0:
+  - Step 2 now installs the tag by name. Editing it in `package.json` and
+    running `npm install` leaves a GitHub dependency on its old version.
+  - Step 5 now says to delete every other accent declaration: one on a
+    more specific selector silently outranks the pasted block. It also
+    says high contrast reaches only the accent in an app that sets its
+    own neutrals.
+  - Step 6's search now lists only the 26 type tokens. It used to list an
+    app's own `--text-*` colours too, such as `--text-faint`. The 1.0.0
+    notes below have the same slip: rename only the names they list, not
+    "every `var(--text-…)`".
+  - Step 8: shorter controls aren't only a Tailwind effect.
+
+  `ADOPTING.md` gets the same accent warning. No package change.
+- **`UPGRADING-1.0.md` refined after a third test upgrade**, on oneofus.beer
+  from v0.1.2. Step 5's accent search now looks only at stylesheets, and
+  says a stylesheet the app never loads can be ignored. Step 6 now splits
+  into two searches: copied type tokens to delete, then uses to rename.
+  No package change.
+- **`UPGRADING-1.0.md`, step 4:** in a Tailwind 4 app `--font-mono` is also
+  Tailwind's own `font-mono` variable, so pointing it at JetBrains Mono
+  changes every `font-mono` in the app. Found upgrading idrovewhere.today.
+  No package change.
+
 ## [1.0.0] — 2026-09-23
 
 The first stable release. From here the public API (every component's props,

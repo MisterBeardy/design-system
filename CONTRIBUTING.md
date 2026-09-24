@@ -1,7 +1,8 @@
 # Contributing
 
-Work happens on `dev`; `main` only moves at a major release (1.0.0, 2.0.0),
-so `main` is always exactly the last one. In between, `dev` can be tagged with
+Work happens on `dev`; `main` only moves at a release (a major like 1.0.0, or
+a patch like 1.0.1 to the current one), so `main` is always exactly the last
+one. In between, `dev` can be tagged with
 pre-releases (`v1.0.0-beta.1`) for an app that needs something early.
 Releases up to v0.8.0 were made straight from `main`, before this.
 
@@ -51,6 +52,18 @@ by pinning that tag; `main` and the two mirrors don't move.
    awk -v v="X.0.0-beta.N" '/^## \[/{p=index($0,"["v"]")} /^\[[^]]+\]: /{p=0} p' CHANGELOG.md | tail -n +2 > /tmp/notes.md
    gh release create vX.0.0-beta.N --target dev --prerelease --title "vX.0.0-beta.N" --notes-file /tmp/notes.md
    ```
+
+### A patch release, `dev` to `main`
+
+For fixes to the current major that apps should get now, without waiting for
+the next one: corrected docs, a bug fix that changes no API. Follow the major
+release routine below with `X.Y.Z` in place of `X.0.0`: a version pull request
+into `dev` (`package.json`, and `## [Unreleased]` renamed to
+`## [X.Y.Z] — YYYY-MM-DD` with a fresh empty one above it), `dev` to `main`
+with a merge commit, the tag with the changelog section as its notes, `dev`
+fast-forwarded, and the mirrors re-synced. Tag only after the version pull
+request is on `main`: the tag must point at a commit whose `package.json`
+says the same version.
 
 ### A major release, `dev` to `main`
 

@@ -11,6 +11,20 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-09-23
+
+A documentation release. The 1.0 upgrade guide is corrected by following it
+on three apps (that-will-be-five-bucks from v0.3.0, oneofus.beer and
+idrovewhere.today from v0.1.2), and `ADOPTING.md` now says an app sets its own
+text in the system's faces. No component, token or class changed, so nothing
+renders differently.
+
+### Upgrading
+
+- **Pin `#v1.0.1` rather than `#v1.0.0`**, so the `UPGRADING-1.0.md` and
+  `ADOPTING.md` in your `node_modules` are the corrected ones. The package
+  code is identical.
+
 ### Changed
 
 - **`ADOPTING.md` now says to set the page's own text in the system's faces**,

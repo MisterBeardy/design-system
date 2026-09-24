@@ -27,7 +27,7 @@ Install the new tag by name. This one command both installs 1.0 and rewrites
 the pin in `package.json`:
 
 ```sh
-npm install github:MisterBeardy/design-system#v1.0.0
+npm install github:MisterBeardy/design-system#v1.0.1
 ```
 
 (`pnpm add` or `yarn add` with the same argument, if you use those.)
@@ -35,7 +35,8 @@ npm install github:MisterBeardy/design-system#v1.0.0
 Don't only edit the tag in `package.json` and run `npm install`. For a
 GitHub dependency, npm keeps the commit recorded in `package-lock.json`,
 reports "up to date", and leaves you on the old version. Check what you
-have with `npm ls @misterbeardy/design-system`: it should say `1.0.0`.
+have with `npm ls @misterbeardy/design-system`: it should say `1.0.1`, or a
+later 1.x.
 
 To try 1.0 before it's released, install a beta instead (`#v1.0.0-beta.1`);
 the steps are the same.

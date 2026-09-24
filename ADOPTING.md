@@ -141,7 +141,7 @@ rip it out. Point the framework's theme layer at the tokens so existing
 components inherit them:
 
 - **Tailwind v4**: `@theme { --color-bg: var(--bg); --color-surface:
-  var(--surface); … }`
+  var(--surface); … }`.
   For type, add `--font-sans: var(--font-display);` to an `@theme inline`
   block, so `font-sans` and Tailwind's default body font are Space Grotesk.
   Leave `--font-mono` out of `@theme`: it's the same name the type scale

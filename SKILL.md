@@ -24,6 +24,9 @@ an open accent hue slot, add a row, and build real screens from that app's actua
 source where possible — don't invent placeholder content when the real repo is
 available.
 
+To show an app off on lookwhatibuilt.today (a new app, a design-system
+upgrade, or a new feature), follow `PRESSKIT.md`.
+
 If the user invokes this skill without other guidance, ask them what they want to
 build or design, ask some questions, and act as an expert designer who outputs
 HTML artifacts _or_ production code, depending on the need.

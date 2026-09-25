@@ -11,6 +11,15 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- **`PRESSKIT.md`: presskits are part of the design system.** The format an
+  app's `presskit/` folder follows for lookwhatibuilt.today, moved here from
+  that repo, and when to refresh it: a new app, after a design-system
+  upgrade, and after a feature worth showing off. One short prompt covers
+  all three. `ADOPTING.md` (step 8) and `UPGRADING-1.0.md` (step 10) end with
+  it, and it ships in the package, so every app has it in `node_modules`.
+
 ### Changed
 
 - **`UPGRADING-1.0.md` starts with "Before you start: check the app"**, the

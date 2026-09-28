@@ -13,6 +13,11 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Added
 
+- **`sessionlog` in the app registry**: hue 340, chroma 0.15, for the
+  session log portal (MisterBeardy/gh-dashboard, issue 155). A magenta-pink in
+  the widest open gap, between Modeler and ScoreACardGame, and it passes every
+  colour check in both themes. `dataLast` is 2, the slot nearest it.
+
 - **`PRESSKIT.md`: presskits are part of the design system.** The format an
   app's `presskit/` folder follows for lookwhatibuilt.today, moved here from
   that repo, and when to refresh it: a new app, after a design-system

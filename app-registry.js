@@ -30,6 +30,7 @@ export const APPS = [
   { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15, dataLast: 4 },
   { key: 'modeler',        name: 'Modeler',              hue: 300, chroma: 0.16, dataLast: 6 },
   { key: 'scoreacardgame', name: 'ScoreACardGame',       hue: 20,  chroma: 0.16, dataLast: 5 },
+  { key: 'sessionlog',     name: 'Session Log',          hue: 340, chroma: 0.15, dataLast: 2 },
 ];
 
 // Keys that were renamed, and the key each one now points at. The old key keeps

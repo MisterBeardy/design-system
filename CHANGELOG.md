@@ -13,6 +13,12 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Added
 
+- **`infraconsole` in the app registry**: hue 125, chroma 0.13, for the
+  homelab's infra-console (MisterBeardy/home-infrastructure, issue 148). An
+  olive in the widest open gap, between Wes Cup and ParametricChaos, and it
+  passes every colour check in both themes. `dataLast` is 1, the slot nearest
+  it.
+
 - **`sessionlog` in the app registry**: hue 340, chroma 0.15, for the
   session log portal (MisterBeardy/gh-dashboard, issue 155). A magenta-pink in
   the widest open gap, between Modeler and ScoreACardGame, and it passes every

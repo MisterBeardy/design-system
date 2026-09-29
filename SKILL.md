@@ -15,7 +15,30 @@ glyph tile and never on the card surface; data colour never collapses into the
 accent; translucency is only for panels floating over live content.
 
 If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets
-out and create static HTML files for the user to view. If working on production
+out and create static HTML files for the user to view.
+
+**Every mockup gets the mockup picker.** Any mock or throwaway prototype with
+open design choices presents each choice as an A / B (or A / B / C) row in
+`components/mockup/mockup-picker.js`, on **one live page**, starting on the
+option you recommend (`recommended: true`). Never hand over options as separate
+static pages, or as screenshots alone. Each button sets an attribute on
+`<html>`, and the mockup's CSS draws that option from it; the picker adds a
+Theme row, puts the state in the URL so a link reproduces it, and hides with
+`?mock=off` for clean screenshots. Paste the script into the page's `<head>`
+(or `<script src>` it) and mount it:
+
+```html
+<script>
+  MockupPicker.mount({ title: "Overview reskin", decisions: [
+    { key: "accent", label: "Accent", options: [
+      { value: "125", label: "125 olive", recommended: true },
+      { value: "45",  label: "45 orange" } ] } ] });
+</script>
+<style>:root[data-accent="45"] { --accent: oklch(0.62 0.15 45); }</style>
+```
+
+The rule and the details are in `guidelines/mockups.md`; the full config is in
+`components/mockup/MockupPicker.prompt.md`. If working on production
 code, copy the token CSS files and component source and read the rules here to
 become an expert in designing with this system.
 

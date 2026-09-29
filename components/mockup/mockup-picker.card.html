@@ -1,0 +1,70 @@
+<!-- @dsCard group="Components" viewport="700x520" subtitle="Compare a mockup's open choices, A vs B, on one live page" name="Mockup picker" -->
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup picker</title>
+<link rel="stylesheet" href="../../styles.css">
+<!-- The picker, from <head>: the chosen state is on <html> before first paint. -->
+<script src="mockup-picker.js"></script>
+<script>
+  MockupPicker.mount({
+    title: "Trips screen",
+    decisions: [
+      { key: "accent", label: "Accent", options: [
+        { value: "256", label: "256 blue", recommended: true },
+        { value: "155", label: "155 green" } ] },
+      { key: "density", label: "Density", options: [
+        { value: "comfortable", label: "Comfortable", recommended: true },
+        { value: "compact", label: "Compact" } ] },
+      { key: "heading", label: "Heading", options: [
+        { value: "display", label: "Space Grotesk" },
+        { value: "mono", label: "JetBrains Mono", recommended: true } ] },
+    ],
+  });
+</script>
+<style>
+  /* The mockup's side of the bargain: one rule per option, keyed off the
+     attribute the picker sets on <html>. Option A is the page's default. */
+  :root[data-accent="155"] { --accent: oklch(0.54 0.13 155); --accent-soft: oklch(0.95 0.03 155); --accent-text: oklch(0.42 0.13 155); --on-accent: #ffffff; }
+  :root[data-theme="dark"][data-accent="155"] { --accent: oklch(0.74 0.1105 155); --accent-soft: oklch(0.32 0.07 155); --accent-text: oklch(0.85 0.1 155); --on-accent: #211f1c; }
+    :root[data-density="compact"] .ds-row { min-height: 36px; padding-top: var(--space-1); padding-bottom: var(--space-1); }
+  :root[data-heading="mono"] h1 { font: var(--type-section); text-transform: uppercase; letter-spacing: var(--tracking-label); }
+
+  body { margin: 0; background: var(--bg); color: var(--text-ink); font: var(--type-body); }
+  header { height: var(--header-height); display: flex; align-items: center; padding: 0 var(--space-4); background: var(--surface); border-bottom: 1px solid var(--border); font: var(--type-heading); }
+  main { max-width: 560px; padding: var(--space-5) var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); }
+  h1 { margin: 0; font: var(--type-display); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-3); }
+  .stat b { display: block; font: var(--type-stat); letter-spacing: var(--tracking-stat); }
+  .stat span { font: var(--type-tile-label); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--text-muted); }
+  .stat.hero b { color: var(--accent-text); }
+  .group { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
+  .ds-row { align-items: center; gap: var(--row-gap); padding: var(--space-3) var(--row-pad-x); min-height: 44px; }
+  .r-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .r-label { font: var(--type-row-label); }
+  .r-sub { font: var(--type-row-sub); color: var(--text-muted); }
+  .r-value { font: var(--type-row-value); color: var(--text-muted); }
+  .primary { align-self: flex-start; font: var(--type-button); background: var(--accent); color: var(--on-accent); border: 0; border-radius: var(--radius-md); padding: var(--space-3) var(--space-5); }
+</style>
+</head>
+<body>
+<header>iDroveWhere</header>
+<main>
+  <h1>Trips</h1>
+  <div class="stats">
+    <div class="stat hero"><b>1,284</b><span>Miles</span></div>
+    <div class="stat"><b>23</b><span>States</span></div>
+    <div class="stat"><b>61</b><span>Trips</span></div>
+  </div>
+  <div class="group">
+    <div class="ds-row"><span class="r-main"><span class="r-label">Blue Ridge Parkway</span><span class="r-sub">Sep 21 · 3 days</span></span><span class="r-value">469 mi</span></div>
+    <div class="ds-row"><span class="r-main"><span class="r-label">Outer Banks</span><span class="r-sub">Aug 30 · 2 days</span></span><span class="r-value">312 mi</span></div>
+    <div class="ds-row"><span class="r-main"><span class="r-label">Catskills loop</span><span class="r-sub">Jul 12 · 1 day</span></span><span class="r-value">188 mi</span></div>
+  </div>
+  <button class="primary" type="button">Log a trip</button>
+</main>
+</body>
+</html>

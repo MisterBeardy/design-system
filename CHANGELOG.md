@@ -19,6 +19,19 @@ under its version (see `CONTRIBUTING.md`).
   passes every colour check in both themes. `dataLast` is 1, the slot nearest
   it.
 
+- **The mockup picker, and the rule that every mockup uses it**
+  (`components/mockup/mockup-picker.js`, `guidelines/mockups.md`). A floating
+  dark panel with one row per open design choice: each button sets an
+  attribute on `<html>` and the mockup's CSS draws that option, so A and B are
+  compared on the real layout, on one page. A Theme row (light / dark /
+  system) is built in; the recommended option is marked and is where the page
+  starts; the URL carries the state (`?accent=45&mock=min|off`); `A` / `B`
+  pick and `X` flips on the active row; it collapses to a pill and is a bottom
+  sheet at phone width. Dependency-free, tokens only, and for mockups, never
+  an app: `SKILL.md` now says every mockup with open choices presents them
+  this way instead of as separate pages or screenshots. Also exported as
+  `@misterbeardy/design-system/mockup-picker`.
+
 - **`sessionlog` in the app registry**: hue 340, chroma 0.15, for the
   session log portal (MisterBeardy/gh-dashboard, issue 155). A magenta-pink in
   the widest open gap, between Modeler and ScoreACardGame, and it passes every

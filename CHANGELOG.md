@@ -13,6 +13,21 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Added
 
+- **Notes and Save in the mockup picker**, so the person deciding can say
+  "saved" instead of reporting their choices by hand. A Notes field (grows to
+  about four lines, draft kept in `localStorage`, a dot in the collapsed pill
+  when it has text) and a Save button (or `S`). In a claude.ai artifact that
+  declares `capabilities: {db: {}, user: {}}`, Save writes
+  `mockup-saves/<timestamp>` and `mockup-saves/latest`: the title, URL, time,
+  every row's value, label, letter and whether it was recommended, the notes
+  and the viewer's id. With no db (a local file), it copies the same JSON to
+  the clipboard and downloads `mockup-choices-<slug>-<timestamp>.json`, and
+  says which. The button reads "Saved ✓ 14:32" after a save, an "unsaved
+  changes" marker shows while things differ from it, and errors show inline.
+  `mount({ save: false | { collection } })`, `MockupPicker.save()` and
+  `MockupPicker.notes()`; `guidelines/mockups.md` and `SKILL.md` say to
+  publish mockups with `db` and read the saves with ArtifactData.
+
 - **`infraconsole` in the app registry**: hue 125, chroma 0.13, for the
   homelab's infra-console (MisterBeardy/home-infrastructure, issue 148). An
   olive in the widest open gap, between Wes Cup and ParametricChaos, and it

@@ -37,6 +37,15 @@ Theme row, puts the state in the URL so a link reproduces it, and hides with
 <style>:root[data-accent="45"] { --accent: oklch(0.62 0.15 45); }</style>
 ```
 
+The picker has **Notes** and **Save**, so the person can say "saved" instead
+of retyping their choices. Publish a mockup as a private artifact with
+`capabilities: {db: {}, user: {}}`, so Save writes `mockup-saves/latest` (and
+a timestamped `mockup-saves/<id>` history) to the artifact's db. When they say
+"saved", read `mockup-saves/latest` (and the history) with ArtifactData rather
+than asking them to retype anything. From a local file, Save downloads
+`mockup-choices-<slug>-<timestamp>.json` instead (and copies it): read the
+newest one in `~/Downloads`.
+
 The rule and the details are in `guidelines/mockups.md`; the full config is in
 `components/mockup/MockupPicker.prompt.md`. If working on production
 code, copy the token CSS files and component source and read the rules here to

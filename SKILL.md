@@ -46,6 +46,21 @@ than asking them to retype anything. From a local file, Save downloads
 `mockup-choices-<slug>-<timestamp>.json` instead (and copies it): read the
 newest one in `~/Downloads`.
 
+**Publishing a mockup as a claude.ai Artifact.** The viewer's CSP breaks
+mockups silently:
+- Author ONE html file with no doctype/`html`/`head`/`body` tags: start with
+  `<title>`, then `<style>`; the publisher adds the skeleton.
+- Every image is a `data:` URI (images from other hosts are blocked with no
+  error); downscale first, e.g. macOS `sips -Z 160`.
+- Only Google Fonts stylesheets and scripts from cdnjs/jsdelivr/unpkg load:
+  inline the picker.
+- The page never gets a query string, only a bare `#token`: deep links use
+  `#name`; the picker's `?key=` sync works in-page but not in shared links.
+- Downloads and `alert`/`confirm` are blocked in the viewer, so Save relies on
+  the db: declare `capabilities: {db: {}, user: {}}`.
+- Combine several mockup screens into one page with an in-page view switch, so
+  one db holds the saves.
+
 The rule and the details are in `guidelines/mockups.md`; the full config is in
 `components/mockup/MockupPicker.prompt.md`. If working on production
 code, copy the token CSS files and component source and read the rules here to

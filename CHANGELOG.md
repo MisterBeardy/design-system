@@ -26,7 +26,10 @@ under its version (see `CONTRIBUTING.md`).
   changes" marker shows while things differ from it, and errors show inline.
   `mount({ save: false | { collection } })`, `MockupPicker.save()` and
   `MockupPicker.notes()`; `guidelines/mockups.md` and `SKILL.md` say to
-  publish mockups with `db` and read the saves with ArtifactData.
+  publish mockups with `db` and read the saves with ArtifactData. Both also list the
+  artifact viewer's CSP rules that break mockups silently (one skeleton-less
+  file, `data:` images, CDN-only scripts, no query string, no downloads, one
+  page per mockup).
 
 - **`infraconsole` in the app registry**: hue 125, chroma 0.13, for the
   homelab's infra-console (MisterBeardy/home-infrastructure, issue 148). An

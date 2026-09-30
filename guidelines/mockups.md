@@ -84,6 +84,10 @@ the full config.
 | Phone | It's a bottom sheet at 600px and under, and never scrolls the page sideways |
 | Report back | Type in **Notes**, press **Save** (or `S`), then tell Claude "saved" |
 
+The panel is always dark, in either theme, and set in mono: tooling, not
+design. Don't restyle it to match the mockup; the point is that nobody
+mistakes it for part of the page.
+
 ## Getting the choices back
 
 The person deciding shouldn't have to retype what they picked. The picker has
@@ -108,6 +112,23 @@ one document (the shape is in `MockupPicker.prompt.md`).
   says so in the panel. Read the newest of those from `~/Downloads`, or ask
   them to paste.
 
-The panel is always dark, in either theme, and set in mono: tooling, not
-design. Don't restyle it to match the mockup; the point is that nobody
-mistakes it for part of the page.
+## Publishing a mockup as a claude.ai Artifact
+
+The artifact viewer's content security policy breaks a mockup silently: nothing
+errors, things just don't load. So:
+
+- **Author one HTML file with no doctype, `<html>`, `<head>` or `<body>`
+  tags.** Start with `<title>`, then `<style>`; the publisher adds the
+  skeleton.
+- **Every image is a `data:` URI.** Images from any other host are blocked
+  with no error. Downscale them first (on macOS, `sips -Z 160 in.png`) so the
+  page stays small.
+- **Only Google Fonts stylesheets, and scripts from cdnjs, jsdelivr or unpkg,
+  load.** Paste the picker inline; it can't come from GitHub or this repo.
+- **The page never receives a query string, only a bare `#token`.** Deep
+  links use `#name`. The picker's `?key=` sync still works inside the page,
+  but not in a shared link.
+- **Downloads and `alert` / `confirm` are blocked in the viewer**, so Save
+  relies on the db. Declare `capabilities: {db: {}, user: {}}`.
+- **Several screens go on one page** with an in-page view switch, not one
+  artifact each, so one db holds all the saves.

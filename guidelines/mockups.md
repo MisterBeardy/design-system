@@ -82,7 +82,53 @@ the full config.
 | Get it out of the way | The `–` button or `M` collapses it to a pill; `?mock=min` starts it collapsed |
 | Clean screenshot | `?mock=off` hides it; the choices in the URL still apply |
 | Phone | It's a bottom sheet at 600px and under, and never scrolls the page sideways |
+| Report back | Type in **Notes**, press **Save** (or `S`), then tell Claude "saved" |
 
 The panel is always dark, in either theme, and set in mono: tooling, not
 design. Don't restyle it to match the mockup; the point is that nobody
 mistakes it for part of the page.
+
+## Getting the choices back
+
+The person deciding shouldn't have to retype what they picked. The picker has
+a **Notes** field and a **Save** button (on by default; `save: false` removes
+both), and Save records every row's choice, the notes, the URL and the time as
+one document (the shape is in `MockupPicker.prompt.md`).
+
+- **Publish a mockup as a private claude.ai artifact that declares
+  `capabilities: {db: {}, user: {}}`.** Then Save writes the document to the
+  artifact's db, as `mockup-saves/<timestamp>` and `mockup-saves/latest`, where
+  Claude can read it. Without `db` there is nowhere for it to go but the
+  person's clipboard. The db's default rules are what this wants: everyone who
+  can open the page can read the saves, and a Contributor or above can write
+  them. To declare that outright, add
+  `rules: [{ path: "mockup-saves", read: "view", write: "interact" }]` to `db`.
+- **When the person says "saved", read it; don't ask them to retype it.** Read
+  `mockup-saves/latest` with ArtifactData, and list `mockup-saves` for the
+  history when they've saved more than once. Their notes are in the same
+  document.
+- **Working from a local file**, Save can't reach Claude: it copies the JSON to
+  the clipboard and downloads `mockup-choices-<slug>-<timestamp>.json`, and
+  says so in the panel. Read the newest of those from `~/Downloads`, or ask
+  them to paste.
+
+## Publishing a mockup as a claude.ai Artifact
+
+The artifact viewer's content security policy breaks a mockup silently: nothing
+errors, things just don't load. So:
+
+- **Author one HTML file with no doctype, `<html>`, `<head>` or `<body>`
+  tags.** Start with `<title>`, then `<style>`; the publisher adds the
+  skeleton.
+- **Every image is a `data:` URI.** Images from any other host are blocked
+  with no error. Downscale them first (on macOS, `sips -Z 160 in.png`) so the
+  page stays small.
+- **Only Google Fonts stylesheets, and scripts from cdnjs, jsdelivr or unpkg,
+  load.** Paste the picker inline; it can't come from GitHub or this repo.
+- **The page never receives a query string, only a bare `#token`.** Deep
+  links use `#name`. The picker's `?key=` sync still works inside the page,
+  but not in a shared link.
+- **Downloads and `alert` / `confirm` are blocked in the viewer**, so Save
+  relies on the db. Declare `capabilities: {db: {}, user: {}}`.
+- **Several screens go on one page** with an in-page view switch, not one
+  artifact each, so one db holds all the saves.

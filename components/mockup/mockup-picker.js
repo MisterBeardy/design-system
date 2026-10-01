@@ -31,7 +31,15 @@
 
    Keys (when focus isn't in a text field): A / B / C… pick that option on the
    active row (the focused one, else the last one used); X flips it between its
-   first two options; M collapses and expands the panel.
+   first two options; M collapses and expands the panel; S saves.
+
+   Save and Notes: a Notes field (draft kept in localStorage) and a Save button
+   that records the choices and notes where Claude can read them. Published as
+   a claude.ai artifact with capabilities {db: {}, user: {}}, Save writes
+   mockup-saves/<timestamp> and mockup-saves/latest to the artifact's db. With
+   no db (a local file, no window.claude) it copies the same JSON to the
+   clipboard and downloads it as mockup-choices-<slug>-<timestamp>.json.
+   save: false leaves both out.
 
    Not part of any app. It exists for mockups and throwaway prototypes only. */
 (function (global) {
@@ -83,8 +91,29 @@
     ".mp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}",
     ".mp-toggle{border:0 !important;padding:0 var(--space-1) !important;min-width:24px;text-align:center !important;font-weight:700}",
     ".mp-help{opacity:.5;font-size:.91em}",
+    /* Notes and Save. */
+    ".mp-notes{display:flex;flex-direction:column;gap:var(--space-1);min-width:0}",
+    ".mp-notes label{opacity:.7;text-transform:uppercase;letter-spacing:var(--tracking-caps)}",
+    ".mp textarea{font:inherit;color:inherit;margin:0;width:100%;min-width:0;display:block;resize:none;",
+    "line-height:1.4;padding:var(--space-1) var(--space-2);min-height:calc(2 * 1.4em + 2 * var(--space-1) + 2px);",
+    "max-height:calc(4 * 1.4em + 2 * var(--space-1) + 2px);overflow-y:auto;",
+    "background:color-mix(in srgb,var(--text-ink) 6%,transparent);",
+    "border:1px solid color-mix(in srgb,var(--text-ink) 35%,transparent);border-radius:var(--radius-sm)}",
+    ".mp textarea:focus-visible{outline:2px solid var(--text-ink);outline-offset:2px}",
+    ".mp-foot{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-1) var(--space-2);min-width:0}",
+    ".mp-save{font-weight:700}",
+    ".mp-save[aria-busy=\"true\"]{opacity:.6;cursor:progress}",
+    ".mp-dirty{display:inline-flex;align-items:center;gap:var(--space-1);color:var(--warning-text)}",
+    ".mp-dirty::before{content:\"\";width:6px;height:6px;border-radius:var(--radius-pill);background:var(--warning)}",
+    ".mp-dirty[hidden]{display:none}",
+    ".mp-status{flex-basis:100%;contain:inline-size;opacity:.75;overflow-wrap:anywhere}",
+    ".mp-status:empty{display:none}",
+    ".mp-status[data-error]{opacity:1;color:var(--danger-text)}",
+    /* A dot in the pill when there are notes. */
+    ".mp-ndot{display:none;width:6px;height:6px;border-radius:var(--radius-pill);background:currentColor;margin-left:var(--space-2);vertical-align:middle}",
+    ".mp[data-min][data-has-notes] .mp-ndot{display:inline-block}",
     /* Collapsed: one line, the title and the state as letters. */
-    ".mp[data-min] .mp-row,.mp[data-min] .mp-help,.mp[data-min] .mp-legend{display:none}",
+    ".mp[data-min] .mp-row,.mp[data-min] .mp-help,.mp[data-min] .mp-legend,.mp[data-min] .mp-notes,.mp[data-min] .mp-foot{display:none}",
     ".mp[data-min] .mp-sum{display:inline}",
     ".mp[data-min]{padding:var(--space-1) var(--space-1) var(--space-1) var(--space-3);border-radius:var(--radius-pill)}",
     ".mp-spacer{display:none}",
@@ -100,7 +129,7 @@
     ".mp-spacer{display:block;height:var(--mockup-picker-inset,0px)}",
     "}",
     /* Touch: 44px tap targets, as everywhere else in the system. */
-    "@media (pointer:coarse){.mp-opt,.mp-toggle{min-height:44px}.mp-toggle{min-width:44px}}",
+    "@media (pointer:coarse){.mp-opt,.mp-toggle,.mp-save{min-height:44px}.mp-toggle{min-width:44px}.mp textarea{font-size:16px}}",
   ].join("");
 
   var state = null; // the mounted instance
@@ -178,6 +207,7 @@
     (r.buttons || []).forEach(function (b) { b.setAttribute("aria-pressed", String(b.value === value)); });
     if (state) {
       paintSummary();
+      paintDirty();
       if (!(opts && opts.silent)) {
         writeUrl();
         if (typeof r.onChange === "function") r.onChange(value);
@@ -202,6 +232,185 @@
     state.sum.textContent = state.rows.filter(function (r) { return !r.theme; }).map(letterOf).join(" ");
   }
 
+  /* --- notes and save ---------------------------------------------------- */
+  var SAVE_COLLECTION = "mockup-saves";
+
+  function saveConfig(c) {
+    if (c.save === false) return null;
+    var coll = c.save && typeof c.save === "object" && c.save.collection ? String(c.save.collection) : SAVE_COLLECTION;
+    return { collection: coll };
+  }
+  function notesKey() {
+    return "mockup-picker-notes:" + global.location.pathname + (state && state.config.title ? "#" + state.config.title : "");
+  }
+  function readDraft() {
+    try { return global.localStorage.getItem(notesKey()) || ""; } catch (e) { return ""; }
+  }
+  function writeDraft(v) {
+    try { if (v) global.localStorage.setItem(notesKey(), v); else global.localStorage.removeItem(notesKey()); } catch (e) {}
+  }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function clock(d) { return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+  function slug(s) {
+    return (String(s || "mockup").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "mockup").slice(0, 40);
+  }
+
+  /* The same shape whether it goes to the db or to a file. */
+  function payload(now) {
+    var choices = {};
+    state.rows.forEach(function (r) {
+      var i = 0;
+      for (; i < r.options.length; i++) if (r.options[i].value === r.value) break;
+      var o = r.options[i] || { label: r.value };
+      choices[r.key] = { value: r.value, label: o.label, option: i < LETTERS.length ? LETTERS[i].toUpperCase() : String(i + 1), recommended: !!o.recommended };
+    });
+    return {
+      mockup: state.config.title || doc.title || "Mockup",
+      url: global.location.href,
+      savedAt: now.toISOString(),
+      choices: choices,
+      notes: state.notes || "",
+      viewer: state.viewer || null,
+    };
+  }
+  function fingerprint() { return JSON.stringify([snapshot(), state.notes || ""]); }
+
+  function paintDirty() {
+    if (!state || !state.dirty) return;
+    var dirty = state.savedPrint != null && state.savedPrint !== fingerprint();
+    state.dirty.hidden = !dirty;
+    if (dirty) {
+      state.dirty.textContent = "unsaved changes" + (state.savedAt ? " · last saved " + clock(state.savedAt) : "");
+      if (state.status && !state.status.hasAttribute("data-error")) setStatus("");
+    }
+    if (state.saveBtn && !state.saving) state.saveBtn.textContent = state.savedAt && !dirty ? "Saved ✓ " + clock(state.savedAt) : "Save";
+  }
+  function setStatus(text, isError) {
+    if (!state || !state.status) return;
+    state.status.textContent = text || "";
+    state.status.toggleAttribute("data-error", !!isError);
+  }
+
+  /* claude.use() never resolves during the first run, and resolves null when
+     the page isn't in an artifact viewer (a local file, no window.claude). */
+  function useCap(name) {
+    try {
+      var c = global.claude;
+      if (!c || typeof c.use !== "function") return Promise.resolve(null);
+      return Promise.resolve(c.use(name)).then(function (v) { return v || null; }, function () { return null; });
+    } catch (e) { return Promise.resolve(null); }
+  }
+  function connect() {
+    var st = state;
+    var dbP = useCap("db");
+    var userP = useCap("user").then(function (u) {
+      if (!u) return;
+      try {
+        return Promise.all([
+          Promise.resolve(u.id()).then(function (id) { st.viewer = id || null; }, function () {}),
+          Promise.resolve(u.can("data.write")).then(function (ok) { st.canWrite = ok; }, function () {}),
+        ]);
+      } catch (e) {}
+    }).catch(function () {});
+    // Save waits for both, so the saved doc carries the viewer's id.
+    state.dbReady = Promise.all([dbP, userP]).then(function (v) { return v[0]; });
+  }
+
+  function copyText(text) {
+    function legacy() {
+      try {
+        var ta = el("textarea", { readonly: true, style: "position:fixed;top:0;left:0;opacity:0;pointer-events:none" });
+        ta.value = text;
+        doc.body.appendChild(ta);
+        ta.select();
+        var ok = doc.execCommand && doc.execCommand("copy");
+        ta.remove();
+        return !!ok;
+      } catch (e) { return false; }
+    }
+    try {
+      if (global.navigator && global.navigator.clipboard && global.navigator.clipboard.writeText) {
+        return global.navigator.clipboard.writeText(text).then(function () { return true; }, function () { return legacy(); });
+      }
+    } catch (e) {}
+    return Promise.resolve(legacy());
+  }
+  function download(name, text) {
+    try {
+      var url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+      var a = el("a", { href: url, download: name, style: "display:none" });
+      doc.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      return true;
+    } catch (e) { return false; }
+  }
+  function saveLocal(data, stamp, why) {
+    var text = JSON.stringify(data);
+    var name = "mockup-choices-" + slug(data.mockup) + "-" + stamp + ".json";
+    why = why || "Not in a published artifact, so the choices were";
+    return copyText(text).then(function (copied) {
+      var downloaded = download(name, text);
+      var done = [copied ? "copied to the clipboard" : null, downloaded ? "downloaded as " + name : null].filter(Boolean);
+      if (!done.length) return { ok: false, where: "none", error: why.replace(/, so the choices were$/, "") + ", and the choices couldn't be copied or downloaded." };
+      return { ok: true, where: "local", file: downloaded ? name : null, copied: copied, message: why + " " + done.join(" and ") + "." };
+    });
+  }
+  function describe(e) {
+    return (e && (e.message || e.code)) || String(e);
+  }
+  function writeDb(db, data, id) {
+    var coll = state.saveCfg.collection;
+    function once() {
+      return db.collection(coll).doc(id).set(data).then(function () { return db.collection(coll).doc("latest").set(data); });
+    }
+    return once().catch(function (e) {
+      if (e && e.code === "unavailable") return new Promise(function (res) { setTimeout(res, 400 + Math.random() * 600); }).then(once);
+      throw e;
+    });
+  }
+
+  function doSave() {
+    if (!state || !state.saveCfg) return Promise.resolve({ ok: false, where: "none", error: "Saving is turned off (save: false)." });
+    if (state.saving) return state.saving;
+    var st = state;
+    var now = new Date();
+    var data = payload(now);
+    var print = fingerprint();
+    var id = now.toISOString().replace(/:/g, "-");
+    var stamp = id.replace(/\.\d+Z$/, "Z");
+    if (st.saveBtn) { st.saveBtn.setAttribute("aria-busy", "true"); st.saveBtn.textContent = "Saving…"; }
+    setStatus("");
+    st.saving = (st.dbReady || Promise.resolve(null)).then(function (db) {
+      data.viewer = st.viewer || null;
+      if (!db) return saveLocal(data, stamp);
+      if (st.canWrite === false) return saveLocal(data, stamp, "You can view this page but not save to it, so the choices were");
+      return writeDb(db, data, id).then(function () {
+        return { ok: true, where: "db", id: id, message: "Saved to this page. Tell Claude “saved”." };
+      }, function (e) {
+        return saveLocal(data, stamp, "Couldn't save to the page (" + describe(e) + "), so the choices were");
+      });
+    }).catch(function (e) {
+      return { ok: false, where: "none", error: "Save failed: " + describe(e) };
+    }).then(function (res) {
+      st.saving = null;
+      if (st !== state) return res;
+      if (st.saveBtn) st.saveBtn.removeAttribute("aria-busy");
+      if (res.ok) { st.savedAt = now; st.savedPrint = print; }
+      setStatus(res.ok ? res.message : res.error, !res.ok);
+      paintDirty();
+      doc.dispatchEvent(new CustomEvent("mockup-picker:save", { detail: { result: res, data: data } }));
+      return res;
+    });
+    return st.saving;
+  }
+
+  function autosize(ta) {
+    ta.style.height = "auto";
+    ta.style.height = (ta.scrollHeight + 2) + "px";
+  }
+
   function setActive(r) {
     if (!state) return;
     state.active = r;
@@ -214,6 +423,7 @@
     state.toggle.textContent = state.min ? "+" : "–";
     state.toggle.setAttribute("aria-expanded", String(!state.min));
     state.toggle.setAttribute("aria-label", state.min ? "Expand the mockup picker" : "Collapse the mockup picker");
+    if (!state.min && state.notesField) autosize(state.notesField);
     measure();
   }
 
@@ -230,7 +440,8 @@
     state.sum = el("span", { class: "mp-sum", "aria-hidden": "true" });
     var hasRec = state.rows.some(function (r) { return r.options.some(function (o) { return o.recommended; }); });
     var head = el("div", { class: "mp-head" }, [
-      el("span", { class: "mp-title" }, ["Mockup" + (c.title ? " · " + c.title : ""), " ", state.sum]),
+      el("span", { class: "mp-title" }, ["Mockup" + (c.title ? " · " + c.title : ""), " ", state.sum,
+        state.saveCfg ? el("span", { class: "mp-ndot", title: "Has notes", "aria-hidden": "true" }) : null]),
       state.toggle,
     ]);
     var body = el("div", { id: id + "-body", style: "display:contents" });
@@ -255,9 +466,28 @@
       body.appendChild(r.node);
     });
     if (hasRec) body.appendChild(el("div", { class: "mp-legend" }, [el("span", { class: "mp-rec", "aria-hidden": "true", style: "margin:0 var(--space-1) 0 0" }), "recommended"]));
-    if (c.keys !== false) body.appendChild(el("div", { class: "mp-help", text: "Keys: A / B pick · X flips · M collapses" }));
+    if (state.saveCfg) {
+      var ta = el("textarea", { id: id + "-notes", rows: "2", spellcheck: "true", placeholder: "Anything the choices don't say" });
+      ta.value = state.notes;
+      ta.addEventListener("input", function () {
+        state.notes = ta.value;
+        writeDraft(ta.value);
+        state.panel.toggleAttribute("data-has-notes", !!ta.value.trim());
+        autosize(ta);
+        paintDirty();
+      });
+      state.notesField = ta;
+      body.appendChild(el("div", { class: "mp-notes" }, [el("label", { for: id + "-notes", text: "Notes" }), ta]));
+      state.saveBtn = el("button", { type: "button", class: "mp-save", title: "Save the choices and notes (S)", text: "Save" });
+      state.saveBtn.addEventListener("click", function () { doSave(); });
+      state.dirty = el("span", { class: "mp-dirty", hidden: true, text: "unsaved changes" });
+      state.status = el("span", { class: "mp-status", role: "status", "aria-live": "polite" });
+      body.appendChild(el("div", { class: "mp-foot" }, [state.saveBtn, state.dirty, state.status]));
+    }
+    if (c.keys !== false) body.appendChild(el("div", { class: "mp-help", text: "Keys: A / B pick · X flips · M collapses" + (state.saveCfg ? " · S saves" : "") }));
 
     state.panel = el("aside", { class: "mp", "aria-label": "Mockup picker: design choices, not part of the design", "data-mockup-picker": true, "data-theme": "dark" }, [head, body]);
+    if (state.saveCfg && state.notes.trim()) state.panel.setAttribute("data-has-notes", "");
     state.toggle.addEventListener("click", function () { setMin(!state.min); writeUrl(); });
 
     var mode = params().get("mock");
@@ -269,6 +499,7 @@
     paintSummary();
     var firstChoice = state.rows.filter(function (r) { return !r.theme; })[0] || state.rows[0];
     if (firstChoice) setActive(firstChoice);
+    if (state.notesField) autosize(state.notesField);
     if (global.ResizeObserver) new ResizeObserver(measure).observe(state.panel);
     global.addEventListener("resize", measure);
     measure();
@@ -281,6 +512,7 @@
     if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
     var k = (e.key || "").toLowerCase();
     if (k === "m") { setMin(!state.min); writeUrl(); e.preventDefault(); return; }
+    if (k === "s" && state.saveCfg) { doSave(); e.preventDefault(); return; }
     var focused = state.rows.filter(function (r) { return r.node && r.node.contains(doc.activeElement); })[0];
     var r = focused || state.active;
     if (!r) return;
@@ -296,7 +528,9 @@
   function mount(config) {
     if (state) unmount();
     config = config || {};
-    state = { config: config, rows: normalise(config), min: false, active: null };
+    state = { config: config, rows: normalise(config), min: false, active: null, saveCfg: saveConfig(config),
+      notes: "", viewer: null, canWrite: null, savedAt: null, savedPrint: null, saving: null };
+    if (state.saveCfg) { state.notes = readDraft(); connect(); }
     // Attributes go on <html> now, even from <head>, so the first paint is
     // already the chosen state. The panel waits for <body>.
     state.rows.forEach(function (r) { setRow(r, r.value, { silent: true }); });
@@ -327,6 +561,11 @@
       var r = state && state.rows.filter(function (x) { return x.key === key; })[0];
       if (r) setRow(r, String(value));
     },
+    /** Save the choices and notes, as the Save button does. Never rejects:
+        resolves { ok, where: "db" | "local" | "none", id?, file?, message?, error? }. */
+    save: function () { return doSave(); },
+    /** The Notes field's text ("" when empty or when save is off). */
+    notes: function () { return state ? state.notes || "" : ""; },
   };
   global.MockupPicker = api;
 

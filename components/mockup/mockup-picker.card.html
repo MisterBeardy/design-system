@@ -22,6 +22,11 @@
         { value: "display", label: "Space Grotesk" },
         { value: "mono", label: "JetBrains Mono", recommended: true } ] },
     ],
+    // Notes + Save (on by default). Opened as a file, as here, Save copies the
+    // choices to the clipboard and downloads them as JSON; published as an
+    // artifact with capabilities {db: {}, user: {}}, it writes
+    // mockup-saves/<timestamp> and mockup-saves/latest for Claude to read.
+    save: true,
   });
 </script>
 <style>

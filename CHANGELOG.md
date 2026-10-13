@@ -11,6 +11,88 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-10-13
+
+`Row` can wrap its text, and shows the full string in a tooltip. Nothing moves
+unless an app passes `wrap`.
+
+### Upgrading
+
+- **Pin `#v1.2.0`.** Nothing to change. Pass `wrap` to a `Row` whose label or
+  sub-label can run long and has no hover to read it on (a phone): it then
+  flows onto more lines instead of ending in an ellipsis. Every string label
+  and sub-label also carries a `title` now, so a native tooltip appears on
+  hover where text was cut.
+
+### Added
+
+- `Row` takes `wrap`: label and sub-label flow onto more lines instead of
+  ending in an ellipsis. Off by default, so nothing moves.
+- **Notes and Save in the mockup picker**, so the person deciding can say
+  "saved" instead of reporting their choices by hand. A Notes field (grows to
+  about four lines, draft kept in `localStorage`, a dot in the collapsed pill
+  when it has text) and a Save button (or `S`). In a claude.ai artifact that
+  declares `capabilities: {db: {}, user: {}}`, Save writes
+  `mockup-saves/<timestamp>` and `mockup-saves/latest`: the title, URL, time,
+  every row's value, label, letter and whether it was recommended, the notes
+  and the viewer's id. With no db (a local file), it copies the same JSON to
+  the clipboard and downloads `mockup-choices-<slug>-<timestamp>.json`, and
+  says which. The button reads "Saved ✓ 14:32" after a save, an "unsaved
+  changes" marker shows while things differ from it, and errors show inline.
+  `mount({ save: false | { collection } })`, `MockupPicker.save()` and
+  `MockupPicker.notes()`; `guidelines/mockups.md` and `SKILL.md` say to
+  publish mockups with `db` and read the saves with ArtifactData. Both also list the
+  artifact viewer's CSP rules that break mockups silently (one skeleton-less
+  file, `data:` images, CDN-only scripts, no query string, no downloads, one
+  page per mockup).
+
+- **`infraconsole` in the app registry**: hue 125, chroma 0.13, for the
+  homelab's infra-console (MisterBeardy/home-infrastructure, issue 148). An
+  olive in the widest open gap, between Wes Cup and ParametricChaos, and it
+  passes every colour check in both themes. `dataLast` is 1, the slot nearest
+  it.
+
+- **The mockup picker, and the rule that every mockup uses it**
+  (`components/mockup/mockup-picker.js`, `guidelines/mockups.md`). A floating
+  dark panel with one row per open design choice: each button sets an
+  attribute on `<html>` and the mockup's CSS draws that option, so A and B are
+  compared on the real layout, on one page. A Theme row (light / dark /
+  system) is built in; the recommended option is marked and is where the page
+  starts; the URL carries the state (`?accent=45&mock=min|off`); `A` / `B`
+  pick and `X` flips on the active row; it collapses to a pill and is a bottom
+  sheet at phone width. Dependency-free, tokens only, and for mockups, never
+  an app: `SKILL.md` now says every mockup with open choices presents them
+  this way instead of as separate pages or screenshots. Also exported as
+  `@misterbeardy/design-system/mockup-picker`.
+
+- **`sessionlog` in the app registry**: hue 340, chroma 0.15, for the
+  session log portal (MisterBeardy/gh-dashboard, issue 155). A magenta-pink in
+  the widest open gap, between Modeler and ScoreACardGame, and it passes every
+  colour check in both themes. `dataLast` is 2, the slot nearest it.
+
+- **`PRESSKIT.md`: presskits are part of the design system.** The format an
+  app's `presskit/` folder follows for lookwhatibuilt.today, moved here from
+  that repo, and when to refresh it: a new app, after a design-system
+  upgrade, and after a feature worth showing off. One short prompt covers
+  all three. `ADOPTING.md` (step 8) and `UPGRADING-1.0.md` (step 10) end with
+  it, and it ships in the package, so every app has it in `node_modules`.
+
+### Changed
+
+- **`UPGRADING-1.0.md` starts with "Before you start: check the app"**, the
+  problems a build won't show: `dev` behind `main`, your own variables with
+  the system's names, `data-theme` used for something else, backgrounds fixed
+  to one theme, white text on the accent, fonts loaded twice, emoji as icons,
+  and what the screenshots will need. `ADOPTING.md` points to it. Found by
+  checking all twelve apps before their upgrades.
+- **`ADOPTING.md` step 5 warns that Tailwind 4's `rounded-*` read the
+  system's radii.** `--radius-sm/md/lg/xl` are 6, 10, 14 and 20px here and 4,
+  6, 8 and 12px in Tailwind, so importing the tokens makes every `rounded-*`
+  rounder. The step says how to keep Tailwind's scale until the screens move
+  over. Found by whatwillimodel.today's Tailwind 4 upgrade.
+- `Row` puts the full text of a string label or sub-label in its `title`: a
+  native tooltip on hover, so text the ellipsis cut can be read.
+
 ## [1.1.0] — 2026-09-24
 
 Registry names that match lookwhatibuilt.today's naming convention (RFC-011),
@@ -506,7 +588,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...v1.0.0

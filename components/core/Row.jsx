@@ -9,6 +9,10 @@ const truncate = {
   whiteSpace: "nowrap",
 };
 
+// `wrap` lets label and sub run onto more lines; the default stays one line
+// with an ellipsis, and the full text is in the title (a native tooltip on hover).
+const flow = { overflowWrap: "anywhere", whiteSpace: "normal" };
+
 const px = (v) => (typeof v === "number" ? `${v}px` : v);
 
 export function Row({
@@ -18,6 +22,7 @@ export function Row({
   value,
   trailing,
   chevron = false,
+  wrap = false,
   onClick,
   disabled = false,
   className,
@@ -34,15 +39,18 @@ export function Row({
     ? { "--row-inset": `calc(var(--row-pad-x) + ${px(glyphSize)} + var(--row-gap))`, ...style }
     : style;
 
+  const textStyle = wrap ? flow : truncate;
+  const titleOf = (node) => (!wrap && typeof node === "string" ? node : undefined);
+
   const body = (
     <>
       {glyph}
       <span style={{ minWidth: 0, flex: 1, textAlign: "left" }}>
-        <span style={{ display: "block", font: "var(--type-row-label)", color: "var(--text-ink)", ...truncate }}>
+        <span style={{ display: "block", font: "var(--type-row-label)", color: "var(--text-ink)", ...textStyle }} title={titleOf(label)}>
           {label}
         </span>
         {sub && (
-          <span style={{ display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 1, ...truncate }}>
+          <span style={{ display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 1, ...textStyle }} title={titleOf(sub)}>
             {sub}
           </span>
         )}

@@ -15,6 +15,12 @@ Row — one line inside a `Group`.
 rows, or it's a row with a chevron into a screen. The sub-label is a qualifier,
 not a paragraph.
 
+Text that doesn't fit is cut with an ellipsis and its full string goes in the
+`title`, for hover. A touch screen has no hover, so pass `wrap` where a sub-label
+can run long (an empty-state hint, a status line): label and sub-label then flow
+onto more lines and the row grows. Leave it off for short, fixed labels, so a
+list stays one even height.
+
 `value` is for data (mono, tabular, muted). `trailing` is for controls. A row
 with both is fine; a row with neither is a label with a chevron, which is also
 fine.

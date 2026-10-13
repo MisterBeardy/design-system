@@ -44,3 +44,18 @@ export function Navigation() {
     </Frame>
   );
 }
+
+export function LongText() {
+  return (
+    <Frame>
+      <Group>
+        <Row label="Orders" sub="Plan a route you can't pay for yet and press Order route. Gates and plane are bought together when cash allows." />
+        <Row
+          wrap
+          label="Orders"
+          sub="Plan a route you can't pay for yet and press Order route. Gates and plane are bought together when cash allows."
+        />
+      </Group>
+    </Frame>
+  );
+}

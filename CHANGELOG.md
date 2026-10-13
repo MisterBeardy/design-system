@@ -11,6 +11,19 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-10-13
+
+`Row` can wrap its text, and shows the full string in a tooltip. Nothing moves
+unless an app passes `wrap`.
+
+### Upgrading
+
+- **Pin `#v1.2.0`.** Nothing to change. Pass `wrap` to a `Row` whose label or
+  sub-label can run long and has no hover to read it on (a phone): it then
+  flows onto more lines instead of ending in an ellipsis. Every string label
+  and sub-label also carries a `title` now, so a native tooltip appears on
+  hover where text was cut.
+
 ### Added
 
 - `Row` takes `wrap`: label and sub-label flow onto more lines instead of
@@ -575,7 +588,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/MisterBeardy/design-system/compare/v0.8.0...v1.0.0

@@ -13,6 +13,8 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Added
 
+- `Row` takes `wrap`: label and sub-label flow onto more lines instead of
+  ending in an ellipsis. Off by default, so nothing moves.
 - **Notes and Save in the mockup picker**, so the person deciding can say
   "saved" instead of reporting their choices by hand. A Notes field (grows to
   about four lines, draft kept in `localStorage`, a dot in the collapsed pill
@@ -75,6 +77,8 @@ under its version (see `CONTRIBUTING.md`).
   6, 8 and 12px in Tailwind, so importing the tokens makes every `rounded-*`
   rounder. The step says how to keep Tailwind's scale until the screens move
   over. Found by whatwillimodel.today's Tailwind 4 upgrade.
+- `Row` puts the full text of a string label or sub-label in its `title`: a
+  native tooltip on hover, so text the ellipsis cut can be read.
 
 ## [1.1.0] — 2026-09-24
 

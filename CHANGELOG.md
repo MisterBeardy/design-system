@@ -11,8 +11,38 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Upgrading
+
+- **The fonts are in the package** (#82). `styles.css` (through
+  `tokens/fonts.css`) now declares Space Grotesk and JetBrains Mono from files
+  in `fonts/`, so the page, the build and a strict Content-Security-Policy no
+  longer need `fonts.googleapis.com` or `fonts.gstatic.com`. An app that
+  imports `styles.css` changes nothing and gets the same faces, in the same
+  subsets, from its own origin; it can delete a Google `<link>` or
+  `next/font/google` for those two families. An app that skips `fonts.css` and
+  loads its own copies is unaffected. `ADOPTING.md` shows the
+  `next/font/local` setup. Two things to check:
+  - **A copy you vendored** (a static page, a mockup that links
+    `tokens/fonts.css`): copy `fonts/` next to `tokens/` too, or the page
+    falls back to system faces without an error.
+  - **An app that inlines `@import "@misterbeardy/design-system/styles.css"`
+    through `postcss-import`** (some Tailwind v3 setups) rather than importing
+    it from JavaScript: that tool doesn't rebase `url()`, so the font paths
+    resolve against the app's own CSS and the build fails with "Module not
+    found". Import the stylesheet from JavaScript, as the guide shows.
+
 ### Added
 
+- **Space Grotesk and JetBrains Mono ship with the package** (#82): `fonts/`
+  holds every subset Google served for them (latin, latin-ext and Vietnamese
+  for both, plus Cyrillic and Greek for JetBrains Mono), each a variable
+  WOFF2 covering weights 400 to 700, about 114 KB in all, with each family's
+  SIL Open Font License text, exported as
+  `@misterbeardy/design-system/fonts/*`. `tokens/fonts.css` declares them with
+  `@font-face` (`font-display: swap`, Google's own `unicode-range` per subset,
+  so a page downloads only the subsets its text uses) in place of the Google
+  `@import`, keeping `--font-display` and `--font-mono` and their fallback
+  stacks.
 - **An `info` status tone** (#73): `--info`, `--info-soft`, `--info-text` and
   `--on-info`, in light, dark and both high-contrast sets, for information that
   isn't an outcome (a hint, a note, "new"). `Chip`, `Banner` (with the info

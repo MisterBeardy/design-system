@@ -53,9 +53,8 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
 - **Preview glyphs come from `Icon`, never a typed character.** The design agent imitates
   previews, so a `✓` in a preview becomes `✓` in its designs (caught on the v0.8.0 sync in
   Popover's sort menu).
-- **Fonts load remotely.** `tokens/fonts.css` (split out of `typography.css` for 1.0) `@import`s Google Fonts (Space Grotesk +
-  JetBrains Mono) → `[FONT_REMOTE]`, non-blocking, assumed served at runtime. No local
-  fonts shipped, no `fonts/` dir.
+- **Fonts are local files from the release after 1.2.0.** `tokens/fonts.css` declares `@font-face` for Space Grotesk + JetBrains Mono from
+  `fonts/*.woff2` (every Google subset, variable, OFL). Until then it `@import`ed Google Fonts → `[FONT_REMOTE]`. `.design-sync/config.json` only globs `tokens/*.css`, so the converter may copy `fonts.css` without `fonts/`, and previews would fall back to system faces where they used to get Google. Check the next sync's bundle for `fonts/`; if it's missing, that is a regression of this release to fix in the sync config, not in the package.
 - **Guidelines are synced as markdown.** The `guidelines/*.card.html` visual preview
   cards aren't synced (they're HTML, not the markdown `guidelinesGlob` copies); the
   `guidelines/*.md` are, via `cfg.guidelinesGlob="guidelines/*.md"`. They land at
@@ -75,8 +74,8 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
 - `[DTS_STYLE_SYSTEM]` fires on **Icon**, whose props extend `SVGAttributes`: the
   converter drops the inherited presentational attributes and keeps the real API
   (`name`, `size`, `label`, plus the `IconName` union inlined). Expected, not a
-  problem; don't set `cfg.dtsPropsFor.Icon`. `[FONT_REMOTE]` is the only
-  informational line and is expected (see above).
+  problem; don't set `cfg.dtsPropsFor.Icon`. Before the fonts were bundled `[FONT_REMOTE]` was the only informational line;
+  see the Fonts note above.
 
 ## Re-sync risks (what can silently go stale)
 
@@ -89,7 +88,7 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
 - **`docsMap` is hand-enumerated** because the docs are named `.prompt.md`. A new
   component still appears (discovery reads the types entry), but without its doc until
   it's added to `docsMap`.
-- **Remote fonts** depend on Google Fonts being reachable at render time.
+- **Fonts** (after 1.2.0) are bundled files; before that they needed Google Fonts reachable at render time.
 - **Authored previews** in `.design-sync/previews/*.tsx` import from
   `@misterbeardy/design-system` and are tied to the current component APIs (props like
   `variant`, `tone`, `options`, `stats`). A breaking API change needs the preview updated, and its

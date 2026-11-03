@@ -66,7 +66,8 @@ function Chip({ tone = "neutral", mono = true, children, style, ...props }) {
     ink: { background: "var(--text-ink)", color: "var(--bg)" },
     success: { background: "var(--success-soft)", color: "var(--success-text)" },
     warning: { background: "var(--warning-soft)", color: "var(--warning-text)" },
-    danger: { background: "var(--danger-soft)", color: "var(--danger-text)" }
+    danger: { background: "var(--danger-soft)", color: "var(--danger-text)" },
+    info: { background: "var(--info-soft)", color: "var(--info-text)" }
   };
   return /* @__PURE__ */ jsx3(
     "span",
@@ -206,7 +207,7 @@ function Group({ header, footer, children, style, ...props }) {
 }
 
 // components/core/Row.jsx
-import { isValidElement } from "react";
+import { isValidElement, useId, useState } from "react";
 
 // components/core/GlyphTile.jsx
 import { jsx as jsx7 } from "react/jsx-runtime";
@@ -215,6 +216,7 @@ var TONE_BG = {
   success: "var(--success)",
   warning: "var(--warning)",
   danger: "var(--danger)",
+  info: "var(--info)",
   neutral: "var(--text-muted)"
 };
 var TONE_ON = {
@@ -222,6 +224,7 @@ var TONE_ON = {
   success: "var(--on-success)",
   warning: "var(--on-warning)",
   danger: "var(--on-danger)",
+  info: "var(--on-info)",
   neutral: "var(--on-neutral)"
 };
 function GlyphTile({ tone = "neutral", color, data, size, children, style, ...props }) {
@@ -315,6 +318,8 @@ function Row({
   trailing,
   chevron = false,
   wrap = false,
+  help,
+  defaultHelpOpen = false,
   onClick,
   disabled = false,
   className,
@@ -322,6 +327,9 @@ function Row({
   ...props
 }) {
   const interactive = typeof onClick === "function";
+  const hasHelp = help != null && help !== false && !interactive;
+  const [helpOpen, setHelpOpen] = useState(defaultHelpOpen);
+  const helpId = useId();
   const glyphSize = isValidElement(glyph) && glyph.type === GlyphTile ? glyph.props.size : void 0;
   const rowStyle = glyphSize != null ? { "--row-inset": `calc(var(--row-pad-x) + ${px(glyphSize)} + var(--row-gap))`, ...style } : style;
   const textStyle = wrap ? flow : truncate;
@@ -334,14 +342,58 @@ function Row({
     ] }),
     value !== void 0 && value !== null && /* @__PURE__ */ jsx9("span", { style: { flexShrink: 0, font: "var(--type-row-value)", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }, children: value }),
     trailing,
-    chevron && /* @__PURE__ */ jsx9(Icon, { name: "chevron-right", size: 14, style: { color: "var(--text-muted)", opacity: 0.5 } })
+    hasHelp && /* @__PURE__ */ jsx9(
+      "button",
+      {
+        type: "button",
+        className: "ds-button ds-row-help",
+        "aria-label": typeof label === "string" ? `About ${label}` : "More information",
+        "aria-expanded": helpOpen,
+        "aria-controls": helpOpen ? helpId : void 0,
+        onClick: () => setHelpOpen(!helpOpen),
+        style: {
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 28,
+          height: 28,
+          margin: "-4px -6px -4px 0",
+          padding: 0,
+          border: "none",
+          borderRadius: "var(--radius-pill)",
+          background: "transparent",
+          color: helpOpen ? "var(--info-text)" : "var(--text-muted)",
+          cursor: "pointer"
+        },
+        children: /* @__PURE__ */ jsx9(Icon, { name: "info", size: 16 })
+      }
+    ),
+    chevron && /* @__PURE__ */ jsx9(Icon, { name: "chevron-right", size: 14, style: { color: "var(--text-muted)", opacity: 0.5 } }),
+    hasHelp && helpOpen && /* @__PURE__ */ jsx9(
+      "div",
+      {
+        id: helpId,
+        role: "note",
+        style: {
+          flexBasis: "100%",
+          // Lines up with the label, past the glyph.
+          paddingLeft: glyph ? "calc(var(--row-inset) - var(--row-pad-x))" : 0,
+          font: "var(--type-row-sub)",
+          color: "var(--text-muted)",
+          overflowWrap: "anywhere",
+          textAlign: "left"
+        },
+        children: help
+      }
+    )
   ] });
   const shared = {
     className: cx("ds-row", className),
     "data-glyph": glyph ? "true" : void 0,
     "data-interactive": interactive && !disabled ? "true" : void 0,
     "data-disabled": disabled ? "true" : void 0,
-    style: rowStyle
+    style: hasHelp ? { flexWrap: "wrap", rowGap: 6, ...rowStyle } : rowStyle
   };
   if (interactive) {
     return /* @__PURE__ */ jsx9("button", { type: "button", onClick, disabled, ...props, ...shared, children: body });
@@ -481,7 +533,8 @@ var SUB_COLOR = {
   neutral: "var(--text-muted)",
   success: "var(--success-text)",
   warning: "var(--warning-text)",
-  danger: "var(--danger-text)"
+  danger: "var(--danger-text)",
+  info: "var(--info-text)"
 };
 var truncate3 = { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function StatStrip({ stats, style, ...props }) {
@@ -547,7 +600,7 @@ function StatStrip({ stats, style, ...props }) {
 }
 
 // components/core/Sheet.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState as useState2 } from "react";
 import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
 function Sheet({
   open,
@@ -566,7 +619,7 @@ function Sheet({
   const panel = useRef(null);
   const close = useRef(onClose);
   close.current = onClose;
-  const [drag, setDrag] = useState(null);
+  const [drag, setDrag] = useState2(null);
   const start = useRef(0);
   const restore = useRef(null);
   useEffect(() => {
@@ -665,7 +718,7 @@ function Sheet({
 }
 
 // components/core/Popover.jsx
-import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef2, useState as useState2 } from "react";
+import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef2, useState as useState3 } from "react";
 import { createPortal } from "react-dom";
 import { Fragment as Fragment2, jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
 var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -699,10 +752,10 @@ function Popover({
   const panel = useRef2(null);
   const close = useRef2(onClose);
   close.current = onClose;
-  const [side, setSide] = useState2(placement);
-  const [edge, setEdge] = useState2(align);
+  const [side, setSide] = useState3(placement);
+  const [edge, setEdge] = useState3(align);
   const beside = anchor != null;
-  const [pos, setPos] = useState2(null);
+  const [pos, setPos] = useState3(null);
   const replace = useRef2(null);
   const lastWidth = useRef2(null);
   const anchorNow = useRef2(anchor);
@@ -965,7 +1018,7 @@ function Popover({
 }
 
 // components/core/Field.jsx
-import { Children, cloneElement as cloneElement2, useId } from "react";
+import { Children, cloneElement as cloneElement2, useId as useId2 } from "react";
 
 // components/core/Textarea.jsx
 import { jsx as jsx15 } from "react/jsx-runtime";
@@ -995,7 +1048,7 @@ function Textarea({ disabled = false, bare = false, rows = 3, className, style, 
 // components/core/Field.jsx
 import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
 function Field({ label, help, error, glyph, children, className, style, ...props }) {
-  const autoId = useId();
+  const autoId = useId2();
   const child = Children.only(children);
   const id = child.props.id ?? `field${autoId.replace(/:/g, "")}`;
   const msgId = `${id}-msg`;
@@ -1203,6 +1256,7 @@ var TONES = {
   success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
   warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
   danger: { fill: "var(--danger-soft)", ink: "var(--danger-text)", icon: "alert" },
+  info: { fill: "var(--info-soft)", ink: "var(--info-text)", icon: "info" },
   neutral: { fill: "var(--surface-alt)", ink: "var(--text-ink)", icon: "info" }
 };
 function Banner({
@@ -1274,7 +1328,7 @@ function Banner({
 }
 
 // components/core/Toast.jsx
-import { useEffect as useEffect3, useRef as useRef3, useState as useState3 } from "react";
+import { useEffect as useEffect3, useRef as useRef3, useState as useState4 } from "react";
 import { jsx as jsx20, jsxs as jsxs13 } from "react/jsx-runtime";
 function Toast({
   open,
@@ -1288,7 +1342,7 @@ function Toast({
   ...props
 }) {
   const ms = duration ?? (action ? 8e3 : 5e3);
-  const [paused, setPaused] = useState3(false);
+  const [paused, setPaused] = useState4(false);
   const close = useRef3(onClose);
   close.current = onClose;
   useEffect3(() => {

@@ -46,6 +46,13 @@
   --danger:       oklch(0.55 0.18 25);
   --danger-soft:  oklch(0.95 0.03 25);
   --danger-text:  oklch(0.42 0.15 25);
+  /* Information that isn't an outcome: a hint, a note, a neutral count. The
+     system's blue, at a lower chroma than the accents so it never reads as
+     one; where an app's accent is a blue too (H230-256), the label and icon
+     are what tell them apart, not the hue. */
+  --info:         oklch(0.58 0.12 235);
+  --info-soft:    oklch(0.95 0.03 235);
+  --info-text:    oklch(0.42 0.11 235);
 
   /* The glyph on a solid status fill (GlyphTile tone=…) and the Switch knob
      when on. Glyphs are marks, so 3:1 is their floor: white clears it on
@@ -54,6 +61,7 @@
   --on-success:   #ffffff;
   --on-warning:   #ffffff;
   --on-danger:    #ffffff;
+  --on-info:      #ffffff;
   --on-neutral:   #ffffff;
 
   /* Data colour: categories in charts, legends and GlyphTile data={n}. Data
@@ -116,10 +124,14 @@
   --danger:       oklch(0.70 0.15 25);
   --danger-soft:  oklch(0.32 0.07 25);
   --danger-text:  oklch(0.86 0.08 25);
+  --info:         oklch(0.72 0.10 235);
+  --info-soft:    oklch(0.32 0.06 235);
+  --info-text:    oklch(0.85 0.08 235);
 
   --on-success:   #211f1c;
   --on-warning:   #211f1c;
   --on-danger:    #211f1c;
+  --on-info:      #211f1c;
   --on-neutral:   #211f1c;
 
   /* Same hues, lifted for the dark surface; the glyph turns dark with them. */
@@ -157,6 +169,8 @@
     --border:       #8b8781;
     --border-soft:  #8b8781;
     --success:      oklch(0.55 0.13 150);
+    --info:         oklch(0.54 0.12 235);
+    --info-text:    oklch(0.40 0.11 235);
     --warning:      oklch(0.56 0.13 80);
     --warning-text: oklch(0.43 0.11 70);
     --accent:       oklch(0.42 0.15 256);
@@ -172,6 +186,8 @@
     --border:       #7e7871;
     --border-soft:  #7e7871;
     --success:      oklch(0.72 0.11 150);
+    --info:         oklch(0.72 0.10 235);
+    --info-text:    oklch(0.85 0.08 235);
     --warning:      oklch(0.76 0.12 80);
     --warning-text: oklch(0.87 0.09 85);
     --accent:       oklch(0.76 0.1275 256);

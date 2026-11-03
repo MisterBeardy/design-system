@@ -9,6 +9,7 @@ const TONES = {
   success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
   warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
   danger:  { fill: "var(--danger-soft)",  ink: "var(--danger-text)",  icon: "alert" },
+  info:    { fill: "var(--info-soft)",    ink: "var(--info-text)",    icon: "info" },
   neutral: { fill: "var(--surface-alt)",  ink: "var(--text-ink)",     icon: "info" },
 };
 

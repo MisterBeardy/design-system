@@ -13,7 +13,7 @@ the surface stay quiet and gives the colour a job.
 Three ways to colour one, and the difference is the whole point:
 
 - `tone` — **semantic**, from the status tokens. Use it when the colour
-  communicates *state*: success, warning, danger, or just accent/neutral.
+  communicates *state*: success, warning, danger, info, or just accent/neutral.
   App-agnostic, so the same state reads the same way in every app.
 - `data={1…6}` — **categorical**, a slot of the data palette (`--data-1` …
   `--data-6`), for colour that encodes *data* rather than state: category

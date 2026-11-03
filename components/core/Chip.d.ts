@@ -6,7 +6,7 @@ import type { ReactNode, HTMLAttributes } from "react";
  * @startingPoint section="Components" subtitle="Status / tag pill" viewport="700x120"
  */
 export interface ChipProps extends HTMLAttributes<HTMLSpanElement> {
-  tone?: "neutral" | "accent" | "ink" | "success" | "warning" | "danger";
+  tone?: "neutral" | "accent" | "ink" | "success" | "warning" | "danger" | "info";
   /** Mono (JetBrains Mono, uppercase-friendly) is the default for status/data
    *  chips; set false for a friendlier display-font tag. */
   mono?: boolean;

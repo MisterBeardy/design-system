@@ -1,4 +1,4 @@
-import { isValidElement } from "react";
+import { isValidElement, useId, useState } from "react";
 import { cx } from "./cx.js";
 import { GlyphTile } from "./GlyphTile.jsx";
 import { Icon } from "./Icon.jsx";
@@ -23,6 +23,8 @@ export function Row({
   trailing,
   chevron = false,
   wrap = false,
+  help,
+  defaultHelpOpen = false,
   onClick,
   disabled = false,
   className,
@@ -30,6 +32,12 @@ export function Row({
   ...props
 }) {
   const interactive = typeof onClick === "function";
+  // `help` puts an ⓘ button after the row's control and opens the full
+  // description under the row. A row that is itself a button can't hold
+  // another one, so `help` applies to rows without an `onClick`.
+  const hasHelp = help != null && help !== false && !interactive;
+  const [helpOpen, setHelpOpen] = useState(defaultHelpOpen);
+  const helpId = useId();
 
   // --row-inset follows --glyph-size, but a GlyphTile given its own `size` is a
   // prop, which CSS can't see. Recompute the inset for this row's separator so
@@ -61,8 +69,52 @@ export function Row({
         </span>
       )}
       {trailing}
+      {hasHelp && (
+        <button
+          type="button"
+          className="ds-button ds-row-help"
+          aria-label={typeof label === "string" ? `About ${label}` : "More information"}
+          aria-expanded={helpOpen}
+          aria-controls={helpOpen ? helpId : undefined}
+          onClick={() => setHelpOpen(!helpOpen)}
+          style={{
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 28,
+            height: 28,
+            margin: "-4px -6px -4px 0",
+            padding: 0,
+            border: "none",
+            borderRadius: "var(--radius-pill)",
+            background: "transparent",
+            color: helpOpen ? "var(--info-text)" : "var(--text-muted)",
+            cursor: "pointer",
+          }}
+        >
+          <Icon name="info" size={16} />
+        </button>
+      )}
       {chevron && (
         <Icon name="chevron-right" size={14} style={{ color: "var(--text-muted)", opacity: 0.5 }} />
+      )}
+      {hasHelp && helpOpen && (
+        <div
+          id={helpId}
+          role="note"
+          style={{
+            flexBasis: "100%",
+            // Lines up with the label, past the glyph.
+            paddingLeft: glyph ? "calc(var(--row-inset) - var(--row-pad-x))" : 0,
+            font: "var(--type-row-sub)",
+            color: "var(--text-muted)",
+            overflowWrap: "anywhere",
+            textAlign: "left",
+          }}
+        >
+          {help}
+        </div>
       )}
     </>
   );
@@ -74,7 +126,7 @@ export function Row({
     "data-glyph": glyph ? "true" : undefined,
     "data-interactive": interactive && !disabled ? "true" : undefined,
     "data-disabled": disabled ? "true" : undefined,
-    style: rowStyle,
+    style: hasHelp ? { flexWrap: "wrap", rowGap: 6, ...rowStyle } : rowStyle,
   };
 
   // A row that does something must be reachable by keyboard; a row that doesn't

@@ -30,6 +30,8 @@ It's the same warm palette, moved only as far as each role needs:
 | `--success` | `{{--success}}` | `{{contrast:--success}}` | `{{dark:--success}}` | `{{contrast-dark:--success}}` |
 | `--warning` | `{{--warning}}` | `{{contrast:--warning}}` | `{{dark:--warning}}` | `{{contrast-dark:--warning}}` |
 | `--warning-text` | `{{--warning-text}}` | `{{contrast:--warning-text}}` | `{{dark:--warning-text}}` | `{{contrast-dark:--warning-text}}` |
+| `--info` | `{{--info}}` | `{{contrast:--info}}` | `{{dark:--info}}` | `{{contrast-dark:--info}}` |
+| `--info-text` | `{{--info-text}}` | `{{contrast:--info-text}}` | `{{dark:--info-text}}` | `{{contrast-dark:--info-text}}` |
 | `--accent` (default app) | `{{--accent}}` | `{{contrast:--accent}}` | `{{dark:--accent}}` | `{{contrast-dark:--accent}}` |
 | `--accent-text` (default app) | `{{--accent-text}}` | `{{contrast:--accent-text}}` | `{{dark:--accent-text}}` | `{{contrast-dark:--accent-text}}` |
 | `--hairline` | {{--hairline}} | {{contrast:--hairline}} | {{dark:--hairline}} | {{contrast-dark:--hairline}} |

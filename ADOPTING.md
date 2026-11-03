@@ -139,6 +139,12 @@ a dark-mode mechanism (Tailwind `.dark` class, `prefers-color-scheme`, a
 theme picker), have that mechanism **also set `data-theme="dark"` on
 `<html>`** — do not duplicate token values under a different selector.
 
+An app's own colours need their own dark and high-contrast values. The system
+strengthens its borders, muted text and status fills under `prefers-contrast:
+more`, but it can't reach an app's own chrome: any token the app defines for
+its own surfaces needs a `@media (prefers-contrast: more)` value too, in both
+themes.
+
 ## 5. Bridging an existing UI framework
 
 If the app already uses Tailwind, shadcn/ui, MUI, CSS modules, etc., don't
@@ -169,7 +175,10 @@ components inherit them:
 
 New and touched UI migrates toward the system primitives. Migration is
 always incremental — screens convert as they're touched, never a mass
-restyle pass.
+restyle pass. But move a **whole screen at once**: a screen half in the
+system's style and half in the app's own looks worse than either, so when you
+touch one, convert all of it (every group, row, control and chip on it) in the
+same change.
 
 **What "migrates toward" means concretely.** Read the **Visual language**
 section of `readme.md` before touching UI; it's the authority. The short
@@ -196,6 +205,8 @@ palette was never the hard part.
 
 - Outcome states use `--success` / `--warning` / `--danger` (+ `-soft` /
   `-text`) — never ad-hoc greens and reds. React: `<Chip tone="success">PAID</Chip>`.
+- Information that isn't an outcome (a hint, a note, "new") uses `--info` (+ `-soft` /
+  `-text`), never an ad-hoc blue. React: `<Chip tone="info">NEW</Chip>`.
 - Status renders as short uppercase mono chips, not verbose copy.
 - Labels are literal; no emoji in UI chrome; numbers set in JetBrains Mono;
   at most one solid-accent action per view.

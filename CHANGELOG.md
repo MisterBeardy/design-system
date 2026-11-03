@@ -11,9 +11,17 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-11-03
+
+The two typefaces ship with the package, so nothing loads from Google. `Popover`
+can sit beside what it edits, there's an `info` tone, and `Row` takes `help`.
+Nothing moves unless an app uses the new props, and an app that imports
+`styles.css` gets the same faces from its own origin. A vendored copy of
+`fonts.css`, or a `postcss-import` setup, needs a change: see Upgrading.
+
 ### Upgrading
 
-- **The fonts are in the package** (#82). `styles.css` (through
+- **Pin `#v1.3.0`.** The fonts are in the package (#82). `styles.css` (through
   `tokens/fonts.css`) now declares Space Grotesk and JetBrains Mono from files
   in `fonts/`, so the page, the build and a strict Content-Security-Policy no
   longer need `fonts.googleapis.com` or `fonts.gstatic.com`. An app that
@@ -647,7 +655,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...v1.0.1

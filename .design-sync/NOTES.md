@@ -1,9 +1,9 @@
 # design-sync notes — @misterbeardy/design-system
 
 Target Claude Design project: **lookwhatibuilt.today** (`38437aad-2039-4a1a-ad1d-73b3aeb3cec2`).
-Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good. Last synced: v1.2.0 (2026-10-13). Row got a `LongText` preview story for `wrap`.
+Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored previews, all graded good. Last synced: v1.3.0 (2026-11-03). The 1.3.0 sync changed no previews; it fixed `fonts/` going missing from the bundle (`extraFonts`, see Fonts below).
 
-**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (the last release: v1.2.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
+**Which branch to sync.** The mirrors show the last release, so the sync reads what `main` has (the last release: v1.3.0). Work lands on `dev` (see `CONTRIBUTING.md`); `dev` and `main` differ only between releases. The sync's own durable changes (config, previews, this file) go in a PR against `dev`.
 
 ## Repo-specific setup (the gotchas that cost time — do these before the converter)
 
@@ -54,7 +54,8 @@ Shape: **package** (no Storybook). 26 components (since v0.8.0), all authored pr
   previews, so a `✓` in a preview becomes `✓` in its designs (caught on the v0.8.0 sync in
   Popover's sort menu).
 - **Fonts are local files from the release after 1.2.0.** `tokens/fonts.css` declares `@font-face` for Space Grotesk + JetBrains Mono from
-  `fonts/*.woff2` (every Google subset, variable, OFL). Until then it `@import`ed Google Fonts → `[FONT_REMOTE]`. `.design-sync/config.json` only globs `tokens/*.css`, so the converter may copy `fonts.css` without `fonts/`, and previews would fall back to system faces where they used to get Google. Check the next sync's bundle for `fonts/`; if it's missing, that is a regression of this release to fix in the sync config, not in the package.
+  `fonts/*.woff2` (every Google subset, variable, OFL). Until then it `@import`ed Google Fonts → `[FONT_REMOTE]`. Until the 1.3.0 sync `.design-sync/config.json` only globbed `tokens/*.css`, which copied `fonts.css` without `fonts/` (`[FONT_DANGLING]`), so previews would have fallen back to system faces. Fixed with `"extraFonts": ["tokens/fonts.css"]`; the bundle now carries `fonts/` (9 woff2 + fonts.css) and the warning is gone.
+- **`resync.mjs` ignores `--force`** (it logs "unrecognized argument"). The anchor's sourceKeys decide what re-verifies; `package-capture.mjs` does honour `--force`.
 - **Guidelines are synced as markdown.** The `guidelines/*.card.html` visual preview
   cards aren't synced (they're HTML, not the markdown `guidelinesGlob` copies); the
   `guidelines/*.md` are, via `cfg.guidelinesGlob="guidelines/*.md"`. They land at

@@ -123,7 +123,9 @@ errors, things just don't load. So:
   with no error. Downscale them first (on macOS, `sips -Z 160 in.png`) so the
   page stays small.
 - **Only Google Fonts stylesheets, and scripts from cdnjs, jsdelivr or unpkg,
-  load.** Paste the picker inline; it can't come from GitHub or this repo.
+  load.** In an artifact, load Space Grotesk and JetBrains Mono (400–700) with a
+  Google Fonts `<link>`, not `tokens/fonts.css`: its `../fonts/` paths don't
+  exist there. Paste the picker inline; it can't come from GitHub or this repo.
 - **The page never receives a query string, only a bare `#token`.** Deep
   links use `#name`. The picker's `?key=` sync still works inside the page,
   but not in a shared link.

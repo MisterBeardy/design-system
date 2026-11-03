@@ -117,11 +117,11 @@ for (const app of APPS) {
 //    surface, e.g. a StatStrip delta (4.5:1).
 for (const theme of ["light", "dark"]) {
   const v = themes[theme];
-  for (const [fill, on] of [["--success", "--on-success"], ["--warning", "--on-warning"], ["--danger", "--on-danger"], ["--text-muted", "--on-neutral"]]) {
+  for (const [fill, on] of [["--success", "--on-success"], ["--warning", "--on-warning"], ["--danger", "--on-danger"], ["--info", "--on-info"], ["--text-muted", "--on-neutral"]]) {
     const r = contrast(v[on], v[fill]);
     expect(r >= 3, `${theme} ${on} on ${fill}: ${r.toFixed(2)}:1${r >= 3 ? "" : " (needs 3)"}`);
   }
-  for (const status of ["success", "warning", "danger"]) {
+  for (const status of ["success", "warning", "danger", "info"]) {
     const r = contrast(v[`--${status}-text`], v["--surface"]);
     expect(r >= 4.5, `${theme} --${status}-text on --surface: ${r.toFixed(2)}:1${r >= 4.5 ? "" : " (needs 4.5)"}`);
   }
@@ -181,7 +181,7 @@ for (const app of APPS) {
 //    text, so they have no floor.
 for (const theme of ["light", "dark"]) {
   const v = themes[theme];
-  for (const [ink, fill] of [["--success-text", "--success-soft"], ["--warning-text", "--warning-soft"], ["--danger-text", "--danger-soft"], ["--text-ink", "--surface-alt"]]) {
+  for (const [ink, fill] of [["--success-text", "--success-soft"], ["--warning-text", "--warning-soft"], ["--danger-text", "--danger-soft"], ["--info-text", "--info-soft"], ["--text-ink", "--surface-alt"]]) {
     const r = contrast(v[ink], v[fill]);
     expect(r >= 4.5, `${theme} Banner ${ink} on ${fill}: ${r.toFixed(2)}:1${r >= 4.5 ? "" : " (needs 4.5)"}`);
   }
@@ -246,7 +246,7 @@ for (const theme of ["light", "dark"]) {
   for (const ink of ["--text-ink", "--text-muted"])
     for (const g of grounds) floor(contrast(v[ink], v[g]), 7, `high contrast ${theme}: ${ink} on ${g}`);
   for (const g of grounds) floor(contrast(v["--border"], v[g]), 3, `high contrast ${theme}: --border on ${g}`);
-  for (const s of ["success", "warning", "danger"]) {
+  for (const s of ["success", "warning", "danger", "info"]) {
     for (const g of [`--${s}-soft`, "--surface", "--bg"]) floor(contrast(v[`--${s}-text`], v[g]), 7, `high contrast ${theme}: --${s}-text on ${g}`);
     floor(contrast(v[`--on-${s}`], v[`--${s}`]), 4.5, `high contrast ${theme}: --on-${s} on --${s}`);
   }

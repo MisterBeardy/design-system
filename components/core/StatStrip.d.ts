@@ -7,7 +7,7 @@ export interface StatStripItem {
   sub?: ReactNode;
   /** Colour for `sub` (e.g. a success-toned delta). `neutral` (the default)
    *  is muted text, the same tone name as Chip's, GlyphTile's and Banner's. */
-  subTone?: "neutral" | "success" | "warning" | "danger";
+  subTone?: "neutral" | "success" | "warning" | "danger" | "info";
   /** At most one stat per screen should set this. */
   accent?: boolean;
 }

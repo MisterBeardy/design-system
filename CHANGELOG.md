@@ -11,6 +11,73 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-11-03
+
+The two typefaces ship with the package, so nothing loads from Google. `Popover`
+can sit beside what it edits, there's an `info` tone, and `Row` takes `help`.
+Nothing moves unless an app uses the new props, and an app that imports
+`styles.css` gets the same faces from its own origin. A vendored copy of
+`fonts.css`, or a `postcss-import` setup, needs a change: see Upgrading.
+
+### Upgrading
+
+- **Pin `#v1.3.0`.** The fonts are in the package (#82). `styles.css` (through
+  `tokens/fonts.css`) now declares Space Grotesk and JetBrains Mono from files
+  in `fonts/`, so the page, the build and a strict Content-Security-Policy no
+  longer need `fonts.googleapis.com` or `fonts.gstatic.com`. An app that
+  imports `styles.css` changes nothing and gets the same faces, in the same
+  subsets, from its own origin; it can delete a Google `<link>` or
+  `next/font/google` for those two families. An app that skips `fonts.css` and
+  loads its own copies is unaffected. `ADOPTING.md` shows the
+  `next/font/local` setup. Two things to check:
+  - **A copy you vendored** (a static page, a mockup that links
+    `tokens/fonts.css`): copy `fonts/` next to `tokens/` too, or the page
+    falls back to system faces without an error.
+  - **An app that inlines `@import "@misterbeardy/design-system/styles.css"`
+    through `postcss-import`** (some Tailwind v3 setups) rather than importing
+    it from JavaScript: that tool doesn't rebase `url()`, so the font paths
+    resolve against the app's own CSS and the build fails with "Module not
+    found". Import the stylesheet from JavaScript, as the guide shows.
+
+### Added
+
+- **Space Grotesk and JetBrains Mono ship with the package** (#82): `fonts/`
+  holds every subset Google served for them (latin, latin-ext and Vietnamese
+  for both, plus Cyrillic and Greek for JetBrains Mono), each a variable
+  WOFF2 covering weights 400 to 700, about 114 KB in all, with each family's
+  SIL Open Font License text, exported as
+  `@misterbeardy/design-system/fonts/*`. `tokens/fonts.css` declares them with
+  `@font-face` (`font-display: swap`, Google's own `unicode-range` per subset,
+  so a page downloads only the subsets its text uses) in place of the Google
+  `@import`, keeping `--font-display` and `--font-mono` and their fallback
+  stacks.
+- **An `info` status tone** (#73): `--info`, `--info-soft`, `--info-text` and
+  `--on-info`, in light, dark and both high-contrast sets, for information that
+  isn't an outcome (a hint, a note, "new"). `Chip`, `Banner` (with the info
+  icon), `GlyphTile` and `StatStrip`'s `subTone` take `tone="info"`. It is a
+  blue at lower chroma than the accents; where an app's accent is a blue too,
+  keep the label or icon, not the hue, as the difference. Nothing changes
+  unless an app uses it.
+- **`Row` takes `help`** (#73): the full description of a setting, behind an ⓘ
+  button after the row's control that opens it under the row (`aria-expanded`
+  and `aria-controls`; `defaultHelpOpen` starts it open). Keep a one-line `sub`
+  for anything a person must not skim past. Ignored on a row with `onClick`.
+- **A map base-layer guideline** (`map.md`, with a card): land, water,
+  boundary and label colours derived from the neutrals, light and dark. Water
+  in light is a cool tint (`--info` mixed into `--bg`), because pure warm
+  neutral makes coastlines vanish.
+- **`status.md`** says how to tell an accent near the warning hue (70–80) from
+  `--warning`, and an info chip from an accent chip, without relying on hue.
+- **`ADOPTING.md`**: an app's own tokens need their own `prefers-contrast:
+  more` values, and a screen moves to the system whole, not half at a time.
+- **`Popover` can sit beside what it edits** (#74). Pass `anchor` (an element,
+  ref or function) and the panel opens to the right of it, or the left when
+  there's no room, lined up with its top, and follows it on scroll and resize.
+  `pointer` adds a pointer aimed at the anchor. Below `narrow` (700px) it
+  becomes a bottom sheet with the anchor scrolled above it (`topInset` clears a
+  sticky bar), as it does when neither side of the anchor has room. `.ds-editing` outlines the target. Nothing changes unless an
+  app passes `anchor`.
+
 ## [1.2.0] — 2026-10-13
 
 `Row` can wrap its text, and shows the full string in a tooltip. Nothing moves
@@ -588,7 +655,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/MisterBeardy/design-system/compare/v1.0.0...v1.0.1

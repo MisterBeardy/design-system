@@ -50,7 +50,8 @@ preserved as the accent rather than replaced.
   Chips are the primary consumer (`<Chip tone="success">PAID</Chip>`).
 - **Type**: Space Grotesk (display/UI, weights 400–700) + JetBrains Mono
   (data/labels, weights 400–700). The type scale is `tokens/typography.css`;
-  where the two faces come from (Google Fonts, or your own) is `tokens/fonts.css`.
+  the two faces ship in the package (`fonts/`, SIL OFL 1.1) and are declared
+  in `tokens/fonts.css`; nothing loads from Google.
 - **Spacing**: 4px base scale, 4 → 32. **Radius**: 6 / 10 / 14 / 20 / pill —
   10–14px is the default for cards, buttons, inputs. Plus `--radius-card`
   (12px), a role rather than a step on that scale: it's the grouped `Group`
@@ -103,7 +104,7 @@ changes colour, and per-app accents are untouched.
 | `Popover` | A small panel anchored to the control that opened it. Floats, so it takes the popover shadow. |
 | Material | Translucency only over live content. Everywhere else, solid. |
 | Accent | Interactive things only. Per-app, from the registry. |
-| `Banner` | An outcome that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
+| `Banner` | An outcome, or a note (`info`), that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
 | Data colour | **Sacred.** Categories and series use the data palette (`--data-1` … `--data-6`, `GlyphTile data={n}`); counts and density use the ramp (`--ramp-1` … `--ramp-7`). Data colour never collapses into the accent or a status hue. See `guidelines/data.md`. |
 
 Two standing rules, both learned the hard way: **data colour is sacred**, and
@@ -259,8 +260,8 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
 
 ## Index
 - `styles.css` — root import list (tokens + `core.css`)
-- `tokens/fonts.css` (the Google Fonts download and the two families; skip it
-  when you host your own fonts), `tokens/typography.css`, `tokens/colors.css`,
+- `tokens/fonts.css` (the two families, from `fonts/`; skip it when you load
+  your own copies), `tokens/typography.css`, `tokens/colors.css`,
   `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
@@ -274,7 +275,7 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   utility framework. Cherry-picking token files instead of `styles.css`? Import
   this too, or separators and focus rings silently won't render, and import
   `tokens/typography.css`, or components lose their type. Only `fonts.css` is
-  optional (it's the Google Fonts download).
+  optional (it declares the two font files; skip it if you load your own).
 - `components/mockup/mockup-picker.js` — the mockup picker: one dependency-free
   script that puts every open design choice in a mockup on one live page as an
   A / B row (`MockupPicker.prompt.md`, `guidelines/mockups.md`). For mockups

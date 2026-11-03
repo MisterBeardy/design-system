@@ -22,8 +22,10 @@ content, and never more than one per screen; if two things went wrong, say
 both in one.
 
 Tones: `success`, `warning` and `danger` are outcomes, drawn in that status's
-`-text` colour on its `-soft` fill. `neutral` is for information that isn't an
-outcome ("Trips from before 2024 are read-only"), in ink on `--surface-alt`.
+`-text` colour on its `-soft` fill. `info` is a hint or note worth noticing that isn't an outcome ("Trips from
+before 2024 are read-only"), in `--info-text` on `--info-soft` with the info
+icon. `neutral` is the same kind of message with no colour, in ink on
+`--surface-alt`.
 A danger Banner is announced straight away (`role="alert"`); the others
 politely.
 

@@ -2,7 +2,7 @@
    touches the network. The two families they name, --font-display and
    --font-mono, come from tokens/fonts.css, or from the app when it hosts its
    own fonts. So every app can import this file, whatever its CSP or bundler:
-   the Google Fonts download lives in fonts.css, not here. */
+   the font files are declared in fonts.css, not here. */
 :root {
   /* Type shorthands: weight size/line-height family, used as
      `font: var(--type-body)`. They're `--type-*`, not `--text-*`: `--text-ink`

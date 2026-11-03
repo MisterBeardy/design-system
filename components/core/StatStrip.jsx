@@ -5,6 +5,7 @@ const SUB_COLOR = {
   success: "var(--success-text)",
   warning: "var(--warning-text)",
   danger:  "var(--danger-text)",
+  info:    "var(--info-text)",
 };
 
 const truncate = { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };

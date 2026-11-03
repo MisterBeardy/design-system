@@ -359,3 +359,12 @@
   /* A wash over the target's own background, not instead of it. */
   box-shadow: inset 0 0 0 9999px color-mix(in srgb, var(--accent-soft) 60%, transparent);
 }
+
+/* The ⓘ on a Row with `help` sits inside a row that stacks edge to edge, so on
+   a touch screen its hit area grows less than a button's 44px. */
+@media (pointer: coarse) {
+  .ds-row-help::before {
+    width: max(100%, 36px);
+    height: max(100%, 36px);
+  }
+}

@@ -103,7 +103,7 @@ changes colour, and per-app accents are untouched.
 | `Popover` | A small panel anchored to the control that opened it. Floats, so it takes the popover shadow. |
 | Material | Translucency only over live content. Everywhere else, solid. |
 | Accent | Interactive things only. Per-app, from the registry. |
-| `Banner` | An outcome that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
+| `Banner` | An outcome, or a note (`info`), that stays until it's dealt with. The one surface that takes a status tint: the tone's `-soft` fill, its `-text` ink. |
 | Data colour | **Sacred.** Categories and series use the data palette (`--data-1` … `--data-6`, `GlyphTile data={n}`); counts and density use the ramp (`--ramp-1` … `--ramp-7`). Data colour never collapses into the accent or a status hue. See `guidelines/data.md`. |
 
 Two standing rules, both learned the hard way: **data colour is sacred**, and

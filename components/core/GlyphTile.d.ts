@@ -1,6 +1,6 @@
 import type { ReactNode, HTMLAttributes } from "react";
 
-export type GlyphTone = "accent" | "success" | "warning" | "danger" | "neutral";
+export type GlyphTone = "accent" | "success" | "warning" | "danger" | "info" | "neutral";
 
 /**
  * The small rounded, filled square that leads a `Row`. This is where colour

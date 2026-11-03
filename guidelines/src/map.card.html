@@ -1,0 +1,17 @@
+<!-- @dsCard group="Colors" viewport="700x220" subtitle="A basemap derived from the neutrals, light + dark" name="Map base layer" -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .map { --land: var(--bg); --water: color-mix(in oklch, var(--info) 24%, var(--bg)); --line: var(--border); --label: var(--text-muted); --halo: var(--bg);
+         flex: 1; border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; position: relative; background: var(--water); font: 11px var(--font-mono); }
+  [data-theme="dark"].map { --water: color-mix(in oklch, var(--bg) 62%, black); --land: var(--surface); --halo: var(--surface); }
+  .map svg { display: block; width: 100%; height: 180px; }
+  .map .land { fill: var(--land); stroke: var(--line); stroke-width: 1.5; }
+  .map .border { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 3; }
+  .map text { fill: var(--label); paint-order: stroke; stroke: var(--halo); stroke-width: 3; stroke-linejoin: round; }
+  .map .pin { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+</style>
+<div style="display:flex; gap:16px;">
+  <div class="map"><svg viewBox="0 0 320 180"><path class="land" d="M0 0H210C190 30 205 55 180 80C160 100 170 130 140 150C125 162 130 172 120 180H0Z"/><path class="border" d="M0 90C40 80 80 100 120 90C150 84 170 90 188 78"/><text x="14" y="40">LAND</text><text x="226" y="100">WATER</text><circle class="pin" cx="96" cy="70" r="6"/></svg></div>
+  <div class="map" data-theme="dark"><svg viewBox="0 0 320 180"><path class="land" d="M0 0H210C190 30 205 55 180 80C160 100 170 130 140 150C125 162 130 172 120 180H0Z"/><path class="border" d="M0 90C40 80 80 100 120 90C150 84 170 90 188 78"/><text x="14" y="40">LAND</text><text x="226" y="100">WATER</text><circle class="pin" cx="96" cy="70" r="6"/></svg></div>
+</div>

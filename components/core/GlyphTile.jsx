@@ -3,6 +3,7 @@ const TONE_BG = {
   success: "var(--success)",
   warning: "var(--warning)",
   danger:  "var(--danger)",
+  info:    "var(--info)",
   neutral: "var(--text-muted)",
 };
 
@@ -13,6 +14,7 @@ const TONE_ON = {
   success: "var(--on-success)",
   warning: "var(--on-warning)",
   danger:  "var(--on-danger)",
+  info:    "var(--on-info)",
   neutral: "var(--on-neutral)",
 };
 

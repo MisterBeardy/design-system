@@ -13,6 +13,25 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Added
 
+- **An `info` status tone** (#73): `--info`, `--info-soft`, `--info-text` and
+  `--on-info`, in light, dark and both high-contrast sets, for information that
+  isn't an outcome (a hint, a note, "new"). `Chip`, `Banner` (with the info
+  icon), `GlyphTile` and `StatStrip`'s `subTone` take `tone="info"`. It is a
+  blue at lower chroma than the accents; where an app's accent is a blue too,
+  keep the label or icon, not the hue, as the difference. Nothing changes
+  unless an app uses it.
+- **`Row` takes `help`** (#73): the full description of a setting, behind an ⓘ
+  button after the row's control that opens it under the row (`aria-expanded`
+  and `aria-controls`; `defaultHelpOpen` starts it open). Keep a one-line `sub`
+  for anything a person must not skim past. Ignored on a row with `onClick`.
+- **A map base-layer guideline** (`map.md`, with a card): land, water,
+  boundary and label colours derived from the neutrals, light and dark. Water
+  in light is a cool tint (`--info` mixed into `--bg`), because pure warm
+  neutral makes coastlines vanish.
+- **`status.md`** says how to tell an accent near the warning hue (70–80) from
+  `--warning`, and an info chip from an accent chip, without relying on hue.
+- **`ADOPTING.md`**: an app's own tokens need their own `prefers-contrast:
+  more` values, and a screen moves to the system whole, not half at a time.
 - **`Popover` can sit beside what it edits** (#74). Pass `anchor` (an element,
   ref or function) and the panel opens to the right of it, or the left when
   there's no room, lined up with its top, and follows it on scroll and resize.

@@ -6,6 +6,7 @@ export function Chip({ tone = "neutral", mono = true, children, style, ...props 
     success: { background: "var(--success-soft)", color: "var(--success-text)" },
     warning: { background: "var(--warning-soft)", color: "var(--warning-text)" },
     danger:  { background: "var(--danger-soft)", color: "var(--danger-text)" },
+    info:    { background: "var(--info-soft)", color: "var(--info-text)" },
   };
   return (
     <span

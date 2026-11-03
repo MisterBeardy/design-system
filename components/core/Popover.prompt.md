@@ -31,5 +31,42 @@ A `title` adds a header row with that close button. Without one there's no
 header, which suits a plain menu.
 
 `width` is 300 by default and never exceeds the viewport. For anything taller
-than about half the screen, or anything over live content, use a `Sheet`
-instead: a popover that fills the screen is a screen.
+than about half the screen, use a `Sheet`: a popover that fills the screen is
+a screen.
+
+## Editing live content: beside it, with a pointer
+
+A popover under a gear covers the thing the gear changes. When the person
+edits something that redraws as they go, pass `anchor` (the panel, card or
+widget being edited) and `pointer`:
+
+```jsx
+const widget = useRef(null);
+
+<div ref={widget} className={open ? "ds-editing" : undefined}> … the widget … </div>
+
+<Popover open={open} onClose={() => setOpen(false)} title="Widget options"
+         anchor={widget} pointer topInset={56}
+         trigger={<Button variant="ghost" size="sm" icon="settings" onClick={() => setOpen(!open)} />}>
+  …
+</Popover>
+```
+
+It opens beside the anchor, to the right, or the left when there's no room,
+lined up with the anchor's top, and it follows the anchor on scroll and resize.
+The pointer aims at the anchor and stays aimed when the panel is clamped to the
+viewport. Pressing the trigger again closes it; focus returns to the trigger.
+
+Mark the target with `ds-editing` (2px `--accent` outline, faint `--accent-soft`
+wash; it sets `box-shadow`, so a target that has its own shadow loses it), so it's clear which of several similar widgets the panel changes.
+
+Below `narrow` (700px), or when neither side of the anchor has room for the
+panel, it becomes a bottom sheet up to 52vh and the page scrolls to keep the anchor just above it. Give
+`topInset` the height of any sticky bar.
+
+Without `anchor`, over live content use this; a `Sheet` hides part of the page
+and loses the link between the control and what it controls.
+
+If `anchor` never resolves (its ref is never attached), the panel gives up after
+about a dozen frames and sits under the trigger. A string `width` should be one
+the panel can hold on both layouts; a `style.width` overrides `width`.

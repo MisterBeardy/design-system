@@ -11,6 +11,16 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- **`Popover` can sit beside what it edits** (#74). Pass `anchor` (an element,
+  ref or function) and the panel opens to the right of it, or the left when
+  there's no room, lined up with its top, and follows it on scroll and resize.
+  `pointer` adds a pointer aimed at the anchor. Below `narrow` (700px) it
+  becomes a bottom sheet with the anchor scrolled above it (`topInset` clears a
+  sticky bar), as it does when neither side of the anchor has room. `.ds-editing` outlines the target. Nothing changes unless an
+  app passes `anchor`.
+
 ## [1.2.0] — 2026-10-13
 
 `Row` can wrap its text, and shows the full string in a tooltip. Nothing moves

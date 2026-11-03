@@ -666,8 +666,17 @@ function Sheet({
 
 // components/core/Popover.jsx
 import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef2, useState as useState2 } from "react";
-import { jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
+import { createPortal } from "react-dom";
+import { Fragment as Fragment2, jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
 var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+var GAP = 12;
+var EDGE = 8;
+function anchorRect(anchor) {
+  const a = typeof anchor === "function" ? anchor() : anchor;
+  const el = a && "current" in a ? a.current : a;
+  if (!el) return null;
+  return typeof el.getBoundingClientRect === "function" ? el.getBoundingClientRect() : el;
+}
 function Popover({
   open,
   onClose,
@@ -677,6 +686,10 @@ function Popover({
   width = 300,
   placement = "bottom",
   align = "start",
+  anchor,
+  pointer = false,
+  narrow = 700,
+  topInset = 0,
   children,
   className,
   style,
@@ -688,14 +701,112 @@ function Popover({
   close.current = onClose;
   const [side, setSide] = useState2(placement);
   const [edge, setEdge] = useState2(align);
+  const beside = anchor != null;
+  const [pos, setPos] = useState2(null);
+  const replace = useRef2(null);
+  const lastWidth = useRef2(null);
+  const anchorNow = useRef2(anchor);
+  anchorNow.current = anchor;
   useLayoutEffect(() => {
+    if (!open || !beside) {
+      setPos(null);
+      return void 0;
+    }
+    let frame = 0;
+    let tries = 0;
+    let sheeted = false;
+    let scrolled = false;
+    let placedOnce = false;
+    const place = () => {
+      const el = panel.current;
+      const t = anchorRect(anchorNow.current);
+      if (!el) return;
+      if (!t) {
+        if (placedOnce) return;
+        if (++tries <= 12) again();
+        else {
+          const wr = wrap.current?.getBoundingClientRect();
+          if (wr) {
+            const left2 = Math.max(EDGE, Math.min(wr.left, window.innerWidth - el.offsetWidth - EDGE));
+            setPos((p) => p && p.left === left2 && p.top === wr.bottom + 6 ? p : { left: left2, top: wr.bottom + 6, side: "bottom", arrow: null });
+          }
+        }
+        return;
+      }
+      placedOnce = true;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const w = typeof width === "number" ? Math.min(width, vw - 32) : sheeted ? lastWidth.current ?? 300 : el.offsetWidth;
+      const room = (side2) => side2 === "right" ? vw - t.right - GAP - EDGE : t.left - GAP - EDGE;
+      let at = placement === "left" ? "left" : "right";
+      const other = at === "right" ? "left" : "right";
+      if (room(at) < w && room(other) >= w) at = other;
+      if (vw < narrow || room(at) < w) {
+        if (!sheeted) {
+          sheeted = true;
+          setPos({ sheet: true });
+          again();
+          return;
+        }
+        if (!scrolled) {
+          scrolled = true;
+          const limit = vh - el.offsetHeight - EDGE;
+          if (t.bottom > limit) {
+            const by = Math.min(t.bottom - limit, Math.max(0, t.top - topInset - EDGE));
+            if (by > 0) window.scrollBy(0, by);
+          }
+        }
+        return;
+      }
+      sheeted = false;
+      scrolled = false;
+      lastWidth.current = el.offsetWidth;
+      const h = el.offsetHeight;
+      const left = Math.max(EDGE, Math.min(at === "right" ? t.right + GAP : t.left - GAP - w, vw - w - EDGE));
+      const top = Math.max(EDGE, Math.min(t.top, vh - h - EDGE));
+      const onScreen = t.bottom > 0 && t.top < vh;
+      const mid = (Math.max(t.top, 0) + Math.min(t.bottom, vh)) / 2;
+      const arrow = onScreen ? Math.max(16, Math.min(mid - top, h - 16)) : null;
+      setPos((p) => p && p.left === left && p.top === top && p.side === at && p.arrow === arrow ? p : { left, top, side: at, arrow });
+    };
+    const again = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(place);
+    };
+    const follow = () => {
+      tries = 0;
+      again();
+    };
+    replace.current = follow;
+    place();
+    window.addEventListener("resize", follow);
+    window.addEventListener("scroll", follow, true);
+    const watch = typeof ResizeObserver === "function" ? new ResizeObserver(follow) : null;
+    if (watch) {
+      if (panel.current) watch.observe(panel.current);
+      const a = anchorNow.current;
+      const el = typeof a === "function" ? null : a && "current" in a ? a.current : a;
+      if (el && el.nodeType === 1) watch.observe(el);
+    }
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", follow);
+      window.removeEventListener("scroll", follow, true);
+      watch?.disconnect();
+    };
+  }, [open, beside, placement, narrow, topInset, width]);
+  useEffect2(() => {
+    replace.current?.();
+  }, [anchor]);
+  useLayoutEffect(() => {
+    if (beside) return;
     if (!open || !panel.current) return;
     const r = panel.current.getBoundingClientRect();
     const t = wrap.current?.getBoundingClientRect();
     if (!t) return;
     setSide(placement === "bottom" && t.bottom + r.height + 8 > window.innerHeight && t.top - r.height - 8 > 0 ? "top" : placement);
     setEdge(align === "start" && t.left + r.width > window.innerWidth - 8 ? "end" : align);
-  }, [open, placement, align, width]);
+  }, [open, beside, placement, align, width]);
   useEffect2(() => {
     if (!open) return void 0;
     const previously = document.activeElement;
@@ -721,7 +832,7 @@ function Popover({
       }
     };
     const onDown = (e) => {
-      if (!wrap.current?.contains(e.target)) close.current?.();
+      if (!wrap.current?.contains(e.target) && !panel.current?.contains(e.target)) close.current?.();
     };
     document.addEventListener("keydown", onKey, true);
     document.addEventListener("pointerdown", onDown, true);
@@ -732,77 +843,124 @@ function Popover({
     };
   }, [open]);
   const dismiss = useCallback(() => close.current?.(), []);
-  return /* @__PURE__ */ jsxs8("span", { ref: wrap, style: { position: "relative", display: "inline-flex" }, children: [
-    trigger && cloneElement(trigger, { "aria-expanded": open ? true : void 0, "aria-haspopup": "dialog" }),
-    open && /* @__PURE__ */ jsxs8(
+  const sheet = beside && pos?.sheet;
+  const placed = beside ? pos : true;
+  const where = !beside ? {
+    position: "absolute",
+    [side === "top" ? "bottom" : "top"]: "calc(100% + 6px)",
+    [edge === "end" ? "right" : "left"]: 0,
+    width,
+    maxWidth: "calc(100vw - 32px)",
+    borderRadius: "var(--radius-md)"
+  } : sheet ? {
+    position: "fixed",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    maxHeight: "52vh",
+    overflowY: "auto",
+    borderRadius: "var(--radius-lg) var(--radius-lg) 0 0"
+  } : {
+    position: "fixed",
+    left: pos?.left ?? 0,
+    top: pos?.top ?? 0,
+    width,
+    maxWidth: "calc(100vw - 32px)",
+    borderRadius: "var(--radius-md)",
+    // Measured before it is placed, so it never flashes in the corner.
+    // Not visibility:hidden, which would stop it taking focus on open.
+    opacity: placed ? void 0 : 0,
+    pointerEvents: placed ? void 0 : "none"
+  };
+  const content = /* @__PURE__ */ jsxs8(Fragment2, { children: [
+    title && /* @__PURE__ */ jsxs8(
       "div",
       {
-        role: "dialog",
-        "aria-label": label ?? (typeof title === "string" ? title : void 0),
-        tabIndex: -1,
-        ref: panel,
-        ...props,
-        className: cx("ds-popover", className),
         style: {
-          position: "absolute",
-          zIndex: 800,
-          [side === "top" ? "bottom" : "top"]: "calc(100% + 6px)",
-          [edge === "end" ? "right" : "left"]: 0,
-          boxSizing: "border-box",
-          width,
-          maxWidth: "calc(100vw - 32px)",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderRadius: "var(--radius-md)",
-          boxShadow: "var(--shadow-popover)",
-          overflow: "hidden",
-          ...style
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "10px 12px",
+          borderBottom: "var(--hairline) solid var(--border)"
         },
         children: [
-          title && /* @__PURE__ */ jsxs8(
-            "div",
+          /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
+          /* @__PURE__ */ jsx14(
+            "button",
             {
+              type: "button",
+              "aria-label": "Close",
+              "data-ds-close": "",
+              onClick: dismiss,
+              className: "ds-button",
               style: {
+                flexShrink: 0,
                 display: "flex",
                 alignItems: "center",
-                gap: 8,
-                padding: "10px 12px",
-                borderBottom: "var(--hairline) solid var(--border)"
+                justifyContent: "center",
+                width: 26,
+                height: 26,
+                padding: 0,
+                border: "none",
+                borderRadius: "var(--radius-sm)",
+                background: "transparent",
+                color: "var(--text-muted)",
+                cursor: "pointer"
               },
-              children: [
-                /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
-                /* @__PURE__ */ jsx14(
-                  "button",
-                  {
-                    type: "button",
-                    "aria-label": "Close",
-                    "data-ds-close": "",
-                    onClick: dismiss,
-                    className: "ds-button",
-                    style: {
-                      flexShrink: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 26,
-                      height: 26,
-                      padding: 0,
-                      border: "none",
-                      borderRadius: "var(--radius-sm)",
-                      background: "transparent",
-                      color: "var(--text-muted)",
-                      cursor: "pointer"
-                    },
-                    children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 14 })
-                  }
-                )
-              ]
+              children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 14 })
             }
-          ),
-          children
+          )
         ]
       }
-    )
+    ),
+    children
+  ] });
+  const box = /* @__PURE__ */ jsxs8(
+    "div",
+    {
+      role: "dialog",
+      "aria-label": label ?? (typeof title === "string" ? title : void 0),
+      tabIndex: -1,
+      ref: panel,
+      "data-ds-side": beside && !sheet ? pos?.side : void 0,
+      ...props,
+      className: cx("ds-popover", className),
+      style: {
+        zIndex: 800,
+        boxSizing: "border-box",
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        boxShadow: "var(--shadow-popover)",
+        overflow: sheet ? "auto" : beside ? "visible" : "hidden",
+        ...where,
+        ...style
+      },
+      children: [
+        pointer && beside && !sheet && pos && pos.arrow != null && /* @__PURE__ */ jsx14(
+          "span",
+          {
+            "aria-hidden": "true",
+            className: "ds-popover-pointer",
+            style: {
+              position: "absolute",
+              top: pos.arrow - 6,
+              [pos.side === "right" ? "left" : "right"]: -7,
+              width: 12,
+              height: 12,
+              transform: "rotate(45deg)",
+              background: "var(--surface)",
+              [pos.side === "right" ? "borderLeft" : "borderRight"]: "1px solid var(--border)",
+              [pos.side === "right" ? "borderBottom" : "borderTop"]: "1px solid var(--border)"
+            }
+          }
+        ),
+        beside ? /* @__PURE__ */ jsx14("div", { style: { overflow: "hidden", borderRadius: "inherit" }, children: content }) : content
+      ]
+    }
+  );
+  return /* @__PURE__ */ jsxs8("span", { ref: wrap, style: { position: "relative", display: "inline-flex" }, children: [
+    trigger && cloneElement(trigger, { "aria-expanded": open ? true : void 0, "aria-haspopup": "dialog" }),
+    open && (beside && typeof document !== "undefined" ? createPortal(box, document.body) : box)
   ] });
 }
 

@@ -1,7 +1,7 @@
-/* fonts.css leads with its own @import (Google Fonts), which per the CSS
-   spec must precede all non-import rules in the final stylesheet — so it has
-   to be imported first here too. An app that can't take that download skips
-   this barrel and imports the files below one by one (see ADOPTING.md). */
+/* fonts.css declares the two faces from the package's own files (../fonts/),
+   so nothing is downloaded from Google. An app that loads its own copies skips
+   it, or skips this barrel and imports the files below one by one (see
+   ADOPTING.md). */
 @import "./tokens/fonts.css";
 @import "./tokens/typography.css";
 @import "./tokens/colors.css";

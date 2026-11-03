@@ -44,6 +44,41 @@ Every app owns exactly one hue. Check `app-registry.js` in this package:
   needed.
 - Import `"@misterbeardy/design-system/styles.css"` once at the app root,
   before app-local styles.
+- **The two faces come with the package**, so nothing is fetched from Google:
+  `styles.css` declares them (`tokens/fonts.css`, files in `fonts/`, every
+  subset Google served: latin, latin-ext, Vietnamese, and Cyrillic and Greek
+  for JetBrains Mono; variable, weights 400–700, SIL OFL 1.1) and they load
+  from your own origin. A strict Content-Security-Policy needs no
+  `fonts.googleapis.com` or `fonts.gstatic.com`, and a build needs no network
+  to a font host. Delete any `next/font/google` or Google `<link>` for Space
+  Grotesk or JetBrains Mono. To load them through Next's font pipeline
+  instead (it preloads them and sets the fallback metrics), skip `fonts.css`
+  and point `next/font/local` at the package's files, then declare the two
+  variables yourself, as the comment in `tokens/fonts.css` shows:
+  ```js
+  // app/layout.js at the project root. In src/app/layout.js the path starts
+  // "../../node_modules/…": it is relative to the file that calls localFont.
+  import localFont from "next/font/local";
+  const grotesk = localFont({
+    src: "../node_modules/@misterbeardy/design-system/fonts/space-grotesk-latin.woff2",
+    variable: "--font-space-grotesk", weight: "400 700", display: "swap",
+  });
+  const mono = localFont({
+    src: "../node_modules/@misterbeardy/design-system/fonts/jetbrains-mono-latin.woff2",
+    variable: "--font-jetbrains-mono", weight: "400 700", display: "swap",
+  });
+  // <html className={`${grotesk.variable} ${mono.variable}`}>
+  ```
+  That example loads only the latin files: `next/font/local` has no
+  per-file `unicode-range`, so latin-ext, Vietnamese, Cyrillic and Greek text
+  falls back to the system face. An app with such text imports `fonts.css`
+  (through `styles.css`) instead of using `next/font/local`.
+  The variable classes go on `<html>`, not `<body>`: `--font-display` is
+  computed on `:root` and has to see them there.
+  Import `styles.css` from JavaScript (`import "@misterbeardy/design-system/styles.css"`
+  in `app/layout`), not with an `@import` that
+  `postcss-import` inlines: that tool doesn't rebase `url()`, so the font
+  paths would resolve against your own CSS.
 - **Set your own text in the system's two faces**, not just the components'.
   Components set their own type; everything else on the page inherits from
   your `body` and your framework. So `body { font-family: var(--font-display); }`,
@@ -78,8 +113,8 @@ import every other file yourself — everything except `fonts.css`:
 
 `typography.css` is not optional either, and it downloads nothing: it's the
 type scale every component sets its text from (`--type-button`,
-`--type-row-label`, …). Before 1.0 it also carried the Google Fonts import,
-so apps that couldn't take the download left it out, and their Buttons,
+`--type-row-label`, …). Before 1.0 it also carried the font download,
+so apps that couldn't take it left it out, and their Buttons,
 Chips and StatTiles fell back to the page's font. Never copy its values into
 your own CSS instead; import it.
 
@@ -101,7 +136,8 @@ declared on a descendant, and every descendant then inherits the broken value.
 
 **Static HTML / no npm**
 - Vendor `styles.css` + `tokens/*.css` + `components/core/core.css` into the
-  project with a header comment: `/* vendored from @misterbeardy/design-system
+  project, **and the `fonts/` folder next to `tokens/`** (`fonts.css` points at
+  `../fonts/`; without them the page silently uses system faces), with a header comment: `/* vendored from @misterbeardy/design-system
   vX.Y.Z — do not hand-edit; refresh from the repo */`. Rebuild component
   shapes from `guidelines/grouped-list.card.html`, which is plain HTML against
   the same classes and tokens.
@@ -261,8 +297,8 @@ language (Group/Row/GlyphTile/Segmented/Switch/StatStrip) so I can see it
 land. Then stop — the rest of the screens migrate incrementally as they're
 touched, never in a mass restyle pass.
 
-Two things that are easy to get wrong: if you can't import styles.css (CSP
-blocks the Google Fonts download in tokens/fonts.css), you must still import
+Two things that are easy to get wrong: if you can't import styles.css (a
+bundler restriction, say), you must still import
 typography.css and core.css explicitly, or components lose their type and
 separators and focus rings silently won't render. And don't bridge the app's
 categorical/data colours to the accent — data colour is sacred; it comes from

@@ -55,5 +55,8 @@
     }
   },
   "readmeHeader": ".design-sync/conventions.md",
-  "guidelinesGlob": "guidelines/*.md"
+  "guidelinesGlob": "guidelines/*.md",
+  "extraFonts": [
+    "tokens/fonts.css"
+  ]
 }

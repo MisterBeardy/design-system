@@ -11,12 +11,21 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-11-04
+
+The accent registry gains a row for Command Center, the surfacebuddy web app.
+
+### Upgrading
+
+- **Pin `#v1.4.0`.** Nothing to change for an app that doesn't use the new key.
+  The surfacebuddy web app moves its pin from `#v1.3.0` and re-prints its
+  accent block with `accentCssFor("commandcenter")`, which it pastes today.
+
 ### Added
 
 - **Command Center has an accent.** The registry gains a `commandcenter` row
   (hue 45, chroma 0.15, the only open slot) for the surfacebuddy web app, whose
-  stand-in olive at hue 125 shared Infra Console's. Nothing changes for other
-  apps.
+  stand-in olive at hue 125 shared Infra Console's.
 
 ## [1.3.0] — 2026-11-03
 
@@ -662,7 +671,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/MisterBeardy/design-system/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MisterBeardy/design-system/compare/v1.0.1...v1.1.0

@@ -11,6 +11,13 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Added
+
+- **Command Center has an accent.** The registry gains a `commandcenter` row
+  (hue 45, chroma 0.15, the only open slot) for the surfacebuddy web app, whose
+  stand-in olive at hue 125 shared Infra Console's. Nothing changes for other
+  apps.
+
 ## [1.3.0] — 2026-11-03
 
 The two typefaces ship with the package, so nothing loads from Google. `Popover`

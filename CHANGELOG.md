@@ -11,6 +11,47 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+### Upgrading
+
+- **Data colours come in a new order for most apps** (#73). `dataOrderFor()`
+  now moves every slot within 15 of the app's accent, in the light or the dark
+  theme, to the end, where it used to move only the one nearest in light. An
+  app that assigns series with `dataOrderFor()` gets different colours for
+  them: IdleAirport's first series is plum (`--data-2`) instead of ochre, which
+  sat beside its amber accent in dark. Orders for every app are in
+  `app-registry.js`; Command Center's doesn't change. An app that hard-coded
+  slots changes nothing, but can read its new order there.
+- **An app's global `button` styles no longer reach the system's buttons**
+  (#73). If an app relied on them (a hover lift on `Row`s, say), they stop
+  applying; an app that wrote resets for `Row` and `Segmented` can delete them.
+
+### Added
+
+- **The system's buttons reset what they don't set** (#73). `Row`, `Segmented`,
+  `TabBar`, `Button` and the new `Swatches` and `SideNav` render real
+  `<button>`s, so an app's `button { … }` and `button:hover { … }` rules used
+  to give them uppercase labels, a pill radius, a drop shadow and a hover lift.
+  `core.css` now resets the properties each one leaves to the stylesheet
+  (transform, shadow, text-transform, letter-spacing, margin, minimum sizes,
+  and Row's background, border and radius), at a specificity that beats
+  `button:hover` but not an app rule written more specifically.
+- **`Swatches`** (#73): pick one colour from a few, a theme or a livery
+  preset. A `radiogroup` of round chips with a ring in ink on the chosen one;
+  arrow keys, Home and End move and choose, disabled options are skipped, and
+  each chip's name is its accessible label and tooltip. `color` takes any CSS
+  background, so a two-tone preset is a gradient. 28px chips, 32px with 44px
+  tap areas on a touch screen.
+- **`SideNav`** (#73): the pages inside one part of an app (a settings
+  screen), down its side, with one level of sections. A section opens and
+  closes under its name, and opening one goes to its first page. Below
+  `narrow` (700px) it becomes chevron `Row`s in `Group`s, a section's pages
+  under its name. Given the page as `children`, it lays it out beside the
+  rail, or on a phone shows the list or the page under a back bar
+  (`onChange(null)`), moving focus to the page's heading and back to its row.
+- A `chevron-left` icon, for the back bar.
+- `app-registry.js` rows carry `dataOrder` (the whole order) and exports
+  `DATA_NEAR_ACCENT`; `dataLast` stays on every row as the order's last slot.
+
 ## [1.4.0] — 2026-11-04
 
 The accent registry gains a row for Command Center, the surfacebuddy web app.

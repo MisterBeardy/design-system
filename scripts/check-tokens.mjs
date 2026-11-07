@@ -7,7 +7,7 @@
 // Run with `npm run check`. CI runs it on every push and pull request.
 
 import { readFile } from "node:fs/promises";
-import { APPS, DATA_SLOTS, accentFor, accentTokensFor } from "../app-registry.js";
+import { APPS, DATA_NEAR_ACCENT, DATA_SLOTS, accentFor, accentTokensFor } from "../app-registry.js";
 
 // --- Colour maths: CSS colour string -> WCAG 2 contrast ratio -------------
 
@@ -129,7 +129,7 @@ for (const theme of ["light", "dark"]) {
 
 // 4. The data palette: every slot carries its glyph (3:1) and reads as a mark
 //    on the surface (3:1); every pair stays distinguishable for each kind of
-//    vision; and each app's dataLast really is the slot nearest its accent.
+//    vision; and each app's dataOrder puts every slot near its accent last.
 const FLOOR = { normal: 12, protan: 12, deutan: 12, tritan: 10 };
 for (const theme of ["light", "dark"]) {
   const v = themes[theme];
@@ -164,14 +164,21 @@ for (const theme of ["light", "dark"]) {
   }
 }
 for (const app of APPS) {
-  const accent = accentFor(app.hue, app.chroma);
-  const nearest = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1)
-    .map((n) => [apart(themes.light[`--data-${n}`], accent), n])
-    .sort((a, b) => a[0] - b[0])[0];
+  // How far each slot sits from the app's accent: the nearer of the two themes.
+  const near = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1).map((n) => [
+    n,
+    Math.min(...["light", "dark"].map((theme) => apart(themes[theme][`--data-${n}`], accentFor(app.hue, app.chroma, theme === "dark")))),
+  ]);
+  const order = [
+    ...near.filter(([, d]) => d >= DATA_NEAR_ACCENT).map(([n]) => n),
+    ...near.filter(([, d]) => d < DATA_NEAR_ACCENT).sort((a, b) => b[1] - a[1]).map(([n]) => n),
+  ];
+  const ok = order.join() === app.dataOrder.join();
+  const first = near.find(([n]) => n === order[0])[1];
   expect(
-    app.dataLast === nearest[1],
-    `${app.name}: dataLast ${app.dataLast}` +
-      (app.dataLast === nearest[1] ? ` is the slot nearest its accent (${nearest[0].toFixed(1)} apart)` : `, but --data-${nearest[1]} is nearest its accent. Set dataLast: ${nearest[1]}.`),
+    ok,
+    `${app.name}: dataOrder [${app.dataOrder.join(", ")}]` +
+      (ok ? `, first slot ${first.toFixed(1)} from its accent` : ` is stale. Set dataOrder: [${order.join(", ")}].`),
   );
 }
 

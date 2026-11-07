@@ -6,6 +6,7 @@ export const ICONS = {
   "calendar": [["rect",{"x":"3.5","y":"4.5","width":"13","height":"12","rx":"2"}],["path",{"d":"M3.5 8.5h13M7 2.5v4M13 2.5v4"}]],
   "check": [["path",{"d":"M4.5 10.5 8.5 14.5 15.5 6"}]],
   "chevron-down": [["path",{"d":"M4.5 7.5 10 13l5.5-5.5"}]],
+  "chevron-left": [["path",{"d":"M12.5 4.5 7 10l5.5 5.5"}]],
   "chevron-right": [["path",{"d":"M7.5 4.5 13 10l-5.5 5.5"}]],
   "close": [["path",{"d":"M5.5 5.5l9 9M14.5 5.5l-9 9"}]],
   "inbox": [["path",{"d":"M3 11l2.5-6h9L17 11v5H3v-5Z"}],["path",{"d":"M3 11h4l1 2h4l1-2h4"}]],

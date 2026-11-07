@@ -262,6 +262,7 @@ var ICONS = {
   "calendar": [["rect", { "x": "3.5", "y": "4.5", "width": "13", "height": "12", "rx": "2" }], ["path", { "d": "M3.5 8.5h13M7 2.5v4M13 2.5v4" }]],
   "check": [["path", { "d": "M4.5 10.5 8.5 14.5 15.5 6" }]],
   "chevron-down": [["path", { "d": "M4.5 7.5 10 13l5.5-5.5" }]],
+  "chevron-left": [["path", { "d": "M12.5 4.5 7 10l5.5 5.5" }]],
   "chevron-right": [["path", { "d": "M7.5 4.5 13 10l-5.5 5.5" }]],
   "close": [["path", { "d": "M5.5 5.5l9 9M14.5 5.5l-9 9" }]],
   "inbox": [["path", { "d": "M3 11l2.5-6h9L17 11v5H3v-5Z" }], ["path", { "d": "M3 11h4l1 2h4l1-2h4" }]],
@@ -599,9 +600,99 @@ function StatStrip({ stats, style, ...props }) {
   )) });
 }
 
+// components/core/Swatches.jsx
+import { useRef } from "react";
+import { jsx as jsx13 } from "react/jsx-runtime";
+function Swatches({ options, value, onChange, label, className, style, ...props }) {
+  const refs = useRef([]);
+  const enabled = options.map((o, i) => o.disabled ? -1 : i).filter((i) => i >= 0);
+  const current = options.findIndex((o) => o.value === value && !o.disabled);
+  const tabStop = current >= 0 ? current : enabled[0];
+  const pick = (i) => {
+    if (i == null) return;
+    onChange(options[i].value);
+    refs.current[i]?.focus();
+  };
+  const onKeyDown = (event) => {
+    const at = enabled.indexOf(Number(event.target.dataset.index));
+    if (at < 0 || enabled.length === 0) return;
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+    if (step) {
+      const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+      const dir = rtl && (event.key === "ArrowRight" || event.key === "ArrowLeft") ? -step : step;
+      pick(enabled[(at + dir + enabled.length) % enabled.length]);
+    } else if (event.key === "Home") {
+      pick(enabled[0]);
+    } else if (event.key === "End") {
+      pick(enabled[enabled.length - 1]);
+    } else {
+      return;
+    }
+    event.preventDefault();
+  };
+  return /* @__PURE__ */ jsx13(
+    "div",
+    {
+      role: "radiogroup",
+      "aria-label": label,
+      ...props,
+      onKeyDown,
+      className: cx("ds-swatches", className),
+      style: {
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: "var(--swatch-gap)",
+        // The ring on the chosen chip is drawn outside it; this keeps it
+        // inside the group's box so a wrapping parent doesn't clip it.
+        padding: 4,
+        ...style
+      },
+      children: options.map((opt, i) => {
+        const active = i === current;
+        return /* @__PURE__ */ jsx13(
+          "button",
+          {
+            ref: (el) => refs.current[i] = el,
+            type: "button",
+            role: "radio",
+            "aria-checked": active,
+            "aria-label": opt.label,
+            title: opt.label,
+            "data-index": i,
+            tabIndex: i === tabStop ? 0 : -1,
+            disabled: opt.disabled,
+            onClick: () => onChange(opt.value),
+            className: "ds-swatch",
+            style: {
+              flexShrink: 0,
+              boxSizing: "border-box",
+              width: "var(--swatch-size)",
+              height: "var(--swatch-size)",
+              padding: 0,
+              border: "none",
+              borderRadius: "var(--radius-pill)",
+              // Any CSS background: a colour, or a gradient for a two-tone livery.
+              background: opt.color,
+              cursor: opt.disabled ? "default" : "pointer",
+              opacity: opt.disabled ? 0.4 : void 0,
+              // An edge in ink at low strength, so a white chip on a white card
+              // or a near-black one on the dark surface still has an outline;
+              // the chosen chip adds a gap in the surface colour and a ring
+              // in ink, which holds 3:1 on any surface in either theme.
+              boxShadow: active ? "inset 0 0 0 1px var(--swatch-edge), 0 0 0 2px var(--surface), 0 0 0 4px var(--text-ink)" : "inset 0 0 0 1px var(--swatch-edge)"
+            }
+          },
+          opt.value
+        );
+      })
+    }
+  );
+}
+
 // components/core/Sheet.jsx
-import { useEffect, useRef, useState as useState2 } from "react";
-import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
+import { useEffect, useRef as useRef2, useState as useState2 } from "react";
+import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
 function Sheet({
   open,
   onClose,
@@ -616,12 +707,12 @@ function Sheet({
   style,
   ...props
 }) {
-  const panel = useRef(null);
-  const close = useRef(onClose);
+  const panel = useRef2(null);
+  const close = useRef2(onClose);
   close.current = onClose;
   const [drag, setDrag] = useState2(null);
-  const start = useRef(0);
-  const restore = useRef(null);
+  const start = useRef2(0);
+  const restore = useRef2(null);
   useEffect(() => {
     if (!open) return void 0;
     restore.current = document.activeElement;
@@ -685,7 +776,7 @@ function Sheet({
         ...style
       },
       children: [
-        grabber && /* @__PURE__ */ jsx13(
+        grabber && /* @__PURE__ */ jsx14(
           "div",
           {
             onPointerDown,
@@ -693,7 +784,7 @@ function Sheet({
             onPointerUp,
             onPointerCancel: onPointerUp,
             style: { display: "flex", justifyContent: "center", padding: "10px 0 4px", cursor: "grab" },
-            children: /* @__PURE__ */ jsx13("span", { "aria-hidden": "true", style: { width: 36, height: 5, borderRadius: "var(--radius-pill)", background: "var(--border)" } })
+            children: /* @__PURE__ */ jsx14("span", { "aria-hidden": "true", style: { width: 36, height: 5, borderRadius: "var(--radius-pill)", background: "var(--border)" } })
           }
         ),
         (title || trailing) && /* @__PURE__ */ jsxs7(
@@ -706,21 +797,21 @@ function Sheet({
               padding: grabber ? "2px var(--space-4) 0" : "14px var(--space-4) 0"
             },
             children: [
-              /* @__PURE__ */ jsx13("span", { style: { flex: 1, minWidth: 0, font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
+              /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
               trailing
             ]
           }
         ),
-        /* @__PURE__ */ jsx13("div", { style: { flex: 1, minHeight: 0, overflowY: "auto", padding: "var(--space-3) var(--space-4) var(--space-4)" }, children })
+        /* @__PURE__ */ jsx14("div", { style: { flex: 1, minHeight: 0, overflowY: "auto", padding: "var(--space-3) var(--space-4) var(--space-4)" }, children })
       ]
     }
   );
 }
 
 // components/core/Popover.jsx
-import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef2, useState as useState3 } from "react";
+import { cloneElement, useCallback, useEffect as useEffect2, useLayoutEffect, useRef as useRef3, useState as useState3 } from "react";
 import { createPortal } from "react-dom";
-import { Fragment as Fragment2, jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
 var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 var GAP = 12;
 var EDGE = 8;
@@ -748,17 +839,17 @@ function Popover({
   style,
   ...props
 }) {
-  const wrap = useRef2(null);
-  const panel = useRef2(null);
-  const close = useRef2(onClose);
+  const wrap = useRef3(null);
+  const panel = useRef3(null);
+  const close = useRef3(onClose);
   close.current = onClose;
   const [side, setSide] = useState3(placement);
   const [edge, setEdge] = useState3(align);
   const beside = anchor != null;
   const [pos, setPos] = useState3(null);
-  const replace = useRef2(null);
-  const lastWidth = useRef2(null);
-  const anchorNow = useRef2(anchor);
+  const replace = useRef3(null);
+  const lastWidth = useRef3(null);
+  const anchorNow = useRef3(anchor);
   anchorNow.current = anchor;
   useLayoutEffect(() => {
     if (!open || !beside) {
@@ -937,8 +1028,8 @@ function Popover({
           borderBottom: "var(--hairline) solid var(--border)"
         },
         children: [
-          /* @__PURE__ */ jsx14("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
-          /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx15("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
+          /* @__PURE__ */ jsx15(
             "button",
             {
               type: "button",
@@ -960,7 +1051,7 @@ function Popover({
                 color: "var(--text-muted)",
                 cursor: "pointer"
               },
-              children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 14 })
+              children: /* @__PURE__ */ jsx15(Icon, { name: "close", size: 14 })
             }
           )
         ]
@@ -989,7 +1080,7 @@ function Popover({
         ...style
       },
       children: [
-        pointer && beside && !sheet && pos && pos.arrow != null && /* @__PURE__ */ jsx14(
+        pointer && beside && !sheet && pos && pos.arrow != null && /* @__PURE__ */ jsx15(
           "span",
           {
             "aria-hidden": "true",
@@ -1007,7 +1098,7 @@ function Popover({
             }
           }
         ),
-        beside ? /* @__PURE__ */ jsx14("div", { style: { overflow: "hidden", borderRadius: "inherit" }, children: content }) : content
+        beside ? /* @__PURE__ */ jsx15("div", { style: { overflow: "hidden", borderRadius: "inherit" }, children: content }) : content
       ]
     }
   );
@@ -1021,9 +1112,9 @@ function Popover({
 import { Children, cloneElement as cloneElement2, useId as useId2 } from "react";
 
 // components/core/Textarea.jsx
-import { jsx as jsx15 } from "react/jsx-runtime";
+import { jsx as jsx16 } from "react/jsx-runtime";
 function Textarea({ disabled = false, bare = false, rows = 3, className, style, ...props }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx16(
     "textarea",
     {
       rows,
@@ -1046,7 +1137,7 @@ function Textarea({ disabled = false, bare = false, rows = 3, className, style, 
 }
 
 // components/core/Field.jsx
-import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs9 } from "react/jsx-runtime";
 function Field({ label, help, error, glyph, children, className, style, ...props }) {
   const autoId = useId2();
   const child = Children.only(children);
@@ -1082,7 +1173,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
             },
             children: [
               !stacked && glyph,
-              /* @__PURE__ */ jsx16(
+              /* @__PURE__ */ jsx17(
                 "span",
                 {
                   style: {
@@ -1094,11 +1185,11 @@ function Field({ label, help, error, glyph, children, className, style, ...props
                 }
               ),
               control,
-              error && !stacked && /* @__PURE__ */ jsx16(Icon, { name: "alert", size: 14, style: { color: "var(--danger-text)" } })
+              error && !stacked && /* @__PURE__ */ jsx17(Icon, { name: "alert", size: 14, style: { color: "var(--danger-text)" } })
             ]
           }
         ),
-        message && /* @__PURE__ */ jsx16(
+        message && /* @__PURE__ */ jsx17(
           "div",
           {
             id: msgId,
@@ -1117,7 +1208,7 @@ function Field({ label, help, error, glyph, children, className, style, ...props
 }
 
 // components/core/Select.jsx
-import { jsx as jsx17, jsxs as jsxs10 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs10 } from "react/jsx-runtime";
 function Select({ options, value, onChange, disabled = false, bare = false, placeholder, className, style, ...props }) {
   const opts = options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
   const invalid = isInvalid(props["aria-invalid"]);
@@ -1165,12 +1256,12 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
               ...style
             },
             children: [
-              placeholder != null && /* @__PURE__ */ jsx17("option", { value: "", disabled: true, children: placeholder }),
-              opts.map((o) => /* @__PURE__ */ jsx17("option", { value: o.value, disabled: o.disabled, children: o.label }, o.value))
+              placeholder != null && /* @__PURE__ */ jsx18("option", { value: "", disabled: true, children: placeholder }),
+              opts.map((o) => /* @__PURE__ */ jsx18("option", { value: o.value, disabled: o.disabled, children: o.label }, o.value))
             ]
           }
         ),
-        /* @__PURE__ */ jsx17(
+        /* @__PURE__ */ jsx18(
           Icon,
           {
             name: bare ? "chevron-right" : "chevron-down",
@@ -1190,7 +1281,7 @@ function Select({ options, value, onChange, disabled = false, bare = false, plac
 }
 
 // components/core/Checkbox.jsx
-import { jsx as jsx18, jsxs as jsxs11 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs11 } from "react/jsx-runtime";
 function Checkbox({ checked, onChange, label, sub, disabled = false, row = false, className, style, ...props }) {
   return /* @__PURE__ */ jsxs11(
     "label",
@@ -1210,7 +1301,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx18(
+        /* @__PURE__ */ jsx19(
           "input",
           {
             type: "checkbox",
@@ -1221,7 +1312,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
             className: "ds-checkbox-input"
           }
         ),
-        /* @__PURE__ */ jsx18(
+        /* @__PURE__ */ jsx19(
           "span",
           {
             "aria-hidden": "true",
@@ -1238,12 +1329,12 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
               // Ticking is an interactive choice, so it spends the accent.
               ...checked ? { background: "var(--accent)", border: "1px solid transparent", color: "var(--on-accent)" } : { background: "var(--surface)", border: "1.5px solid var(--text-muted)", color: "transparent" }
             },
-            children: checked && /* @__PURE__ */ jsx18(Icon, { name: "check", size: 14 })
+            children: checked && /* @__PURE__ */ jsx19(Icon, { name: "check", size: 14 })
           }
         ),
         (label || sub) && /* @__PURE__ */ jsxs11("span", { style: { minWidth: 0, paddingTop: sub ? 1 : 0 }, children: [
-          /* @__PURE__ */ jsx18("span", { style: { display: "block", font: row ? "var(--type-row-label)" : "var(--type-input)", color: "var(--text-ink)" }, children: label }),
-          sub && /* @__PURE__ */ jsx18("span", { style: { display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
+          /* @__PURE__ */ jsx19("span", { style: { display: "block", font: row ? "var(--type-row-label)" : "var(--type-input)", color: "var(--text-ink)" }, children: label }),
+          sub && /* @__PURE__ */ jsx19("span", { style: { display: "block", font: "var(--type-row-sub)", color: "var(--text-muted)", marginTop: 2 }, children: sub })
         ] })
       ]
     }
@@ -1251,7 +1342,7 @@ function Checkbox({ checked, onChange, label, sub, disabled = false, row = false
 }
 
 // components/core/Banner.jsx
-import { jsx as jsx19, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs12 } from "react/jsx-runtime";
 var TONES = {
   success: { fill: "var(--success-soft)", ink: "var(--success-text)", icon: "check" },
   warning: { fill: "var(--warning-soft)", ink: "var(--warning-text)", icon: "alert" },
@@ -1272,7 +1363,7 @@ function Banner({
   ...props
 }) {
   const t = TONES[tone] ?? TONES.neutral;
-  const glyph = icon === void 0 ? /* @__PURE__ */ jsx19(Icon, { name: t.icon }) : icon;
+  const glyph = icon === void 0 ? /* @__PURE__ */ jsx20(Icon, { name: t.icon }) : icon;
   return /* @__PURE__ */ jsxs12(
     "div",
     {
@@ -1291,13 +1382,13 @@ function Banner({
         ...style
       },
       children: [
-        glyph && /* @__PURE__ */ jsx19("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
+        glyph && /* @__PURE__ */ jsx20("span", { style: { display: "flex", flexShrink: 0, marginTop: 2 }, children: glyph }),
         /* @__PURE__ */ jsxs12("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx19("div", { style: { font: "var(--type-message-title)" }, children: title }),
-          children && /* @__PURE__ */ jsx19("div", { style: { font: "var(--type-message)", marginTop: title ? 2 : 0 }, children }),
-          action && /* @__PURE__ */ jsx19("div", { style: { marginTop: 10 }, children: action })
+          title && /* @__PURE__ */ jsx20("div", { style: { font: "var(--type-message-title)" }, children: title }),
+          children && /* @__PURE__ */ jsx20("div", { style: { font: "var(--type-message)", marginTop: title ? 2 : 0 }, children }),
+          action && /* @__PURE__ */ jsx20("div", { style: { marginTop: 10 }, children: action })
         ] }),
-        onClose && /* @__PURE__ */ jsx19(
+        onClose && /* @__PURE__ */ jsx20(
           "button",
           {
             type: "button",
@@ -1319,7 +1410,7 @@ function Banner({
               color: "inherit",
               cursor: "pointer"
             },
-            children: /* @__PURE__ */ jsx19(Icon, { name: "close", size: 14 })
+            children: /* @__PURE__ */ jsx20(Icon, { name: "close", size: 14 })
           }
         )
       ]
@@ -1328,8 +1419,8 @@ function Banner({
 }
 
 // components/core/Toast.jsx
-import { useEffect as useEffect3, useRef as useRef3, useState as useState4 } from "react";
-import { jsx as jsx20, jsxs as jsxs13 } from "react/jsx-runtime";
+import { useEffect as useEffect3, useRef as useRef4, useState as useState4 } from "react";
+import { jsx as jsx21, jsxs as jsxs13 } from "react/jsx-runtime";
 function Toast({
   open,
   message,
@@ -1343,7 +1434,7 @@ function Toast({
 }) {
   const ms = duration ?? (action ? 8e3 : 5e3);
   const [paused, setPaused] = useState4(false);
-  const close = useRef3(onClose);
+  const close = useRef4(onClose);
   close.current = onClose;
   useEffect3(() => {
     if (!open) setPaused(false);
@@ -1353,7 +1444,7 @@ function Toast({
     const id = setTimeout(() => close.current?.(), ms);
     return () => clearTimeout(id);
   }, [open, message, paused, ms]);
-  return /* @__PURE__ */ jsx20(
+  return /* @__PURE__ */ jsx21(
     "div",
     {
       role: "status",
@@ -1402,8 +1493,8 @@ function Toast({
             ...style
           },
           children: [
-            /* @__PURE__ */ jsx20("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)" }, children: message }),
-            action && /* @__PURE__ */ jsx20(
+            /* @__PURE__ */ jsx21("span", { style: { flex: 1, minWidth: 0, font: "var(--type-message-title)" }, children: message }),
+            action && /* @__PURE__ */ jsx21(
               "button",
               {
                 type: "button",
@@ -1434,10 +1525,10 @@ function Toast({
 }
 
 // components/core/Skeleton.jsx
-import { jsx as jsx21, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx22, jsxs as jsxs14 } from "react/jsx-runtime";
 var LABEL_WIDTHS = ["62%", "48%", "70%", "40%", "56%", "66%"];
 var VALUE_WIDTHS = [44, 36, 52, 30, 40, 48];
-var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx21("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
+var Bar = ({ width, height, radius = 4 }) => /* @__PURE__ */ jsx22("span", { className: "ds-skeleton-bar", style: { display: "block", flexShrink: 0, width, height, borderRadius: radius } });
 function Skeleton({ variant = "rows", count = 3, label = "Loading", className, style, ...props }) {
   const items = Array.from({ length: count }, (_, i) => i);
   return /* @__PURE__ */ jsxs14(
@@ -1450,7 +1541,7 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
       className: cx("ds-skeleton", className),
       style: variant === "tiles" ? { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 10, ...style } : style,
       children: [
-        /* @__PURE__ */ jsx21("span", { className: "ds-visually-hidden", children: label }),
+        /* @__PURE__ */ jsx22("span", { className: "ds-visually-hidden", children: label }),
         variant === "tiles" ? items.map((i) => /* @__PURE__ */ jsxs14(
           "div",
           {
@@ -1466,20 +1557,20 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
               gap: 10
             },
             children: [
-              /* @__PURE__ */ jsx21(Bar, { width: "55%", height: 9 }),
-              /* @__PURE__ */ jsx21(Bar, { width: "70%", height: 22, radius: 6 })
+              /* @__PURE__ */ jsx22(Bar, { width: "55%", height: 9 }),
+              /* @__PURE__ */ jsx22(Bar, { width: "70%", height: 22, radius: 6 })
             ]
           },
           i
         )) : items.map((i) => (
           // The Row's own class: same padding, gap and inset separators.
           /* @__PURE__ */ jsxs14("div", { "aria-hidden": "true", className: "ds-row", "data-glyph": "true", style: { minHeight: 44 }, children: [
-            /* @__PURE__ */ jsx21(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
+            /* @__PURE__ */ jsx22(Bar, { width: "var(--glyph-size)", height: "var(--glyph-size)", radius: "var(--radius-sm)" }),
             /* @__PURE__ */ jsxs14("span", { style: { flex: 1, display: "flex", flexDirection: "column", gap: 5 }, children: [
-              /* @__PURE__ */ jsx21(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
-              /* @__PURE__ */ jsx21(Bar, { width: "30%", height: 8 })
+              /* @__PURE__ */ jsx22(Bar, { width: LABEL_WIDTHS[i % LABEL_WIDTHS.length], height: 10 }),
+              /* @__PURE__ */ jsx22(Bar, { width: "30%", height: 8 })
             ] }),
-            /* @__PURE__ */ jsx21(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
+            /* @__PURE__ */ jsx22(Bar, { width: VALUE_WIDTHS[i % VALUE_WIDTHS.length], height: 10 })
           ] }, i)
         ))
       ]
@@ -1488,7 +1579,7 @@ function Skeleton({ variant = "rows", count = 3, label = "Loading", className, s
 }
 
 // components/core/EmptyState.jsx
-import { jsx as jsx22, jsxs as jsxs15 } from "react/jsx-runtime";
+import { jsx as jsx23, jsxs as jsxs15 } from "react/jsx-runtime";
 function EmptyState({ icon, title, action, children, className, style, ...props }) {
   return /* @__PURE__ */ jsxs15(
     "div",
@@ -1508,17 +1599,17 @@ function EmptyState({ icon, title, action, children, className, style, ...props 
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx22(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx22(Icon, { name: "inbox", size: 22 }) }),
-        title && /* @__PURE__ */ jsx22("div", { style: { font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
-        children && /* @__PURE__ */ jsx22("div", { style: { font: "var(--type-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
-        action && /* @__PURE__ */ jsx22("div", { style: { marginTop: 4 }, children: action })
+        /* @__PURE__ */ jsx23(GlyphTile, { tone: "neutral", size: 44, children: icon ?? /* @__PURE__ */ jsx23(Icon, { name: "inbox", size: 22 }) }),
+        title && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-subhead)", color: "var(--text-ink)" }, children: title }),
+        children && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-body)", color: "var(--text-muted)", maxWidth: 300 }, children }),
+        action && /* @__PURE__ */ jsx23("div", { style: { marginTop: 4 }, children: action })
       ]
     }
   );
 }
 
 // components/core/ErrorState.jsx
-import { jsx as jsx23, jsxs as jsxs16 } from "react/jsx-runtime";
+import { jsx as jsx24, jsxs as jsxs16 } from "react/jsx-runtime";
 function ErrorState({
   title,
   onRetry,
@@ -1538,11 +1629,11 @@ function ErrorState({
       className: cx("ds-error", className),
       style: { display: "flex", gap: "var(--row-gap)", alignItems: "flex-start", padding: "14px var(--row-pad-x)", ...style },
       children: [
-        /* @__PURE__ */ jsx23(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx23(Icon, { name: "alert", size: 13 }) }),
+        /* @__PURE__ */ jsx24(GlyphTile, { tone: "danger", children: icon ?? /* @__PURE__ */ jsx24(Icon, { name: "alert", size: 13 }) }),
         /* @__PURE__ */ jsxs16("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
-          children && /* @__PURE__ */ jsx23("div", { style: { font: "var(--type-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
-          (action || onRetry) && /* @__PURE__ */ jsx23("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx23(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
+          title && /* @__PURE__ */ jsx24("div", { style: { font: "var(--type-message-title)", color: "var(--text-ink)" }, children: title }),
+          children && /* @__PURE__ */ jsx24("div", { style: { font: "var(--type-message)", color: "var(--text-muted)", marginTop: title ? 3 : 0 }, children }),
+          (action || onRetry) && /* @__PURE__ */ jsx24("div", { style: { marginTop: 10 }, children: action ?? /* @__PURE__ */ jsx24(Button, { variant: "secondary", size: "sm", onClick: onRetry, children: retryLabel }) })
         ] })
       ]
     }
@@ -1551,7 +1642,7 @@ function ErrorState({
 
 // components/core/PageHeader.jsx
 import { createElement as createElement2 } from "react";
-import { jsx as jsx24, jsxs as jsxs17 } from "react/jsx-runtime";
+import { jsx as jsx25, jsxs as jsxs17 } from "react/jsx-runtime";
 var truncate4 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
 function PageHeader({
   title,
@@ -1585,25 +1676,25 @@ function PageHeader({
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-start" }, children: leading }),
+        /* @__PURE__ */ jsx25("div", { style: { ...side, justifyContent: "flex-start" }, children: leading }),
         /* @__PURE__ */ jsxs17("div", { style: { minWidth: 0, textAlign: "center" }, children: [
           createElement2(
             `h${headingLevel}`,
             { style: { margin: 0, font: "var(--type-subhead)", color: "var(--text-ink)", ...truncate4 } },
             title
           ),
-          sub && /* @__PURE__ */ jsx24("span", { style: { ...truncate4, font: "var(--type-page-sub)", color: "var(--text-muted)" }, children: sub })
+          sub && /* @__PURE__ */ jsx25("span", { style: { ...truncate4, font: "var(--type-page-sub)", color: "var(--text-muted)" }, children: sub })
         ] }),
-        /* @__PURE__ */ jsx24("div", { style: { ...side, justifyContent: "flex-end" }, children: trailing })
+        /* @__PURE__ */ jsx25("div", { style: { ...side, justifyContent: "flex-end" }, children: trailing })
       ]
     }
   );
 }
 
 // components/core/Toolbar.jsx
-import { jsx as jsx25 } from "react/jsx-runtime";
+import { jsx as jsx26 } from "react/jsx-runtime";
 function Toolbar({ label, wrap = false, children, className, style, ...props }) {
-  return /* @__PURE__ */ jsx25(
+  return /* @__PURE__ */ jsx26(
     "div",
     {
       ...label ? { role: "group", "aria-label": label } : null,
@@ -1628,7 +1719,7 @@ function Toolbar({ label, wrap = false, children, className, style, ...props }) 
 }
 
 // components/core/TabBar.jsx
-import { jsx as jsx26, jsxs as jsxs18 } from "react/jsx-runtime";
+import { jsx as jsx27, jsxs as jsxs18 } from "react/jsx-runtime";
 var truncate5 = { display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" };
 function TabBar({
   items,
@@ -1641,7 +1732,7 @@ function TabBar({
   style,
   ...props
 }) {
-  return /* @__PURE__ */ jsx26(
+  return /* @__PURE__ */ jsx27(
     "nav",
     {
       "aria-label": label,
@@ -1685,13 +1776,292 @@ function TabBar({
               color: current ? "var(--accent-text)" : "var(--text-muted)"
             },
             children: [
-              item.icon && /* @__PURE__ */ jsx26(Icon, { name: item.icon, size: 20 }),
-              /* @__PURE__ */ jsx26("span", { style: { ...truncate5, font: "var(--type-tab)" }, children: item.label })
+              item.icon && /* @__PURE__ */ jsx27(Icon, { name: item.icon, size: 20 }),
+              /* @__PURE__ */ jsx27("span", { style: { ...truncate5, font: "var(--type-tab)" }, children: item.label })
             ]
           },
           item.value
         );
       })
+    }
+  );
+}
+
+// components/core/SideNav.jsx
+import { useEffect as useEffect4, useId as useId3, useLayoutEffect as useLayoutEffect2, useRef as useRef5, useState as useState5 } from "react";
+import { jsx as jsx28, jsxs as jsxs19 } from "react/jsx-runtime";
+var useIsoLayoutEffect = typeof window === "undefined" ? useEffect4 : useLayoutEffect2;
+function useNarrow(narrow) {
+  const query = `(max-width: ${narrow - 0.02}px)`;
+  const [match, setMatch] = useState5(() => typeof window !== "undefined" && window.matchMedia(query).matches);
+  useIsoLayoutEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setMatch(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return match;
+}
+var parentOf = (items, value) => items.find((it) => it.children?.some((c) => c.value === value));
+var findItem = (items, value) => {
+  for (const it of items) {
+    if (it.value === value) return it;
+    const child = it.children?.find((c) => c.value === value);
+    if (child) return child;
+  }
+  return void 0;
+};
+var glyphFor = (icon, size) => typeof icon === "string" ? /* @__PURE__ */ jsx28(Icon, { name: icon, size }) : icon;
+var list = { listStyle: "none", margin: 0, padding: 0 };
+function SideNav({
+  items,
+  value,
+  onChange,
+  label,
+  layout = "auto",
+  narrow = 700,
+  headingLevel = 2,
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const isNarrow = useNarrow(narrow);
+  const mode = layout === "auto" ? isNarrow ? "list" : "rail" : layout;
+  const hasPage = children !== void 0 && children !== null && children !== false;
+  const showPage = mode === "list" && hasPage && value != null;
+  const [open, setOpen] = useState5(() => new Set([parentOf(items, value)?.value].filter((v) => v != null)));
+  const holder = parentOf(items, value)?.value;
+  useEffect4(() => {
+    if (holder != null) setOpen((prev) => prev.has(holder) ? prev : new Set(prev).add(holder));
+  }, [holder]);
+  const pageRef = useRef5(null);
+  const navRef = useRef5(null);
+  const lastPage = useRef5(value);
+  const wasShowingPage = useRef5(showPage);
+  useEffect4(() => {
+    if (showPage && !wasShowingPage.current) {
+      const heading = pageRef.current?.querySelector("h1, h2, h3, h4, h5, h6");
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+      }
+    } else if (!showPage && wasShowingPage.current && mode === "list") {
+      const row = [...navRef.current?.querySelectorAll("[data-sidenav-value]") ?? []].find(
+        (el) => el.dataset.sidenavValue === String(lastPage.current)
+      );
+      row?.focus({ preventScroll: true });
+    }
+    wasShowingPage.current = showPage;
+    if (value != null) lastPage.current = value;
+  }, [showPage, mode, value]);
+  const idBase = useId3();
+  if (showPage) {
+    const current = findItem(items, value);
+    return /* @__PURE__ */ jsxs19(
+      "div",
+      {
+        ...props,
+        ref: pageRef,
+        className: cx("ds-sidenav-page", className),
+        style: { display: "flex", flexDirection: "column", gap: "var(--space-4)", ...style },
+        children: [
+          /* @__PURE__ */ jsx28(
+            PageHeader,
+            {
+              sticky: false,
+              headingLevel,
+              title: current?.label,
+              leading: /* @__PURE__ */ jsxs19(
+                "button",
+                {
+                  type: "button",
+                  className: "ds-button ds-sidenav-back",
+                  onClick: () => onChange(null),
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    maxWidth: "100%",
+                    minWidth: 0,
+                    padding: "6px 8px 6px 2px",
+                    border: "none",
+                    borderRadius: "var(--radius-sm)",
+                    background: "transparent",
+                    color: "var(--accent-text)",
+                    font: "var(--type-button-sm)",
+                    cursor: "pointer"
+                  },
+                  children: [
+                    /* @__PURE__ */ jsx28(Icon, { name: "chevron-left", size: 18 }),
+                    /* @__PURE__ */ jsx28("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label })
+                  ]
+                }
+              )
+            }
+          ),
+          children
+        ]
+      }
+    );
+  }
+  if (mode === "list") {
+    const groups = [];
+    for (const it of items) {
+      if (it.children?.length) groups.push({ header: it.label, key: it.value, rows: it.children });
+      else if (groups.length && !groups[groups.length - 1].header) groups[groups.length - 1].rows.push(it);
+      else groups.push({ key: it.value, rows: [it] });
+    }
+    const nav = /* @__PURE__ */ jsx28(
+      "nav",
+      {
+        ...hasPage ? {} : props,
+        ref: navRef,
+        "aria-label": label,
+        className: cx("ds-sidenav", "ds-sidenav-list", !hasPage && className),
+        style: { display: "flex", flexDirection: "column", gap: "var(--space-5)", ...hasPage ? null : style },
+        children: groups.map((g) => /* @__PURE__ */ jsx28(Group, { header: g.header, children: g.rows.map((it) => /* @__PURE__ */ jsx28(
+          Row,
+          {
+            "data-sidenav-value": it.value,
+            "aria-current": it.value === value ? "page" : void 0,
+            glyph: it.icon ? /* @__PURE__ */ jsx28(GlyphTile, { children: glyphFor(it.icon, 13) }) : void 0,
+            label: it.label,
+            chevron: true,
+            onClick: () => onChange(it.value)
+          },
+          it.value
+        )) }, g.key))
+      }
+    );
+    return hasPage ? /* @__PURE__ */ jsx28("div", { ...props, className: cx("ds-sidenav-layout", className), style, children: nav }) : nav;
+  }
+  const withIcons = items.some((it) => it.icon);
+  const itemStyle = (current, depth) => ({
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    width: "100%",
+    boxSizing: "border-box",
+    minHeight: "var(--sidenav-item-height)",
+    padding: depth ? `6px 10px 6px ${withIcons ? 38 : 22}px` : "6px 10px",
+    border: "none",
+    borderRadius: "var(--radius-md)",
+    // The hover tint arrives through --sidenav-item-bg (core.css), so an
+    // app's own `button:hover` background can't replace it.
+    background: current ? "var(--accent-soft)" : "var(--sidenav-item-bg, transparent)",
+    color: current ? "var(--accent-text)" : depth ? "var(--text-muted)" : "var(--text-ink)",
+    font: "var(--type-row-label)",
+    fontWeight: current || !depth ? 500 : 400,
+    textAlign: "start",
+    cursor: "pointer"
+  });
+  const text = { flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
+  const rail = /* @__PURE__ */ jsx28(
+    "nav",
+    {
+      ...hasPage ? {} : props,
+      ref: navRef,
+      "aria-label": label,
+      className: cx("ds-sidenav", "ds-sidenav-rail", !hasPage && className),
+      style: hasPage ? { position: "sticky", top: "var(--space-4)", alignSelf: "start" } : style,
+      children: /* @__PURE__ */ jsx28("ul", { role: "list", style: { ...list, display: "flex", flexDirection: "column", gap: 2 }, children: items.map((it, i) => {
+        const sections = it.children?.length ? it.children : null;
+        if (!sections) {
+          const current = it.value === value;
+          return /* @__PURE__ */ jsx28("li", { children: /* @__PURE__ */ jsxs19(
+            "button",
+            {
+              type: "button",
+              className: "ds-sidenav-item",
+              "data-sidenav-value": it.value,
+              "aria-current": current ? "page" : void 0,
+              title: typeof it.label === "string" ? it.label : void 0,
+              onClick: () => onChange(it.value),
+              style: itemStyle(current, 0),
+              children: [
+                it.icon && glyphFor(it.icon, 18),
+                /* @__PURE__ */ jsx28("span", { style: text, children: it.label })
+              ]
+            }
+          ) }, it.value);
+        }
+        const isOpen = open.has(it.value);
+        const holdsCurrent = it.value === holder;
+        const listId = `${idBase}-${i}`;
+        return /* @__PURE__ */ jsxs19("li", { children: [
+          /* @__PURE__ */ jsxs19(
+            "button",
+            {
+              type: "button",
+              className: "ds-sidenav-item",
+              "aria-expanded": isOpen,
+              "aria-controls": isOpen ? listId : void 0,
+              title: typeof it.label === "string" ? it.label : void 0,
+              onClick: () => {
+                const next = new Set(open);
+                if (isOpen) next.delete(it.value);
+                else next.add(it.value);
+                setOpen(next);
+                if (!isOpen && !holdsCurrent) onChange(sections[0].value);
+              },
+              style: itemStyle(false, 0),
+              children: [
+                it.icon && glyphFor(it.icon, 18),
+                /* @__PURE__ */ jsx28("span", { style: text, children: it.label }),
+                /* @__PURE__ */ jsx28(
+                  Icon,
+                  {
+                    name: "chevron-down",
+                    size: 14,
+                    style: {
+                      color: "var(--text-muted)",
+                      transform: isOpen ? "none" : "rotate(-90deg)",
+                      transition: "transform var(--duration-base) var(--ease-out)"
+                    }
+                  }
+                )
+              ]
+            }
+          ),
+          isOpen && /* @__PURE__ */ jsx28("ul", { id: listId, role: "list", style: { ...list, display: "flex", flexDirection: "column", gap: 2, marginTop: 2 }, children: sections.map((c) => {
+            const current = c.value === value;
+            return /* @__PURE__ */ jsx28("li", { children: /* @__PURE__ */ jsx28(
+              "button",
+              {
+                type: "button",
+                className: "ds-sidenav-item",
+                "data-sidenav-value": c.value,
+                "aria-current": current ? "page" : void 0,
+                title: typeof c.label === "string" ? c.label : void 0,
+                onClick: () => onChange(c.value),
+                style: itemStyle(current, 1),
+                children: /* @__PURE__ */ jsx28("span", { style: text, children: c.label })
+              }
+            ) }, c.value);
+          }) })
+        ] }, it.value);
+      }) })
+    }
+  );
+  if (!hasPage) return rail;
+  return /* @__PURE__ */ jsxs19(
+    "div",
+    {
+      ...props,
+      className: cx("ds-sidenav-layout", className),
+      style: {
+        display: "grid",
+        gridTemplateColumns: "minmax(160px, 220px) minmax(0, 1fr)",
+        gap: "var(--space-5)",
+        alignItems: "start",
+        ...style
+      },
+      children: [
+        rail,
+        /* @__PURE__ */ jsx28("div", { style: { minWidth: 0 }, children })
+      ]
     }
   );
 }
@@ -1715,9 +2085,11 @@ export {
   Segmented,
   Select,
   Sheet,
+  SideNav,
   Skeleton,
   StatStrip,
   StatTile,
+  Swatches,
   Switch,
   TabBar,
   Textarea,

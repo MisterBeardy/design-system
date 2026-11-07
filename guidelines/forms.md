@@ -14,6 +14,7 @@ A form is a grouped list whose rows take input. Related fields share a `Group` w
 | `Field` + `Textarea` | Prose. Its label goes above it and it takes the full width |
 | `Checkbox row` | Yes or no, applied on submit |
 | `Segmented` | One of two to four peers, always visible |
+| `Swatches` | One colour from a few: a theme, a livery. Name the chosen one in text beside it |
 | `Switch` | On or off, taking effect now: a settings screen with no Save button |
 
 ## Layout

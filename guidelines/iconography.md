@@ -17,7 +17,7 @@ One small set, drawn the same way, used everywhere. Emoji are banned in UI chrom
 
 ## The set
 
-`check` `close` `plus` `chevron-right` `chevron-down` `alert` `info` `inbox` `search` `calendar` `pin` `map` `bolt` `ruler` `thermometer` `trophy`
+`check` `close` `plus` `chevron-left` `chevron-right` `chevron-down` `alert` `info` `inbox` `search` `calendar` `pin` `map` `bolt` `ruler` `thermometer` `trophy`
 
 In React: `<Icon name="pin" />`. Without React: `icons/pin.svg` (exported as `@misterbeardy/design-system/icons/pin.svg`); it draws in the colour of the text around it.
 

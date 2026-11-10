@@ -5,6 +5,7 @@ export type IconName =
   | "calendar"
   | "check"
   | "chevron-down"
+  | "chevron-left"
   | "chevron-right"
   | "close"
   | "inbox"

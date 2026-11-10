@@ -99,6 +99,7 @@ changes colour, and per-app accents are untouched.
 | `StatStrip` | The number is the hero; its label is furniture. One accent metric per screen. |
 | `Segmented` | Replaces tab rows and year/range pickers. Three or four options, max. |
 | `Switch` | Replaces the checkbox wherever the change takes effect immediately. |
+| `Swatches` | One colour from a few (a theme, a livery). The chosen one's name goes beside it in text. |
 | `Field` | A form is a grouped list whose rows take input: label left, bare control right, help or error under it. |
 | `Sheet` | The one elevation and the one translucent surface: a panel over live content, which it never dims. |
 | `Popover` | A small panel anchored to the control that opened it. Floats, so it takes the popover shadow. |
@@ -130,7 +131,9 @@ an alert glyph, never colour alone. On their own, the controls are boxed like
 
 ## App chrome
 
-The frame around the content: `PageHeader`, `Toolbar`, `TabBar`.
+The frame around the content: `PageHeader`, `Toolbar`, `TabBar`, and
+`SideNav` for the pages inside one part of an app (a settings screen), which
+becomes chevron rows on a phone.
 
 | | Where it sits | Scrolls away? |
 |---|---|---|
@@ -196,8 +199,8 @@ accent would win in high contrast too.
    tradeoff if it lands near another app). Greens and cyans (roughly H156–226)
    need chroma of 0.13 or less, or the button label misses 4.5:1.
 3. Add a row to `app-registry.js` and run `npm run check`, which fails if the
-   new app's labels miss their contrast floor (4.5:1, and 7:1 in high contrast), and names the `dataLast` slot
-   (the data colour nearest its accent) to put in the row. Every tool reads
+   new app's labels miss their contrast floor (4.5:1, and 7:1 in high contrast), and gives the `dataOrder`
+   (the data slots, with those near its accent last) to put in the row. Every tool reads
    the registry; nothing else needs updating.
 4. Build real screens from the app's actual repo/data where possible.
 
@@ -265,10 +268,10 @@ bridging, and bridging existing frameworks (Tailwind, shadcn, MUI) — live in
   `tokens/spacing.css`,
   `tokens/motion.css`, `tokens/materials.css`
 - `components/core/` — Button, Chip, Card, Input, StatTile, Group, Row,
-  GlyphTile, Segmented, Switch, StatStrip, Icon; for elevation Sheet and
+  GlyphTile, Segmented, Switch, StatStrip, Swatches, Icon; for elevation Sheet and
   Popover; for forms Field, Select, Textarea, Checkbox; for feedback and
   states Banner, Toast, Skeleton, EmptyState, ErrorState; and for app chrome
-  PageHeader, Toolbar, TabBar (`.jsx` + `.d.ts` + `.prompt.md` each)
+  PageHeader, Toolbar, TabBar, SideNav (`.jsx` + `.d.ts` + `.prompt.md` each)
 - `components/core/core.css` — the few component rules that need real selectors
   (Row's hairline `::after`, `:last-child`, hover, focus rings). Everything else
   is inline styles reading tokens, so consumers need no CSS build step and no

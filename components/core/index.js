@@ -11,6 +11,7 @@ export { GlyphTile } from "./GlyphTile.jsx";
 export { Segmented } from "./Segmented.jsx";
 export { Switch } from "./Switch.jsx";
 export { StatStrip } from "./StatStrip.jsx";
+export { Swatches } from "./Swatches.jsx";
 
 // Icons.
 export { Icon, ICON_NAMES } from "./Icon.jsx";
@@ -36,3 +37,4 @@ export { ErrorState } from "./ErrorState.jsx";
 export { PageHeader } from "./PageHeader.jsx";
 export { Toolbar } from "./Toolbar.jsx";
 export { TabBar } from "./TabBar.jsx";
+export { SideNav } from "./SideNav.jsx";

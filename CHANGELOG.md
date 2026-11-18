@@ -11,8 +11,17 @@ under its version (see `CONTRIBUTING.md`).
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-11-18
+
+The warning colour moves from amber toward olive-gold in every app, most apps
+get a new data-colour order, the system's buttons stop picking up an app's
+global `button` styles, and `Swatches` and `SideNav` are new. Read
+**Upgrading**: the first three can change what an app shows.
+
 ### Upgrading
 
+- **Pin `#v1.5.0`.** Nothing is removed or renamed, so no code has to
+  change, but three things can change what an app shows, below.
 - **The warning colour moves from hue 80 to about hue 98, in every app.**
   `--warning`, `--warning-soft` and `--warning-text` (light, dark and both
   high-contrast sets) take new hues (98 for the solid, 95 to 100 for the soft
@@ -730,7 +739,8 @@ The Apple HIG grouped-list language becomes the default UX.
 - `styles.css` imports `typography.css` first, so its Google Fonts `@import`
   stays valid.
 
-[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/MisterBeardy/design-system/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/MisterBeardy/design-system/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/MisterBeardy/design-system/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/MisterBeardy/design-system/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/MisterBeardy/design-system/compare/v1.1.0...v1.2.0

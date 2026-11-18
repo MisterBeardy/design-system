@@ -13,6 +13,24 @@ under its version (see `CONTRIBUTING.md`).
 
 ### Upgrading
 
+- **The warning colour moves from hue 80 to about hue 98, in every app.**
+  `--warning`, `--warning-soft` and `--warning-text` (light, dark and both
+  high-contrast sets) take new hues (98 for the solid, 95 to 100 for the soft
+  and text), from amber toward olive-gold. Lightness and chroma stay, except
+  the high-contrast light `--warning-text` (L 0.43 to 0.42, to stay at 7:1);
+  all 429 colour checks pass. At H80 it sat 5 to 10 degrees from OneOfUs and
+  IdleAirport and 35 from Command Center (H45), where an orange accent and a
+  warning banner read as the same colour; at H98 it is 23 or more from each.
+  Three things to check when you move to this release:
+  - **An app that redefines the warning tokens** keeps the old colour until it
+    changes its own copy: That Will Be Five Bucks does this in
+    `src/app/globals.css`. Delete the override, or set the new values.
+  - **A vendored copy of `tokens/colors.css`** (Infra Console) changes only
+    when it is re-vendored.
+  - **Wes Cup (H95) and Infra Console (H125, in dark)** sit closest to the new
+    warning; a warning chip and an accent chip can look alike there. The label
+    or icon, as always, is what tells them apart. The first data colour
+    (`--data-1`, H95) is also close to it; `status.md` says so.
 - **Data colours come in a new order for most apps** (#73). `dataOrderFor()`
   now moves every slot within 15 of the app's accent, in the light or the dark
   theme, to the end, where it used to move only the one nearest in light. An

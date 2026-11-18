@@ -19,4 +19,4 @@ Mix with `color-mix(in oklch, …)`, not by hand-picking a hex, so the water fol
 
 - **Check both themes and high contrast.** The recipe is for the default look; under `prefers-contrast: more` the boundary and label strengthen on their own, and the water mix should be looked at once.
 - **Information on a map is `--info`, not the accent.** A layer note or a "new" mark is information: give it a label or an icon, since `--info` is the same blue the light water is tinted with and the hue alone won't separate them.
-- **Accent beside warning on a map.** If an app's accent is near the warning hue (70–80), an accent pin beside a warning mark is hard to tell apart on dark; pair either with an icon or a label, never the hue alone.
+- **Accent beside warning on a map.** If an app's accent is near the warning hue (about 95–100), an accent pin beside a warning mark is hard to tell apart on dark; pair either with an icon or a label, never the hue alone.

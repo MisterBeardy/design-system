@@ -33,16 +33,17 @@
 
   /* Semantic status — same solid/soft/text structure as the accent slot,
      same oklch formula. App-agnostic: never overridden per app, so status
-     reads identically across the portfolio. Note: warning (H80) sits near
-     the OneOfUs/IdleAirport brand hues (70/75) — in those two apps a
-     warning chip and an accent chip will look like siblings; acceptable,
-     since both signal "attention". */
+     reads identically across the portfolio. Note: warning (H98) sits near
+     Wes Cup's brand hue (95) — in that app a warning chip and an accent
+     chip will look like siblings; acceptable, since both signal
+     "attention". It sits 23-28 degrees from OneOfUs/IdleAirport (70/75) and
+     53 from Command Center (45), where H80 was 5-35 from them. */
   --success:      oklch(0.58 0.13 150);
   --success-soft: oklch(0.95 0.04 150);
   --success-text: oklch(0.40 0.11 150);
-  --warning:      oklch(0.64 0.13 80);
-  --warning-soft: oklch(0.95 0.06 85);
-  --warning-text: oklch(0.45 0.11 70);
+  --warning:      oklch(0.64 0.13 98);
+  --warning-soft: oklch(0.95 0.06 100);
+  --warning-text: oklch(0.45 0.11 95);
   --danger:       oklch(0.55 0.18 25);
   --danger-soft:  oklch(0.95 0.03 25);
   --danger-text:  oklch(0.42 0.15 25);
@@ -118,9 +119,9 @@
   --success:      oklch(0.72 0.11 150);
   --success-soft: oklch(0.32 0.06 150);
   --success-text: oklch(0.85 0.09 150);
-  --warning:      oklch(0.76 0.12 80);
-  --warning-soft: oklch(0.34 0.06 80);
-  --warning-text: oklch(0.87 0.09 85);
+  --warning:      oklch(0.76 0.12 98);
+  --warning-soft: oklch(0.34 0.06 98);
+  --warning-text: oklch(0.87 0.09 100);
   --danger:       oklch(0.70 0.15 25);
   --danger-soft:  oklch(0.32 0.07 25);
   --danger-text:  oklch(0.86 0.08 25);
@@ -171,8 +172,8 @@
     --success:      oklch(0.55 0.13 150);
     --info:         oklch(0.54 0.12 235);
     --info-text:    oklch(0.40 0.11 235);
-    --warning:      oklch(0.56 0.13 80);
-    --warning-text: oklch(0.43 0.11 70);
+    --warning:      oklch(0.56 0.13 98);
+    --warning-text: oklch(0.42 0.11 95);
     --accent:       oklch(0.42 0.15 256);
     --accent-text:  oklch(0.39 0.15 256);
   }
@@ -188,8 +189,8 @@
     --success:      oklch(0.72 0.11 150);
     --info:         oklch(0.72 0.10 235);
     --info-text:    oklch(0.85 0.08 235);
-    --warning:      oklch(0.76 0.12 80);
-    --warning-text: oklch(0.87 0.09 85);
+    --warning:      oklch(0.76 0.12 98);
+    --warning-text: oklch(0.87 0.09 100);
     --accent:       oklch(0.76 0.1275 256);
     --accent-text:  oklch(0.85 0.1 256);
   }

@@ -17,23 +17,30 @@
 // they're fitted into sRGB. `npm run check` fails for any row whose label
 // misses 4.5:1 in either theme; lower that app's chroma to fix it.
 
-// dataLast: the data palette slot (1-6) closest to the app's accent. The app
-// uses it last, so its first data series never reads as its accent.
-// `npm run check` recomputes it and fails when it's stale.
-export const APPS = [
-  { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, dataLast: 5, note: 'Real brand color #d97706' },
-  { key: 'idleairport',    name: 'IdleAirport',          hue: 75,  chroma: 0.14, dataLast: 5, note: 'Real brand color #ffd24a' },
-  { key: 'wescup',         name: 'Wes Cup',              hue: 95,  chroma: 0.15, dataLast: 1 },
-  { key: 'parametricchaos',name: 'ParametricChaos',      hue: 155, chroma: 0.13, dataLast: 3 },
-  { key: 'fivebucks',      name: "That'll Be 5 Bucks",   hue: 185, chroma: 0.13, dataLast: 3 },
-  { key: 'washmycar',      name: 'WashMyCar',            hue: 230, chroma: 0.13, dataLast: 3 },
-  { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15, dataLast: 4 },
-  { key: 'modeler',        name: 'Modeler',              hue: 300, chroma: 0.16, dataLast: 6 },
-  { key: 'scoreacardgame', name: 'ScoreACardGame',       hue: 20,  chroma: 0.16, dataLast: 5 },
-  { key: 'sessionlog',     name: 'Session Log',          hue: 340, chroma: 0.15, dataLast: 2 },
-  { key: 'infraconsole',   name: 'Infra Console',        hue: 125, chroma: 0.13, dataLast: 1 },
-  { key: 'commandcenter',  name: 'Command Center',       hue: 45,  chroma: 0.15, dataLast: 5 },
+// dataOrder: the order the app assigns data palette slots (1-6) in. Every slot
+// that sits near the app's accent (closer than DATA_NEAR_ACCENT in OKLab x 100,
+// in the light or the dark theme) moves to the end, the nearest last; the rest
+// keep the palette's own order. So an app's first series never reads as its
+// accent, in either theme. `npm run check` recomputes it and fails when it's
+// stale. (It used to be one `dataLast` slot, measured in light only, which left
+// IdleAirport's first series an ochre beside its amber accent in dark.)
+const ROWS = [
+  { key: 'oneofus',        name: 'OneOfUs',              hue: 70,  chroma: 0.17, dataOrder: [2, 3, 4, 6, 1, 5], note: 'Real brand color #d97706' },
+  { key: 'idleairport',    name: 'IdleAirport',          hue: 75,  chroma: 0.14, dataOrder: [2, 3, 4, 6, 1, 5], note: 'Real brand color #ffd24a' },
+  { key: 'wescup',         name: 'Wes Cup',              hue: 95,  chroma: 0.15, dataOrder: [2, 3, 4, 6, 5, 1] },
+  { key: 'parametricchaos',name: 'ParametricChaos',      hue: 155, chroma: 0.13, dataOrder: [1, 2, 4, 5, 6, 3] },
+  { key: 'fivebucks',      name: "That'll Be 5 Bucks",   hue: 185, chroma: 0.13, dataOrder: [1, 2, 4, 5, 6, 3] },
+  { key: 'washmycar',      name: 'WashMyCar',            hue: 230, chroma: 0.13, dataOrder: [1, 2, 5, 6, 3, 4] },
+  { key: 'idrovewhere',    name: 'iDroveWhere',          hue: 256, chroma: 0.15, dataOrder: [1, 2, 5, 3, 6, 4] },
+  { key: 'modeler',        name: 'Modeler',              hue: 300, chroma: 0.16, dataOrder: [1, 3, 5, 2, 6, 4] },
+  { key: 'scoreacardgame', name: 'ScoreACardGame',       hue: 20,  chroma: 0.16, dataOrder: [1, 3, 4, 6, 2, 5] },
+  { key: 'sessionlog',     name: 'Session Log',          hue: 340, chroma: 0.15, dataOrder: [1, 3, 6, 5, 4, 2] },
+  { key: 'infraconsole',   name: 'Infra Console',        hue: 125, chroma: 0.13, dataOrder: [2, 3, 4, 5, 6, 1] },
+  { key: 'commandcenter',  name: 'Command Center',       hue: 45,  chroma: 0.15, dataOrder: [1, 2, 3, 4, 6, 5] },
 ];
+
+// `dataLast` is kept for code that read it: the slot each app uses last.
+export const APPS = ROWS.map((row) => ({ ...row, dataLast: row.dataOrder[row.dataOrder.length - 1] }));
 
 // Keys that were renamed, and the key each one now points at. The old key keeps
 // working everywhere a key is accepted, so an app can move to the new one when
@@ -53,6 +60,12 @@ export function appFor(key) {
 
 // The data palette has six slots (--data-1 … --data-6, tokens/colors.css).
 export const DATA_SLOTS = 6;
+
+// How close (OKLab x 100, either theme) a data slot can sit to an app's accent
+// before it moves to the end of that app's dataOrder. The palette's own pairs
+// are held to 12 apart; a slot within 15 of the accent read as a sibling of it
+// in IdleAirport's dark HUD (ochre --data-1 beside amber, 14.6 apart).
+export const DATA_NEAR_ACCENT = 15;
 
 // Minimum hue separation (degrees) before two accents are considered "too
 // close" for comfort if the apps might ever appear side by side.
@@ -161,13 +174,12 @@ export function accentTokensFor(app, chroma) {
   };
 }
 
-/** The order an app assigns its data colours in: slots 1-6, with the slot
- *  closest to its accent moved to the end. `dataOrderFor("oneofus")` gives
- *  [1, 2, 3, 4, 6, 5]: the first series gets --data-1, and so on. */
+/** The order an app assigns its data colours in: slots 1-6, with every slot
+ *  near its accent moved to the end, the nearest last.
+ *  `dataOrderFor("idleairport")` gives [2, 3, 4, 6, 1, 5]: the first series
+ *  gets --data-2, the second --data-3, and so on. */
 export function dataOrderFor(app) {
-  const row = appFor(app);
-  const slots = Array.from({ length: DATA_SLOTS }, (_, i) => i + 1);
-  return [...slots.filter((n) => n !== row.dataLast), row.dataLast];
+  return [...appFor(app).dataOrder];
 }
 
 /** The same tokens as the stylesheet block an app pastes into its root CSS,

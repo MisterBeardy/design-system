@@ -18,8 +18,8 @@ Data colour says **what** something is: which category, which series, how many. 
 | `--data-6` | `{{--data-6}}` violet | `{{dark:--data-6}}` | The sixth |
 | `--on-data` | `{{--on-data}}` | `{{dark:--on-data}}` | A glyph or label on any data fill |
 
-- **Use the slots in order.** They're ordered so the first ones are the most distinct: slots 1 and 2 are 22.6 apart (OKLab × 100) for every kind of vision, and the first three stay at least 13.8 apart. A two-series chart uses 1 and 2.
-- **Each app lists the slot nearest its accent last.** `dataOrderFor("<app-key>")` in `app-registry.js` gives the order, so an app's first series never reads as its accent.
+- **Use the slots in order.** They're ordered so the first ones are the most distinct: slots 1 and 2 are 22.6 apart (OKLab × 100) for every kind of vision, and the first three stay at least 13.8 apart. A two-series chart uses the first two of its app's order (below), which for most apps is 1 and 2; whichever two they are, they clear the floors below.
+- **Each app takes the slots in its own order.** `dataOrderFor("<app-key>")` in `app-registry.js` gives it: every slot within 15 of the app's accent (OKLab × 100, in the light or the dark theme) moves to the end, the nearest last, so an app's first series never reads as its accent in either theme. IdleAirport (amber, H75) starts at plum, `[2, 3, 4, 6, 1, 5]`, because ochre `--data-1` sits 14.6 from its dark accent. `npm run check` recomputes every order and fails when one is stale.
 - **Six is the limit.** Past six categories, label the series, group the small ones into "Other", or use a table. More colours can't stay distinguishable.
 - **There's no green, on purpose.** Green collapses into red for red-green colour blindness (about 1 in 12 men), so a "green = good" chart belongs to the status colours, not the data palette.
 - **Tiles:** `<GlyphTile data={3}>`, which takes `--on-data` for its glyph. Keep `GlyphTile color=` for a colour the data already owns, like a car's real paint colour.

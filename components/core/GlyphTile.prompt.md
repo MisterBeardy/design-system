@@ -20,7 +20,8 @@ Three ways to colour one, and the difference is the whole point:
   breakdowns, series, per-vehicle colours. Data colour is sacred and never
   collapses into the accent, which is why it can't be expressed as a tone.
   Assign slots in the app's order (`dataOrderFor(key)` in `app-registry.js`):
-  1, 2, 3 … with the slot nearest its accent last. Past six categories, label
+  its first slot, then its second, and so on, which puts every slot near its
+  accent last (`[2, 3, 4, 6, 1, 5]` for IdleAirport). Past six categories, label
   them rather than reaching for more colours.
 - `color` — an escape hatch for a colour the data **already owns**: a car's
   real paint colour, a team's kit. It isn't themed and its glyph stays white,

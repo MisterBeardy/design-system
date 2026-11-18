@@ -1,6 +1,7 @@
 # Chrome
 
-The frame around the content: `PageHeader`, `Toolbar`, `TabBar`. It's the
+The frame around the content: `PageHeader`, `Toolbar`, `TabBar`, and
+`SideNav` inside one part of an app (below). It's the
 first thing a person reads on any screen and the last thing they think about,
 which is the point — chrome that asks to be noticed is chrome that's in the
 way.
@@ -103,3 +104,17 @@ one panel, and the difference is what a screen reader announces.
 promises arrow-key movement between its controls, and the control most often
 in a toolbar is a `Segmented`, which is a radiogroup and owns the arrow keys
 already.
+
+## Pages inside one part of an app: SideNav
+
+Where one place in the app holds more pages than a `Segmented` can (settings,
+an account area), `SideNav` lists them down the side, with one level of
+sections under a page's name: Display, then Appearance, Top bar, Camera. Below
+700px it becomes the grouped list a phone expects, chevron rows in `Group`s,
+and the page opens in its place under a back bar. Pass the page as its
+`children` and it does that layout itself.
+
+The current page takes `--accent-soft` and `--accent-text`, the one accent on
+the rail, as on the `TabBar`. Sections open and close (`aria-expanded`); the
+pages are buttons with `aria-current="page"`. Never more than one level: a
+section inside a section is a screen of its own.

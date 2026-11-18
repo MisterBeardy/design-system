@@ -10,6 +10,7 @@ import type { GlyphTileProps, GlyphTone } from "./GlyphTile";
 import type { SegmentedProps, SegmentedOption } from "./Segmented";
 import type { SwitchProps } from "./Switch";
 import type { StatStripProps, StatStripItem } from "./StatStrip";
+import type { SwatchesProps, SwatchOption } from "./Swatches";
 import type { IconProps, IconName } from "./Icon";
 import type { SheetProps } from "./Sheet";
 import type { PopoverProps } from "./Popover";
@@ -25,6 +26,7 @@ import type { ErrorStateProps } from "./ErrorState";
 import type { PageHeaderProps } from "./PageHeader";
 import type { ToolbarProps } from "./Toolbar";
 import type { TabBarProps, TabBarItem } from "./TabBar";
+import type { SideNavProps, SideNavItem, SideNavPage } from "./SideNav";
 
 export type {
   ButtonProps,
@@ -41,6 +43,8 @@ export type {
   SwitchProps,
   StatStripProps,
   StatStripItem,
+  SwatchesProps,
+  SwatchOption,
   IconProps,
   SheetProps,
   PopoverProps,
@@ -61,6 +65,9 @@ export type {
   ToolbarProps,
   TabBarProps,
   TabBarItem,
+  SideNavProps,
+  SideNavItem,
+  SideNavPage,
 };
 
 export declare const Button: FC<ButtonProps>;
@@ -75,6 +82,7 @@ export declare const GlyphTile: FC<GlyphTileProps>;
 export declare function Segmented<T extends string = string>(props: SegmentedProps<T>): ReactElement;
 export declare const Switch: FC<SwitchProps>;
 export declare const StatStrip: FC<StatStripProps>;
+export declare function Swatches<T extends string = string>(props: SwatchesProps<T>): ReactElement;
 
 // Icons.
 export declare const Icon: FC<IconProps>;
@@ -101,3 +109,4 @@ export declare const ErrorState: FC<ErrorStateProps>;
 export declare const PageHeader: FC<PageHeaderProps>;
 export declare const Toolbar: FC<ToolbarProps>;
 export declare const TabBar: FC<TabBarProps>;
+export declare const SideNav: FC<SideNavProps>;
